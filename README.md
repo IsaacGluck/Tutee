@@ -8,10 +8,17 @@ A web application to simplify the high school tutoring system.
 
 #####Leader - Aida Piccato (Under direction of KJU <3)
 
-- Front End - Isaac Glu
-- Database Manager - Aida Pic
-- Javascript Connections - Leslie Bre
-- Algorithm for Matching Tutors and Tutees - Coby Gol
+- Front End Maestro - Isaac Glu
+- Database Manager Virtuoso - Aida Pic
+- Javascript Connections Sensai - Leslie Bre
+- Algorithm for Matching Tutors and Tutees & Authentication High Priestess - Coby Gol
+
+- Chairman of the Board of Directors - Kim Jong Un
+- Vice Chairman of the Board of Directors - Coby Gol
+- Dean of Service - Isaac Glu
+- Princess - LesBres
+- Chief (Keef) Deputy Vice Butt-Head - Aida Pic
+- Assistant Liazon to the Illuminati - Julie Anne
 
 ###APIs
 - Geolocation
@@ -22,3 +29,18 @@ A web application to simplify the high school tutoring system.
 - Instant Messaging
 - Storing Resouces/Documents
 - Google Calendar Integration
+
+##Timeline
+1. Make Timeline
+2. Roles
+3. Basic Framework (App.py Index.html)
+4. Website Flow
+5. Basic Database Functionality
+6. Tutor Perspective
+    - Register
+    - Generic Profile/Editing Page
+7. Tutee Perspective
+    - Register
+    - Generic Profile/Editing Page
+8. Searching for Tutors (Integrating Algorithm on a page)
+9. Creatiing a Tutor Selecting a Meetup
