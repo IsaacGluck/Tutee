@@ -8,10 +8,10 @@ A web application to simplify the high school tutoring system.
 
 #####Leader - Aida Piccato (Under direction of KJU <3)
 
-- Front End Maestro - Isaac Glu
-- Database Manager Virtuoso - Aida Pic
-- Javascript Connections Sensai - Leslie Bre
-- Algorithm for Matching Tutors and Tutees & Authentication High Priestess - Coby Gol
+1. Front End Maestro - Isaac Glu
+2. Database Manager Virtuoso - Aida Pic
+3. Javascript Connections Sensai - Leslie Bre
+4. Algorithm for Matching Tutors and Tutees & Authentication High Priestess - Coby Gol
 
 - Chairman of the Board of Directors - Kim Jong Un
 - Vice Chairman of the Board of Directors - Coby Gol
