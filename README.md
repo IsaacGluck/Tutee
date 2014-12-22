@@ -6,8 +6,7 @@ A web application to simplify the high school tutoring system.
 ##Roles (Royce)
 
 
-###Leader
-Aida Piccato (Under direction of KJU <3)
+#####Leader - Aida Piccato (Under direction of KJU <3)
 
 - Front End - Isaac Glu
 - Database Manager - Aida Pic
