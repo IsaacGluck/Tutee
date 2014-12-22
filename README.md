@@ -11,7 +11,7 @@ A web application to simplify the high school tutoring system.
 1. Front End Maestro - Isaac Glu
 2. Database Manager Virtuoso - Aida Pic
 3. Javascript Connections Sensai - Leslie Bre
-4. Algorithm for Matching Tutors and Tutees & Authentication High Priestess - Coby Gol
+4. Search Algorithm & Authentication High Priestess - Coby Gol
 
 - Chairman of the Board of Directors - Kim Jong Un
 - Vice Chairman of the Board of Directors - Coby Gol
