@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+	<h1> Create an account </h1>
+	<form method="POST">
+		Email:<br>
+		<input type="text" name="email">
+		<br>
+		Password:<br>
+		<input type="password" name="password">
+		<br>
+		Confirm Password:<br>
+		<input type="password" name="confirm_password">
+		<br>
+		<button type="submit" name="b" value="Submit">Submit</button>
+	</form>
+{% endblock %}
