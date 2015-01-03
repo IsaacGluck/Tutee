@@ -23,10 +23,8 @@ def authenticate(account, confirm_password):
         hash_pass = account['password'] # the hashed version of the password (with salt)
         hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
         if hash_pass == hash_confirm:
-                print("success")
                 return True
         else:
-                print("fail")
                 return False
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
@@ -41,9 +39,8 @@ def register(user_type):
 		account['email'] = request.form["email"]
 
                 password = request.form["password"]
-                salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent hackings
+                salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent password compromisation even if hacker knew the hashing algo
                 hash_pass = hashlib.sha512(salt + password).hexdigest() #prepend the salt to the password, hash using sha512 algorithm, use hexdigest to store as string
-                print "HASH: " + hash_pass
                 account['salt'] = salt
 		account['password'] = hash_pass
 
