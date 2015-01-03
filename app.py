@@ -10,7 +10,7 @@ db = conn['users']
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-	return render_template("base.html")
+	return render_template("index.html")
 
 def create_account(user_type, account):
 	if user_type == "tutor":
