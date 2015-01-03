@@ -1,0 +1,20 @@
+{% extends "register.html" %}
+
+{% block header %}
+<h1> Create a Tutor account </h1>
+{% endblock %}
+
+{% block info %}
+	<p>Advanced courses you've taken:
+	<select multiple size="1" form="info" name="courses">
+		<option value="chemistry">AP Chemistry</option>
+		<option value="physics">AP Physics</option>
+		<option value="literature">AP Literature</option>
+	</select></p>
+	<p>Your strongest subjects:
+	<select multiple autofocus size="1" form="info" name="subjects">
+		<option value="chemistry">Chemistry</option>
+		<option value="physics">Physics</option>
+		<option value="english">English</option>
+	</select></p>
+{% endblock %}
