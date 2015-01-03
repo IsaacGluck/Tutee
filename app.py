@@ -59,12 +59,6 @@ def register(user_type):
 				flash("Passwords do not match")
 				return render_template(base_url)
 
-@app.route("/search", methods=["GET", "POST"]) def search():
-        if request.method == "GET": 
-                return render_template("search.html") 
-        else: 
-                print "hi"
-
 if __name__ == "__main__":
 	app.debug = True
 	app.secret_key = "shhhhhh"
