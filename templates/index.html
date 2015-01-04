@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-<html lang="en">
 
 {% block head %}
     <meta charset="utf-8">
@@ -10,7 +9,7 @@
     <title>Tutee</title>
 
     <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='stylesheets/index.css') }}" rel="stylesheet">
+    <link href="static/stylesheets/index.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -19,44 +18,29 @@
     <![endif]-->
 {% endblock head %}
 
-	{% block body %}
-		<div class="site-wrapper">
+{% block body %}
 
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">Cover</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Features</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-
-          <div class="inner cover">
-            <h1 class="cover-heading">Cover your page.</h1>
-            <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">Learn more</a>
-            </p>
-          </div>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
+<div class="container-fluid">
+  <nav>
+    <ul class="nav nav-pills nav-justified">
+      <li role="presentation"><a href="#"><h3>Login</h3></a></li>
+      <li role="presentation" class="active"><a href="#"><h2>Tutee</h2></a></li>
+      <li role="presentation"><a href="#"><h3>Register</h3></a></li>
+    </ul>
+  </nav>
+  <div class="center-block">
+    <div class="text-center">
+    <h1 class="main">Tutee</h1>
+    <h2>A Highschool Tutoring Service</h2>
     </div>
-	{% endblock %}
-</html>
+  </div>
+</div>
+		
+{% endblock %}
+
+  {% block postscript %}
+  <script type="text/javascript" src="/static/js/index.js"></script>
+  <script src="js/TweenLite.min.js"></script>
+  <script src="js/EasePack.min.js"></script>
+  <script src="js/demo-3.js"></script>
+  {% endblock postscript %}

@@ -3,8 +3,12 @@ h1 {
     font-size: 59px;
     line-height: 70px;
 }
+
+h2, h3, h4, h5, h6 {
+	font-family: 'Arvo', Georgia, Times, serif;
+}
  
-p {
+body, p {
     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 25px;
