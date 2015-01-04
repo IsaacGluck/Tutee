@@ -7,16 +7,37 @@ body {
 
 .main {
   font-size: 90px;
+  padding: 10px 40px;
+  text-transform: uppercase;
+}
+
+.center-block {
+  border: 10px solid #ffffff;
+  margin-left: 25%;
+  margin-right: 25%; 
 }
 
 a {
   background-color: transparent !important;
+  transition: transform 0.3s !important;
+  -moz-transition: -moz-transform 0.3s !important;
+  -webkit-transition: -webkit-transform 0.3s !important;
 }
 
-a:hover {
+a::before {
+  transform: translate3d(0,0,0) !important;
+  -moz-transform: translate3d(0,0,0) !important;
+  -webkit-transform: translate3d(0,0,0) !important;
+}
 
+a:hover,
+a:focus {
+  transform: translateY(-15%) !important;
+  -moz-transform: translateY(-15%) !important;
+  -webkit-transform: translateY(-15%) !important;
 }
 
 .center-block {
   margin-top: 15%;
 }
+
