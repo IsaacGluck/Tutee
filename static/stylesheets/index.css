@@ -12,9 +12,14 @@ body {
 }
 
 .center-block {
+  background-color: rgba(48, 48, 48, 0.8);
   border: 10px solid #ffffff;
   margin-left: 25%;
   margin-right: 25%; 
+}
+
+.center-block:hover {
+  border: 10px solid #235283;
 }
 
 a {
