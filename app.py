@@ -27,6 +27,7 @@ def authenticate(account, confirm_password):
         else:
                 return False
 
+
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
 	base_url = "register_" + user_type + ".html"
@@ -36,6 +37,7 @@ def register(user_type):
 		account = {}
 		account['first_name'] = request.form["first_name"]
 		account['last_name'] = request.form["last_name"]
+                account['type'] = user_type
 		account['email'] = request.form["email"]
 
                 password = request.form["password"]
@@ -47,6 +49,7 @@ def register(user_type):
 		confirm_password = request.form["confirm_password"]
 		account['school'] = request.form["school"]
 		account['grade'] = request.form["grade"]
+                account['address1'] = request.form["address1"]
 		if user_type == "tutor":
 			account['courses'] = request.form["courses"]
 			account['subjects'] = request.form["subjects"]
@@ -59,8 +62,25 @@ def register(user_type):
 				flash("Passwords do not match")
 				return render_template(base_url)
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+        if request.method == "GET":
+                return render_template("search.html") 
+        else:
+                courses = request.form["courses"]
+                days = request.form.getlist('days')
+                times = []
+                for d in days:
+                        hour = request.form["%s" % d + "_Time"]
+                        new_time = d + hour
+                        times.append(new_time)
+                        
+                if request.form['b'] == "Submit":
+                        flash(times)
+                        return render_template("base.html")
+                        
+
 if __name__ == "__main__":
 	app.debug = True
 	app.secret_key = "shhhhhh"
 	app.run()
-
