@@ -9,7 +9,7 @@
     <title>Tutee</title>
 
     <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='stylesheets/index.css') }}" rel="stylesheet">
+    <link href="static/stylesheets/index.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -18,36 +18,20 @@
     <![endif]-->
 {% endblock head %}
 
-	{% block body %}
-		<div class="site-wrapper">
+{% block body %}
 
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h2 class="masthead-brand">Tutee</h2>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="/about">About</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-          <div class="inner cover">
-            <h1 class="cover-heading">Tutoring For Highschoolers</h1>
-            <p class="lead">Tutee is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-	{% endblock %}
+<div class="container-fluid">
+  <nav>
+    <ul class="nav nav-pills nav-justified">
+      <li role="presentation"><a href="#"><h3>Login</h3></a></li>
+      <li role="presentation" class="active"><a href="#"><h3>Home</h3></a></li>
+      <li role="presentation"><a href="#"><h3>Register</h3></a></li>
+    </ul>
+  </nav>
+</div>
+		
+{% endblock %}
 
   {% block postscript %}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script type="text/javascript" src="/static/js/index.js"></script>
   {% endblock postscript %}
