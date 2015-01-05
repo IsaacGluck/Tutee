@@ -5,11 +5,16 @@ body {
   color: white !important;
 }
 
+.highlight {
+	color: rgba(231, 76, 60,1.0) !important;
+}
+
 .main {
   font-size: 90px;
   padding: 10px 40px;
   text-transform: uppercase;
 }
+
 
 .center-block {
   background-color: rgba(48, 48, 48, 0.8);
@@ -19,7 +24,11 @@ body {
 }
 
 .center-block:hover {
-  border: 10px solid #235283;
+	transition: border-color 0.5s ease-out; 
+	-webkit-transition: border-color 0.5s ease-out; 
+	-moz-transition: border-color 0.5s ease-out; 
+	-o-transition: border-color 0.5s ease-out;
+	border-color: rgba(231, 76, 60,1.0);
 }
 
 a {
