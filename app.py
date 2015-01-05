@@ -27,6 +27,20 @@ def authenticate(account, confirm_password):
         else:
                 return False
 
+#Returns list of possible tutors, based on course requested and the possible times given. times is a list of strings, each string is formatted day;hours;addresses.
+#Concept: First seperates out all tutors free on specified days and with specified subjects. Then begins operating on point system: Points accorded, (listed from most valuable to least): hours matching, address proximity, courses matching, school matching, grade matching
+def search_operation(course, subject, times):
+        tutors = []
+        #First make list of days tutee is available
+        days = []
+        for time in times:
+                t = time.split(";")
+                days.append(t[0])
+        #create list tutors filled with all tutors with right subject and free day(s)
+        for day in days:
+                tutors.append(list(db.tutors.find({"subjects":{"$in":[subject]}, "days":{"$in":[day]}}))))
+        
+        
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
@@ -53,6 +67,7 @@ def register(user_type):
 		if user_type == "tutor":
 			account['courses'] = request.form["courses"]
 			account['subjects'] = request.form["subjects"]
+                        account['times'] = request.form["times"]
 		if request.form['b'] == "Submit":
 			if authenticate(account, confirm_password):
 				create_account(user_type, account)
@@ -68,16 +83,23 @@ def search():
                 return render_template("search.html") 
         else:
                 courses = request.form["courses"]
-                days = request.form.getlist('days')
+                subjects = request.form["subjects"]
+                days = request.form.getlist("days")
                 times = []
                 for d in days:
                         hour = request.form["%s" % d + "_Time"]
-                        new_time = d + hour
-                        times.append(new_time)
-                        
+                        new_req = d + ";" + hour
+                        addresses = request.form.getlist("%s" % d + "_Address")
+                        for a in addresses:
+                                new_req += ";" + account[a] #to be replaced with sessions use to find the current user's home/ school adress
+                        other_add = request.form["%s" % d + "_Other"]
+                        if other_add:
+                                new_req += ";" + other_add
+                        times.append(new_req)
+                tutor_list = search_operation(courses, subjects, times)
                 if request.form['b'] == "Submit":
                         flash(times)
-                        return render_template("base.html")
+                        return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
                         
 
 if __name__ == "__main__":
