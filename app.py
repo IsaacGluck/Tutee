@@ -29,6 +29,7 @@ def authenticate(email, user_type, confirm_password):
 	else:
 		return False
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
 	return render_template("index.html")
@@ -39,26 +40,9 @@ def register(user_type):
 	if request.method == "GET":
 		return render_template(base_url)
 	else:
-
-		account = {}
-		account['first_name'] = request.form["first_name"]
-		account['last_name'] = request.form["last_name"]
-		account['email'] = request.form["email"]
-
-                password = request.form["password"]
-                salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent password compromisation even if hacker knew the hashing algo
-                hash_pass = hashlib.sha512(salt + password).hexdigest() #prepend the salt to the password, hash using sha512 algorithm, use hexdigest to store as string
-                account['salt'] = salt
-		account['password'] = hash_pass
-
-		confirm_password = request.form["confirm_password"]
-		account['school'] = request.form["school"]
-		account['grade'] = request.form["grade"]
-		if user_type == "tutor":
-			account['courses'] = request.form["courses"]
-			account['subjects'] = request.form["subjects"]
+                account = register_user(user_type, request.form)
 		if request.form['b'] == "Submit":
-			if confirm_password == password:
+			if request.form['confirm_password'] == request.form['password']:
 				create_account(user_type, account)
 				flash(user_type + ": You have succesfully created an account")
 				return render_template("base.html")
@@ -82,6 +66,29 @@ def login():
 		else:
 			flash("Your username or password is incorrect")
 			return render_template("login.html")
+
+
+#helper method to register users
+def register_user(user_type, form):
+        account = {}
+        account['first_name'] = form["first_name"]
+        account['last_name'] = form["last_name"]
+        account['type'] = user_type
+        account['email'] = form["email"]
+
+        password = form["password"]
+        salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent password compromisation even if hacker knew the hashing algo
+        hash_pass = hashlib.sha512(salt + password).hexdigest() #prepend the salt to the password, hash using sha512 algorithm, use hexdigest to store as string
+        account['salt'] = salt
+        account['password'] = hash_pass
+        account['school'] = form["school"]
+        account['grade'] = form["grade"]
+        if user_type == "tutor":
+                account['courses'] = form["courses"]
+                account['subjects'] = form["subjects"]
+                account['times'] = form["times"]
+                account['match_score'] = 0
+        return account
 
 if __name__ == "__main__":
 	app.debug = True
