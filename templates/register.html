@@ -17,6 +17,15 @@
 
 		<p>Grade: <input type="numn" name="grade"></p>
 
+		<p> Address: 
+		  <input type="text" name="address1"></p>
+
+		<p>This is:
+		  <select multiple size="1" form="info" name="address1_hs">
+		    <option value="home">Home</option>
+		    <option value="work">School</option>
+		</select></p>
+
 		{% block info %}{% endblock %}
 
 		<p><button type="submit" name="b" value="Submit">Submit</button></p>
