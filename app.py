@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash
 from pymongo import Connection
+from googlemaps import locate
 import hashlib, uuid
 import random
 
@@ -64,6 +65,18 @@ def register_user(user_type, form):
         account['password'] = hash_pass
         account['school'] = form["school"]
         account['grade'] = form["grade"]
+        
+        a1 = form["address1"]
+        a1_type = form["address1_hs"] #is this address for home or for school
+        loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
+
+        address1 = {}
+        address1["longitude"] = loc[0] #longitude
+        address1["latitude"] = loc[1] #latitude
+        address1["zipcode"] = loc[2] #zipcode
+        address1["address"] = a1 #actual address
+        account["%s_address" % a1_type] = address1 #store dictionary of all a1's info
+
         if user_type == "tutor":
                 account['courses'] = form["courses"]
                 #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
@@ -76,7 +89,7 @@ def register_user(user_type, form):
                 while x < len(td):
                         account['%s' % td[x]] = td[x+1]
                         x += 2
-                account['match_score'] = 0
+                account['match_score'] = 0 #used in comparing for searches
         print account
         return account
 
@@ -111,9 +124,9 @@ def search_operation(course, subject, times):
                 
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
-                score = 0
+                match_score = 0
                 if tutor['school'] == tut['school']:
-                        score += 1 # one point for going to the same school
+                        match_score += 1 # one point for going to the same school
                 score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
 
                 
