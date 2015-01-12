@@ -12,15 +12,6 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
-
-
-
-
-
-
-
-
-
 @app.route("/", methods=["GET", "POST"])
 def index():
 	return render_template("index.html")

@@ -1,3 +1,6 @@
+import hashlib, uuid
+from googlemaps import locate
+
 #misc useful helper functions
 
 # matches login attempts with user
@@ -49,6 +52,7 @@ def register_user(user_type, form, db):
         account['grade'] = form["grade"]
         
         a1 = form["address1"]
+        print "add " + str(a1)
         a1_type = form["address1_hs"] #is this address for home or for school
         loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
 
