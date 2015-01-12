@@ -111,20 +111,39 @@ def authenticate(account, confirm_password):
 #Returns list of possible tutors, based on course requested and the possible times given. times is a list of strings, each string is formatted day;hours;addresses.
 #Concept: First seperates out all tutors free on specified days and with specified subjects. Then begins operating on point system: Points accorded, (listed from most valuable to least): hours matching, address proximity, courses matching, school matching, grade matching
 def search_operation(course, subject, times):
+        courses = form["courses"]
+        subjects = form["subjects"]
+        days = form.getlist("days")
+        times = []
+        for d in days:
+                hour = request.form["%s" % d + "_Time"]
+                new_req = d + ";" + hour
+                #addresses = request.form.getlist("%s" % d + "_Address")
+                # for a in addresses:
+                #     new_req += ";" + tut['address'] #to be replaced with sessions use to find the current user's home/ school address
+                #other_add = request.form["%s" % d + "_Other"]
+                #if other_add:
+                #       new_req += ";" + other_add
+                times.append(new_req)
+
         #First make list of days tutee is available
-        days = []
+        ds = []
         for time in times:
                 t = time.split(";")
-                days.append(t[0])
-        #create list tutor_list filled with all tutors with right subject and free day(s)
-        for day in days:
-                tutor_list = db.tutors.find({"%s"%subject:True, "%s"%day:{ '$exists': True }})
-        
-        print("COUNTTTTTTTTT: " + str(tutor_list.count()))
+                ds.append(t[0])
                 
+
+        #create list tutor_list filled with all tutors with right subject and free day(s)
+        for day in ds:
+                tutor_list = db.tutors.find({"%s"%subject:True, "%s"%day:{ '$exists': True }})
+                        
+        #print("COUNTTTTTTTTT: " + str(tutor_list.count()))
+        
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
                 match_score = 0
+                
+                
                 if tutor['school'] == tut['school']:
                         match_score += 1 # one point for going to the same school
                 score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
@@ -152,22 +171,8 @@ def search():
         if request.method == "GET":
                 return render_template("search.html") 
         else:
-                courses = request.form["courses"]
-                subjects = request.form["subjects"]
-                days = request.form.getlist("days")
-                times = []
-                for d in days:
-                        hour = request.form["%s" % d + "_Time"]
-                        new_req = d + ";" + hour
-                        #addresses = request.form.getlist("%s" % d + "_Address")
-                       # for a in addresses:
-                           #     new_req += ";" + tut['address'] #to be replaced with sessions use to find the current user's home/ school address
-                        #other_add = request.form["%s" % d + "_Other"]
-                        #if other_add:
-                         #       new_req += ";" + other_add
-                        times.append(new_req)
                 if request.form['b'] == "Submit":
-                        tutor_list = search_operation(courses, subjects, times)
+                        tutor_list = search_operation(request.form)
                         flash(tutor_list)
                         return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
                         
