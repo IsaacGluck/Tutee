@@ -85,10 +85,10 @@ def register_user(user_type, form):
                 times = form["times"]
                 td = times.split(";")
                 x = 0
-                #each day is given seperate element with value times
+                #each day is given seperate element with value being a dictionary of time, address
                 while x < len(td):
-                        account['%s' % td[x]] = td[x+1]
-                        x += 2
+                        account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
+                        x += 3
                 account['match_score'] = 0 #used in comparing for searches
         print account
         return account
@@ -142,7 +142,19 @@ def search_operation(course, subject, times):
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
                 match_score = 0
-                
+                addresses = []
+                #find the days for which addresses work
+                for day in ds:
+                        try:
+                                tutor_home_school = tutor[day]["address"] # if tutor has an element for that day, find whether it's home or school (that is what they store)
+                                tutor_address = tutor["%s_address" % tutor_home_school] #get the dictionary of the actual address info
+
+                                tutee_home_school = form["%s_Address" % day] #is the tutee home or school for that day
+                                tutee_address = tut["%s_address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
+                                if (tutor_address["zipcode"] == tutee_address["zipcode"]):
+                                        match_score += 4
+                        except: #that means tutor doesn't have an element for that day
+                                pass
                 
                 if tutor['school'] == tut['school']:
                         match_score += 1 # one point for going to the same school
