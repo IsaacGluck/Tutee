@@ -47,10 +47,6 @@ tut = {
 
 #####################################################################################################################################################################################################
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-	return render_template("index.html")
-
 def register_user(user_type, form):
         account = {}
         account['first_name'] = form["first_name"]
