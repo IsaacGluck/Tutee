@@ -18,6 +18,7 @@ school = ['Stuyvesant', 'Bard', 'Bronx Science']
 grade = [9, 10, 11, 12]
 subs = ['chemistry', 'English', 'Physics', 'Biology']
 dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+zips = [10025, 10026, 10027, 10028]
 
 dlist = []
 for i in range(30):
@@ -25,8 +26,9 @@ for i in range(30):
              'school':random.choice(school),
              'grade':random.choice(grade),
              '%s'%random.choice(subs):True,
-             '%s'%random.choice(dates):'1-8',
-             '%s'%random.choice(dates):'1-8',
+             '%s'%random.choice(dates):{"time:":'1-8', "address":"School"},
+             '%s'%random.choice(dates):{"time:":'1-8', "address":"School"},
+             "School_Address":{"longitude":80, "latitude":80, "zipcode":random.choice(zips), "address":"825 West End Avenue"},
         }
         dlist.append(d)
 
@@ -40,9 +42,7 @@ tut = {
         'first_name':random.choice(names),
         'school':random.choice(school),
         'grade':random.choice(grade),
-        'subjects':['English', 'Physics'],
-        'days':['Mon', 'Wed'],
-        'address':'925 West End Ave',
+        'School_Address':{"longitude":80, "latitude":80, "zipcode":10025, "address":"825 West End Avenue"}
 }
 
 
@@ -75,7 +75,7 @@ def register_user(user_type, form):
         address1["latitude"] = loc[1] #latitude
         address1["zipcode"] = loc[2] #zipcode
         address1["address"] = a1 #actual address
-        account["%s_address" % a1_type] = address1 #store dictionary of all a1's info
+        account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
 
         if user_type == "tutor":
                 account['courses'] = form["courses"]
@@ -110,20 +110,14 @@ def authenticate(account, confirm_password):
 
 #Returns list of possible tutors, based on course requested and the possible times given. times is a list of strings, each string is formatted day;hours;addresses.
 #Concept: First seperates out all tutors free on specified days and with specified subjects. Then begins operating on point system: Points accorded, (listed from most valuable to least): hours matching, address proximity, courses matching, school matching, grade matching
-def search_operation(course, subject, times):
+def search_operation(form):
         courses = form["courses"]
-        subjects = form["subjects"]
+        subject = form["subjects"]
         days = form.getlist("days")
         times = []
         for d in days:
                 hour = request.form["%s" % d + "_Time"]
                 new_req = d + ";" + hour
-                #addresses = request.form.getlist("%s" % d + "_Address")
-                # for a in addresses:
-                #     new_req += ";" + tut['address'] #to be replaced with sessions use to find the current user's home/ school address
-                #other_add = request.form["%s" % d + "_Other"]
-                #if other_add:
-                #       new_req += ";" + other_add
                 times.append(new_req)
 
         #First make list of days tutee is available
@@ -131,13 +125,12 @@ def search_operation(course, subject, times):
         for time in times:
                 t = time.split(";")
                 ds.append(t[0])
-                
 
         #create list tutor_list filled with all tutors with right subject and free day(s)
         for day in ds:
                 tutor_list = db.tutors.find({"%s"%subject:True, "%s"%day:{ '$exists': True }})
                         
-        #print("COUNTTTTTTTTT: " + str(tutor_list.count()))
+        print("COUNTTTTTTTTT: " + str(tutor_list.count()))
         
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
@@ -147,10 +140,10 @@ def search_operation(course, subject, times):
                 for day in ds:
                         try:
                                 tutor_home_school = tutor[day]["address"] # if tutor has an element for that day, find whether it's home or school (that is what they store)
-                                tutor_address = tutor["%s_address" % tutor_home_school] #get the dictionary of the actual address info
+                                tutor_address = tutor["%s_Address" % tutor_home_school] #get the dictionary of the actual address info
 
                                 tutee_home_school = form["%s_Address" % day] #is the tutee home or school for that day
-                                tutee_address = tut["%s_address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
+                                tutee_address = tut["%s_Address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
                                 if (tutor_address["zipcode"] == tutee_address["zipcode"]):
                                         match_score += 4
                         except: #that means tutor doesn't have an element for that day
@@ -158,9 +151,11 @@ def search_operation(course, subject, times):
                 
                 if tutor['school'] == tut['school']:
                         match_score += 1 # one point for going to the same school
-                score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
+                match_score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
+                tutor["match_score"] = match_score
+                #print tutor
 
-                
+        return tutor_list
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
@@ -184,7 +179,11 @@ def search():
                 return render_template("search.html") 
         else:
                 if request.form['b'] == "Submit":
-                        tutor_list = search_operation(request.form)
+                        tutor_cursor = search_operation(request.form)
+                        tutor_list = []
+                        for tutor in tutor_cursor:
+                                print tutor
+                                tutor_list.append(tutor)
                         flash(tutor_list)
                         return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
                         
