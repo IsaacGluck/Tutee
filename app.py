@@ -3,6 +3,7 @@ from pymongo import Connection
 from googlemaps import locate
 import hashlib, uuid
 import random
+import json
 
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
-#################################################################################CODE FOR TESTING USE################################################################################################
+###########CODE FOR TESTING USE#########
 names = ['thluffy','dennis','bucky','doughjoe',
          'victor','jesus', 'coby', 'isaac', 'aida', 'leslie', 'z', 'cat', 'lou', 'jake', 'fred', 'bob', 'lee', 'rob', 'ulyses', 'jackson', 'stone']
 school = ['Stuyvesant', 'Bard', 'Bronx Science']
@@ -45,7 +46,7 @@ tut = {
         'School_Address':{"longitude":80, "latitude":80, "zipcode":10025, "address":"825 West End Avenue"}
 }
 
-#####################################################################################################################################################################################################
+########################################
 
 def register_user(user_type, form):
         account = {}
@@ -62,31 +63,32 @@ def register_user(user_type, form):
         account['school'] = form["school"]
         account['grade'] = form["grade"]
         
-        a1 = form["address1"]
-        a1_type = form["address1_hs"] #is this address for home or for school
-        loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
+        ## Commented out below; does not work with current form for register
+        # a1 = form["address1"]
+        # a1_type = form["address1_hs"] #is this address for home or for school
+        # loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
 
-        address1 = {}
-        address1["longitude"] = loc[0] #longitude
-        address1["latitude"] = loc[1] #latitude
-        address1["zipcode"] = loc[2] #zipcode
-        address1["address"] = a1 #actual address
-        account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
+        # address1 = {}
+        # address1["longitude"] = loc[0] #longitude
+        # address1["latitude"] = loc[1] #latitude
+        # address1["zipcode"] = loc[2] #zipcode
+        # address1["address"] = a1 #actual address
+        # account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
 
-        if user_type == "tutor":
-                account['courses'] = form["courses"]
-                #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
-                for subject in form['subjects']:
-                        account['%s' % subject] = True
-                times = form["times"]
-                td = times.split(";")
-                x = 0
-                #each day is given seperate element with value being a dictionary of time, address
-                while x < len(td):
-                        account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
-                        x += 3
-                account['match_score'] = 0 #used in comparing for searches
-        print account
+        # if user_type == "tutor":
+        #         account['courses'] = form["courses"]
+        #         #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
+        #         for subject in form['subjects']:
+        #                 account['%s' % subject] = True
+        #         times = form["times"]
+        #         td = times.split(";")
+        #         x = 0
+        #         #each day is given seperate element with value being a dictionary of time, address
+        #         while x < len(td):
+        #                 account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
+        #                 x += 3
+        #         account['match_score'] = 0 #used in comparing for searches
+        # print account
         return account
 
 def create_account(user_type, account):
@@ -94,21 +96,21 @@ def create_account(user_type, account):
 		return db.tutors.insert(account)
 	return db.tutees.insert(account)
 
-# matches login attempts with user
+# matches login attempts with user. returns user's account dictionary
 def authenticate(email, user_type, confirm_password):
 	if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } )
+		user = db.tutees.find_one( { 'email' : email } , { "_id" : False } )
 	else:   
-		user = db.tutors.find_one( { 'email' : email } )
+		user = db.tutors.find_one( { 'email' : email } , { "_id" : False }  )
 	if user == None:
 		return False
 	salt = user["salt"]
 	hash_pass = user["password"]
 	hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
 	if hash_pass == hash_confirm:
-		return True
+		return user
 	else:
-		return False
+		return None;
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -116,7 +118,7 @@ def index():
 	return render_template("index.html")
 
 #Returns list of possible tutors, based on course requested and the possible times given. times is a list of strings, each string is formatted day;hours;addresses.
-#Concept: First seperates out all tutors free on specified days and with specified subjects. Then begins operating on point system: Points accorded, (listed from most valuable to least): hours matching, address proximity, courses matching, school matching, grade matching
+#Concept: First separates out all tutors free on specified days and with specified subjects. Then begins operating on point system: Points accorded, (listed from most valuable to least): hours matching, address proximity, courses matching, school matching, grade matching
 def search_operation(form):
         courses = form["courses"]
         subject = form["subjects"]
@@ -161,41 +163,45 @@ def search_operation(form):
                 match_score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
                 tutor["match_score"] = match_score
                 #print tutor
-
         return tutor_list
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
-	base_url = "register_" + user_type + ".html"
-	if request.method == "GET":
-		return render_template(base_url)
-	else:
-                account = register_user(user_type, request.form)
-		if request.form['b'] == "Submit":
-			if request.form['confirm_password'] == request.form['password']:
-				create_account(user_type, account)
-				flash(user_type + ": You have succesfully created an account")
-				return render_template("base.html")
-			else:
-				flash("Passwords do not match")
-				return render_template(base_url)
+    base_url = "register_" + user_type + ".html"
+    if request.method == "GET":
+        return render_template(base_url)
+    else:
+        account = register_user(user_type, request.form)
+        if request.form['b'] == "Submit":
+            if request.form['confirm_password'] == request.form['password']:
+                create_account(user_type, account)
+                flash(user_type + ": You have succesfully created an account")
+                return render_template("base.html")
+            else:
+                flash("Passwords do not match")
+                return render_template(base_url)
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-	if request.method == "GET":
-		return render_template("login.html")
-	else:
-		email = request.form["email"]
-		password = request.form["password"]
-		user_type = request.form["user_type"]
-	if request.form['b'] == "Submit":
-		if authenticate(email, user_type, password):
-			flash("You have succesfully logged in")
-			session['email'] = email
-			return render_template("base.html")
-		else:
-			flash("Your username or password is incorrect")
-			return render_template("login.html")
+# authenticates user, logs him into session. there are two different login pages:
+# login/tutee and login/tutor
+@app.route("/login/<user_type>", methods=["GET", "POST"])
+def login(user_type):
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        email = request.form["email"]
+        password = request.form["password"]
+        if request.form['b'] == "Submit":
+            user = authenticate(email, user_type, password)
+            if user:
+                # Loops over dictionary, creates new session element for each key
+                for key in user.keys():
+                    session[key] = user[key]
+                flash("Welcome, " + session['first_name'])
+                flash("You have succesfully logged in")
+                return render_template("base.html")
+            else:
+                flash("Your username or password is incorrect")
+                return render_template("login.html")
 
 
 @app.route("/search", methods=["GET", "POST"])
