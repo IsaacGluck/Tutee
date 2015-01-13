@@ -74,7 +74,7 @@ def search_operation(form, db, session):
 
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
-            match_score = 0
+            match_score = 0.0
             email = tutor['email']
             addresses = []
             #find the days for which addresses work
@@ -86,14 +86,14 @@ def search_operation(form, db, session):
                         tutee_home_school = form["%s_Address" % day] #is the tutee home or school for that day
                         tutee_address = tut["%s_Address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
                         if (tutor_address["zipcode"] == tutee_address["zipcode"]):
-                                match_score += 4
+                                match_score += 4.0
                 except:
                         pass
                         
             if tutor['school'] == tut['school']:
-                    match_score += 1 # one point for going to the same school
+                    match_score += 1.0 # one point for going to the same school
                     print "+1"
-            match_score += (tutor['grade'] - tut['grade'])/5 #An older tutor is preferable
+            match_score += float(tutor['grade'] - tut['grade']) #An older tutor is preferable
             update_tutor(tutor['email'], {'match_score':match_score}, db)
             #print "score is: " + str(find_tutor(tutor['email'], db)['match_score'])
 

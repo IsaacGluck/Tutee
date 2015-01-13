@@ -37,7 +37,7 @@ def create_account(user_type, account, db):
 
 def register_user(user_type, form, db):
         account = {}
-        account['match_score'] = 0
+        account['match_score'] = 0.0
         account['first_name'] = form["first_name"]
         account['last_name'] = form["last_name"]
         account['type'] = user_type
@@ -75,6 +75,6 @@ def register_user(user_type, form, db):
                 while x < len(td):
                         account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
                         x += 3
-                account['match_score'] = 0 #used in comparing for searches
+                account['match_score'] = 0.0 #used in comparing for searches
         #print account
         return account
