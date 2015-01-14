@@ -63,32 +63,32 @@ def register_user(user_type, form):
         account['school'] = form["school"]
         account['grade'] = form["grade"]
         
+        
+        a1 = form["address1"]
         ## Commented out below; does not work with current form for register
-        # a1 = form["address1"]
-        # a1_type = form["address1_hs"] #is this address for home or for school
-        # loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
+        a1_type = form["address1_hs"] #is this address for home or for school
+        loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
+        address1 = {}
+        address1["longitude"] = loc[0] #longitude
+        address1["latitude"] = loc[1] #latitude
+        address1["zipcode"] = loc[2] #zipcode
+        address1["address"] = a1 #actual address
+        account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
 
-        # address1 = {}
-        # address1["longitude"] = loc[0] #longitude
-        # address1["latitude"] = loc[1] #latitude
-        # address1["zipcode"] = loc[2] #zipcode
-        # address1["address"] = a1 #actual address
-        # account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
+        if user_type == "tutor":
+                account['courses'] = form["courses"]
+                #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
+                for subject in form['subjects']:
+                        account['%s' % subject] = True
+                times = form["times"]
+                td = times.split(";")
+                x = 0
+                #each day is given seperate element with value being a dictionary of time, address
+                while x < len(td):
+                        account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
+                        x += 3
+                # account['match_score'] = 0 #used in comparing for searches
 
-        # if user_type == "tutor":
-        #         account['courses'] = form["courses"]
-        #         #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
-        #         for subject in form['subjects']:
-        #                 account['%s' % subject] = True
-        #         times = form["times"]
-        #         td = times.split(";")
-        #         x = 0
-        #         #each day is given seperate element with value being a dictionary of time, address
-        #         while x < len(td):
-        #                 account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
-        #                 x += 3
-        #         account['match_score'] = 0 #used in comparing for searches
-        # print account
         return account
 
 def create_account(user_type, account):
