@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, session
+from flask import Flask, render_template, request, flash, session, redirect
 from pymongo import Connection
 from googlemaps import locate
 import hashlib, uuid
@@ -197,12 +197,15 @@ def login(user_type):
                 for key in user.keys():
                     session[key] = user[key]
                 flash("Welcome, " + session['first_name'])
-                flash("You have succesfully logged in")
-                return render_template("base.html")
+                return redirect("homepage")
             else:
                 flash("Your username or password is incorrect")
                 return render_template("login.html")
 
+@app.route("/homepage", methods=["GET", "POST"])
+def homepage():
+    if request.method == "GET":
+        return render_template("homepage.html")
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
