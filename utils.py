@@ -1,4 +1,5 @@
 import hashlib, uuid
+import math
 from googlemaps import locate
 
 #misc useful helper functions
@@ -78,3 +79,17 @@ def register_user(user_type, form, db):
                 account['match_score'] = 0.0 #used in comparing for searches
         #print account
         return account
+
+#Calculates the distance given two dictionaries of addresses, using longitude and latitude
+def calculate_distance(address1, address2):
+        long1 = math.radians(address1["longitude"])
+        lat1 = math.radians(address1["latitude"])
+        long2 = math.radians(address2["longitude"])
+        lat2 = math.radians(address2["latitude"])
+        dlong = (long2 - long1) #distance between longs
+        dlat = (lat2 - lat1) #distance between lats
+        #these are computations found online for calculating distance
+        a = math.pow((math.sin(dlat/2)),2) + math.cos(lat1) * math.cos(lat2) * math.pow((math.sin(dlong/2)),2)
+        b = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        c = 3963.1 * b #multiply radius of the earth, 3963.1 miles
+        return c

@@ -1,6 +1,6 @@
 import random
 from googlemaps import locate
-from utils import update_tutor, find_tutor
+from utils import update_tutor, find_tutor, calculate_distance
 
 #################################################################################CODE FOR TESTING USE################################################################################################
 
@@ -12,6 +12,7 @@ subs = ['chemistry', 'english', 'physics', 'biology']
 dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
 zips = [10025, 10026, 10027, 10028]
 emails = ["coby.goldberg@gmail.com", "cob", "co", "ss", "a", "b", "c", "d", "e", "f","g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "zzzz", "z", "ghaga", "chake", "shake", "lake"]
+long_lats = [77.7, 77.8, 77.7777, 77.777, 77.9, 90.1]
 
 dlist = []
 x = 0
@@ -24,7 +25,7 @@ while x<30:
              '%s'%random.choice(subs):True,
              '%s'%random.choice(dates):{"time:":'1-8', "address":"School"},
              '%s'%random.choice(dates):{"time:":'1-8', "address":"School"},
-             "School_Address":{"longitude":80, "latitude":80, "zipcode":random.choice(zips), "address":"825 West End Avenue"},
+             "School_Address":{"longitude":random.choice(long_lats), "latitude":random.choice(long_lats), "zipcode":random.choice(zips), "address":"825 West End Avenue"},
         }
         dlist.append(d)
         x += 1
@@ -87,13 +88,16 @@ def search_operation(form, db, session):
                         tutee_address = tut["%s_Address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
                         if (tutor_address["zipcode"] == tutee_address["zipcode"]):
                                 match_score += 4.0
+                        distance = calculate_distance(tutor_address, tutee_address)
+                        match_score += float(3 - distance)
+
                 except:
                         pass
                         
             if tutor['school'] == tut['school']:
                     match_score += 1.0 # one point for going to the same school
-                    print "+1"
-            match_score += float(tutor['grade'] - tut['grade']) #An older tutor is preferable
+                    #print "+1"
+            #match_score += float(tutor['grade'] - tut['grade'])/4 #An older tutor is preferable
             update_tutor(tutor['email'], {'match_score':match_score}, db)
             #print "score is: " + str(find_tutor(tutor['email'], db)['match_score'])
 
