@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, flash, session, redirect
+from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
 from googlemaps import locate
 import hashlib, uuid
 import random
 import json
-
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -47,6 +47,17 @@ tut = {
 }
 
 ########################################
+
+def auth(page):
+    def decorate(f):
+        @wraps(f)
+        def inner(*args):
+            if 'logged_in' not in session:
+                flash("You must be logged in to see this page")
+                return redirect('/')
+            return f(*args)
+        return inner
+    return decorate
 
 def register_user(user_type, form):
         account = {}
@@ -183,7 +194,9 @@ def register(user_type):
 
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
+
 @app.route("/login/<user_type>", methods=["GET", "POST"])
+
 def login(user_type):
     if request.method == "GET":
         return render_template("login.html")
@@ -196,6 +209,7 @@ def login(user_type):
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
+                session["logged_in"] = True
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")
             else:
@@ -203,9 +217,14 @@ def login(user_type):
                 return render_template("login.html")
 
 @app.route("/homepage", methods=["GET", "POST"])
+@auth("/homepage")
 def homepage():
     if request.method == "GET":
         return render_template("homepage.html")
+    else:
+        if request.form['b']=="Log Out":
+            return logout()
+
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -221,6 +240,11 @@ def search():
                         flash(tutor_list)
                         return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
                         
+
+def logout():
+    session.pop('logged_in', None)
+    flash("You have been logged out")
+    return redirect('/')
 
 if __name__ == "__main__":
 	app.debug = True
