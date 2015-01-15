@@ -4,21 +4,21 @@ from googlemaps import locate
 
 #misc useful helper functions
 
-# matches login attempts with user
+# matches login attempts with user, returns user's account dictionary
 def authenticate(email, user_type, confirm_password, db):
-	if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } )
+        if user_type == "tutee": 
+		user = db.tutees.find_one( { 'email' : email } , { "_id" : False } )
 	else:   
-		user = db.tutors.find_one( { 'email' : email } )
+		user = db.tutors.find_one( { 'email' : email } , { "_id" : False }  )
 	if user == None:
-		return False
+		return None
 	salt = user["salt"]
 	hash_pass = user["password"]
 	hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
 	if hash_pass == hash_confirm:
-		return True
+		return user
 	else:
-		return False
+		return None
 
 #helper method to find a tutor given an email
 def find_tutor(email, db):
@@ -38,7 +38,6 @@ def create_account(user_type, account, db):
 
 def register_user(user_type, form, db):
         account = {}
-        account['match_score'] = 0.0
         account['first_name'] = form["first_name"]
         account['last_name'] = form["last_name"]
         account['type'] = user_type
@@ -53,7 +52,6 @@ def register_user(user_type, form, db):
         account['grade'] = form["grade"]
         
         a1 = form["address1"]
-        print "add " + str(a1)
         a1_type = form["address1_hs"] #is this address for home or for school
         loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
 
@@ -67,17 +65,16 @@ def register_user(user_type, form, db):
         if user_type == "tutor":
                 account['courses'] = form["courses"]
                 #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
-                for subject in form['subjects']:
-                        account['%s' % subject] = True
+                subject = form['subjects']
+                account['%s' % subject] = True
                 times = form["times"]
                 td = times.split(";")
                 x = 0
                 #each day is given seperate element with value being a dictionary of time, address
                 while x < len(td):
-                        account['%s' % td[x]] = {"time": td[x+1], "address": td[x+2]}
-                        x += 3
+                        account['%s' % td[x]] = {"time": td[x+1], "address": form['Day1_Address']}
+                        x += 2
                 account['match_score'] = 0.0 #used in comparing for searches
-        #print account
         return account
 
 #Calculates the distance given two dictionaries of addresses, using longitude and latitude

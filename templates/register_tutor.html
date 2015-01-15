@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block info %}
-<p> Time: 
-  <input type="text" name="times">Enter: Day;Hours;Home/School</p>
+<p> Time (Enter Day;Hours):
+  <input type="text" name="times">Day;Hours</p>
+<p> Address: <input type="checkbox" name="Day1_Address" value="School">School</input><input type="checkbox" name="Day1_Address" value="Home">Home</input>
 <p>Advanced courses you've taken:
   <select multiple size="1" form="info" name="courses">
     <option value="chemistry">AP Chemistry</option>
