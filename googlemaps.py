@@ -1,7 +1,7 @@
 import urllib2
 import json
 
-##GOOGLE API KEY, CURRENTLY STOLEN FROM AN OLD PROJECT
+##GOOGLE API KEY
 google_key = 'AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4' #API key
 
 #location takes an address, and using the google maps api returns the zip code and longditude/ latitude
