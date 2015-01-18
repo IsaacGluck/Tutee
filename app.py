@@ -25,10 +25,15 @@ def auth(page):
         return inner
     return decorate
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
-	return render_template("index.html")
+    if request.method == "GET":
+	   return render_template("index.html")
+    else:
+        if request.form['b']=="Login":
+            return redirect("/login/tutees")
+        else:
+            return redirect("/register/tutees")
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
