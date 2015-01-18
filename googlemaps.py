@@ -7,7 +7,7 @@ google_key = 'AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4' #API key
 #location takes an address, and using the google maps api returns the zip code and longditude/ latitude
 def locate(address):
     address = address.replace(" ", "%20") #needed for proper api usage
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s" % (address, google_key)
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s" % (address, google_key)      
 
     request = urllib2.urlopen(url)
     results = request.read()

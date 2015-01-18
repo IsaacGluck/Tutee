@@ -9,7 +9,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-## mongo 
+# mongo 
 conn = Connection()
 db = conn['users']
 
@@ -25,10 +25,15 @@ def auth(page):
         return inner
     return decorate
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
-	return render_template("index.html")
+    if request.method == "GET":
+	   return render_template("index.html")
+    else:
+        if request.form['b']=="Login":
+            return redirect("/login/tutees")
+        else:
+            return redirect("/register/tutees")
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
@@ -45,9 +50,7 @@ def register(user_type):
 			else:
 				flash("Passwords do not match")
 				return render_template(base_url)
-
 @app.route("/login", methods=["GET", "POST"])
-
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
 @app.route("/login/<user_type>", methods=["GET", "POST"])
@@ -78,6 +81,12 @@ def homepage():
     else:
         if request.form['b']=="Log Out":
             return logout()
+
+@app.route("/profile", methods=["GET","POST"])
+@auth("/profile")
+def profile():
+    if request.method == "GET":
+        return render_template("profile.html")
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
