@@ -9,7 +9,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-## mongo 
+# mongo 
 conn = Connection()
 db = conn['users']
 
