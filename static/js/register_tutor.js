@@ -192,6 +192,7 @@ function processsub2(e) {
 function setDay(e) {
 var day = e.toElement.innerHTML;
 document.getElementById("day").innerHTML = day;
+ document.getElementById("_day1").setAttribute("value", day);
 }
 
 function setHour(e) {
@@ -199,6 +200,13 @@ function setHour(e) {
     var parent = e.toElement.getAttribute("parent");
     document.getElementById(parent).innerHTML = hour + ":00"
     checkComplete(curM.slice(1,2));
+    console.log("hi");
+    if (e.toElement.getAttribute("root") == "m2") {
+	document.getElementById("_starthour1").setAttribute("value", hour);
+    }
+    else {
+	document.getElementById("_endhour1").setAttribute("value", hour);
+    }
 }
 
 function setMinute(e) {
@@ -206,6 +214,12 @@ function setMinute(e) {
     var parent = e.toElement.getAttribute("parent");
     document.getElementById(parent).innerHTML = " " + min;
     checkComplete(curM.slice(1,2));
+    if (e.toElement.getAttribute("root") == "m2") {
+	document.getElementById("_startminute1").setAttribute("value", min.slice(1,3));
+    }
+    else {
+	document.getElementById("_endminute1").setAttribute("value", min.slice(1,3));
+	}
 }
 
 function setType(e) {
@@ -213,6 +227,12 @@ function setType(e) {
     var parent = e.toElement.getAttribute("parent");
     document.getElementById(parent).innerHTML = type;
     checkComplete(curM.slice(1,2));
+    if (e.toElement.getAttribute("root") == "m2") {
+	document.getElementById("_starttype1").setAttribute("value", type);
+    }
+    else {
+	document.getElementById("_endtype1").setAttribute("value", type);
+    }
 }
 
 function checkComplete(num) {
