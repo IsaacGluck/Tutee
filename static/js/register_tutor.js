@@ -1,12 +1,15 @@
 var curM = null;
 var closer = null;
 var curSub = null;
+var curMenu = null;
+
 
 var menus = document.getElementsByClassName("m");
 for (var i=0; i<menus.length;i++) {
     menus[i].addEventListener('mouseover', showdrop);
     menus[i].addEventListener('mouseout', hidedropstart);
 }
+
 
 var dropdowns = document.getElementsByClassName("d2");
 for (var i =0; i < dropdowns.length;i++) {
@@ -87,13 +90,23 @@ function showdrop(e) {
 	    //console.log(subs[i]);
 	    subs[i].style.visibility = 'hidden';
     }
+
     }
+    if (curMenu) {
+	var open = document.getElementsByClassName("menu" + curMenu);
+	for (var i = 0; i < open.length; i++) {
+	    open[i].style.visibility = 'hidden';
+	}
+    }	
+	
+    
     curSub = null;
     var id = e.toElement.getAttribute("child");
     curM = id;
+    curMenu = e.toElement.getAttribute("menu");
     //console.log(curM);
     document.getElementById(id).style.visibility = 'visible';
-    var subs = document.getElementsByClassName("d2 " +  curM.slice(1,2) );
+    var subs = document.getElementsByClassName("d2 " +  curM.slice(1,2) + " menu" + curMenu);
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'visible';
     }
@@ -132,6 +145,7 @@ function hidedrop(e) {
     }
     curM = null;
     curSub = null;
+    curMenu = null;
 }
 
 function processdrop(e) {
