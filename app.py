@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
 from search import search_operation
-from utils import authenticate, create_account, register_user
+from utils import authenticate, create_account, register_user, find_tutor, update_tutor
 import hashlib, uuid
 import random
 import json
@@ -50,7 +50,7 @@ def register(user_type):
 			else:
 				flash("Passwords do not match")
 				return render_template(base_url)
-@app.route("/login", methods=["GET", "POST"])
+
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
 @app.route("/login/<user_type>", methods=["GET", "POST"])
@@ -97,6 +97,28 @@ def search():
                         tutor_list = search_operation(request.form, db, session)
                         flash(tutor_list)
                         return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
+
+@auth("/settings")
+@app.route("/settings/<settings_type>", methods=["GET","POST"])
+def update_settings(settings_type):
+    if request.method == "GET":
+        html_file = "settings_" + settings_type + ".html"
+        return render_template(html_file)
+    if request.method == "POST":
+        if request.form["b"] == "Log Out":
+            return logout()
+        if settings_type == "profile":
+            if request.form["b"] == "Update Profile":
+                new_account = {}
+                old_email = session["email"]
+                for key in request.form.keys():
+                    new_account[key] = request.form[key]
+                    session[key] = request.form[key]
+                update_tutor(old_email, new_account, db)
+                return redirect("homepage")
+
+
+
 
 def logout():
     session.pop('logged_in', None)
