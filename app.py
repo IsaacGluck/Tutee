@@ -95,8 +95,14 @@ def search():
         else:
                 if request.form['b'] == "Submit":
                         tutor_list = search_operation(request.form, db, session)
-                        flash(tutor_list)
-                        return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
+                        return render_template("search_results.html", tutor_list=tutor_list) #Will redirect to a search return page, temp for testing purposes of returns
+
+@auth("/results")
+@app.route("/results", methods=["GET", "POST"])
+def results(tutor_list):
+    if request.method == "GET":
+        return render_template("search_results.html", tutor_list=tutor_list)
+
 
 def logout():
     session.pop('logged_in', None)
