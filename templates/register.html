@@ -2,7 +2,8 @@
 
 {% block head %}
 <style>
-.dropdownL {margin: 0;
+.dropdownL {position:relative;
+margin: 0;
 padding: 0;
 list-style: none;
 float: left;
@@ -33,6 +34,7 @@ text-decoration: none
 
 .d {
 position: absolute;
+z-index: 10;
 	visibility: hidden;
 	margin: 0;
 	padding: 0;
@@ -40,6 +42,7 @@ position: absolute;
 	border: 1px solid #5970B2}
 
 .d2 {
+position: relative;
 visibility: hidden
 }
 

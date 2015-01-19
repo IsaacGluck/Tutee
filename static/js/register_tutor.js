@@ -45,6 +45,7 @@ for (var i=0; i < hours1.length;i++) {
     hours1[i].addEventListener('click',setHour);
 }
 
+
 var hours2 = document.getElementsByClassName("s2 3 hours2");
 for (var i=0; i < hours2.length;i++) {
     hours2[i].addEventListener('click',setHour);
@@ -55,10 +56,12 @@ for (var i=0; i< minutes1.length; i++) {
     minutes1[i].addEventListener('click', setMinute);
 }
 
+
 var minutes2 = document.getElementsByClassName("s2 3 minutes2");
 for (var i=0; i< minutes2.length; i++) {
     minutes2[i].addEventListener('click', setMinute);
 }
+
 
 var type1 = document.getElementsByClassName("s2 2 types");
 for (var i=0; i< type1.length; i++) {
@@ -72,6 +75,7 @@ for (var i=0; i< type2.length; i++) {
 }
 
 
+
 function hidedropstart(e){
     closer = window.setTimeout(hidedrop,1000);
 }
@@ -82,16 +86,17 @@ function showdrop(e) {
 	window.clearTimeout(closer);
 	closer = null;
     }
+    /*
     if (curM) {
-	document.getElementById(curM).style.visibility = 'hidden';
+	//document.getElementById(curM).style.visibility = 'hidden';
 	var subs = document.getElementsByClassName( curM.slice(1,2) );
 	//console.log(subs);
 	for (var i =0; i < subs.length; i++) {
 	    //console.log(subs[i]);
 	    subs[i].style.visibility = 'hidden';
     }
-
-    }
+*/
+    
     if (curMenu) {
 	var open = document.getElementsByClassName("menu" + curMenu);
 	for (var i = 0; i < open.length; i++) {
@@ -105,7 +110,8 @@ function showdrop(e) {
     curM = id;
     curMenu = e.toElement.getAttribute("menu");
     //console.log(curM);
-    document.getElementById(id).style.visibility = 'visible';
+    //document.getElementById(id).style.visibility = 'visible';
+    document.getElementById("menu" + curMenu + "-" +id).style.visibility = 'visible';
     var subs = document.getElementsByClassName("d2 " +  curM.slice(1,2) + " menu" + curMenu);
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'visible';
@@ -123,14 +129,14 @@ function showsub(e) {
 	    sub[i].style.visibility = 'hidden';
 	}
     }
-    if (el.getAttribute("class") == "d2 d2F " + curM.slice(1,2)) {
+    if (el.getAttribute("class") == "menu" + curMenu + " d2 d2F " + curM.slice(1,2)) {
 	curSub = el.getAttribute("child");
-	var sub = document.getElementsByClassName(curSub);
+	var sub = document.getElementsByClassName("menu" + curMenu + " " + curSub);
 	for (var i = 0; i < sub.length; i++) {
 	    sub[i].style.visibility = 'visible';
 	}
 	var height = parseInt( window.getComputedStyle(el).height.slice(0,2));
-	document.getElementsByClassName("s " + curM.slice(1,2) + " " + curSub)[0].style.marginTop = "" + parseInt( el.getAttribute("pos") ) * (height) + "px";
+	document.getElementsByClassName("menu" + curMenu + " s " + curM.slice(1,2) + " " + curSub)[0].style.marginTop = "" + parseInt( el.getAttribute("pos") ) * (height) + "px";
     }
 }
   
@@ -138,8 +144,8 @@ function showsub(e) {
 
 function hidedrop(e) {
     //console.log(curM);
-    document.getElementById(curM).style.visibility = 'hidden';
-    var subs = document.getElementsByClassName( curM.slice(1,2) );
+   // document.getElementById(curM).style.visibility = 'hidden';
+    var subs = document.getElementsByClassName( "menu" + curMenu );
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'hidden';
     }
@@ -162,6 +168,7 @@ function processsub(e) {
 	closer = null;
     }
 }
+/*
 function processdrop2(e) {
     var el = e.toElement;
     if (closer) {
@@ -200,7 +207,7 @@ function processsub2(e) {
     }
 }
 
-   
+   */
 
     
 function setDay(e) {

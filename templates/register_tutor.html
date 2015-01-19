@@ -30,10 +30,10 @@
 {% for n in range(2) %}
 
 menu{{n}}
-
-<ul id="times" class="dropdownL">
-  <li class="list"><a class="m" child="m1" id="day" menu="{{n}}">Days</a>
-  <div id="m1" class="menu{{n}} d">
+<div>
+<ul id="menu{{n}}-times" class="dropdownL">
+  <li class="list"><a class="m" child="m1" id="menu{{n}}-day" menu="{{n}}">Days</a>
+  <div id="menu{{n}}-m1" class="menu{{n}} d">
       <a class="menu{{n}} d2 d2F 1" parent="m1" val="mon">Monday</a>
       <a class="menu{{n}} d2 d2F 1" parent="m1" val="tues">Tuesday</a>
       <a class="menu{{n}} d2 d2F 1" parent="m1" val="weds">Wednesday</a>
@@ -44,10 +44,10 @@ menu{{n}}
     </div>   
   </li>
 
-  <li class="list"><a class="m" child="m2" id="start" menu="{{n}}">Starting Time</a>
-  <div id="m2" class="menu{{n}} d">
+  <li class="list"><a class="m" child="m2" id="menu{{n}}-start" menu="{{n}}">Starting Time</a>
+  <div id="menu{{n}}-m2" class="menu{{n}} d">
    
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="hour" child="hours" pos="0">Hour</a>
+    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-hour" child="hours" pos="0">Hour</a>
     
       <div class="menu{{n}} s 2 hours"> 
       <a class="menu{{n}} s2 2 hours" parent="hour" root="m2">1</a>
@@ -63,7 +63,7 @@ menu{{n}}
       <a class="menu{{n}} s2 2 hours" parent="hour" root="m2">11</a>
       <a class="menu{{n}} s2 2 hours" parent="hour" root="m2">12</a>
     </div>
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="min" child="minutes" pos="1">Minute</a>
+    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-min" child="minutes" pos="1">Minute</a>
     
     <div class="menu{{n}} s 2 minutes">
       <a class="menu{{n}} s2 2 minutes" parent="min" root="m2">:00</a>
@@ -80,17 +80,17 @@ menu{{n}}
       <a class="menu{{n}} s2 2 minutes" parent="min" root="m2">:55</a>
     </div>
 
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="type" child="types" pos="2">Type</a>    
+    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-type" child="types" pos="2">Type</a>    
     <div class="menu{{n}} s 2 types">
       <a class="menu{{n}} s2 2 types" parent="type" root="m2">AM</a>
       <a class="menu{{n}} s2 2 types" parent="type" root="m2">PM</a>
     </div>
   </li>
 
-  <li class="list"><a class="m" child="m3" id="end" menu="{{n}}">Ending Time</a>
-  <div id="m3" class="menu{{n}} d">
+  <li class="list"><a class="m" child="m3" id="menu{{n}}-end" menu="{{n}}">Ending Time</a>
+  <div id="menu{{n}}-m3" class="menu{{n}} d">
    
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="hour2" child="hours2" pos="0">Hour</a>
+    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-hour2" child="hours2" pos="0">Hour</a>
     
       <div class="menu{{n}} s 3 hours2"> 
       <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3">1</a>
@@ -106,7 +106,7 @@ menu{{n}}
       <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3">11</a>
       <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3">12</a>
     </div>
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="min2" child="minutes2" pos="1">Minute</a>
+    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-min2" child="minutes2" pos="1">Minute</a>
     
     <div class="menu{{n}} s 3 minutes2">
       <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3">:00</a>
@@ -123,7 +123,7 @@ menu{{n}}
       <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3">:55</a>
     </div>
 
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="type2" child="types2" pos="2">Type</a>    
+    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-type2" child="types2" pos="2">Type</a>    
     <div class="menu{{n}} s 3 types2">
       <a class="menu{{n}} s2 3 types2" parent="type2" root="m3">AM</a>
       <a class="menu{{n}} s2 3 types2" parent="type2" root="m3">PM</a>
@@ -131,12 +131,13 @@ menu{{n}}
   </li>
 
   <li class="list"><a class="m" child="m4" menu="{{n}}">Location</a>
-  <div id="m4" class="menu{{n}} d 4">
+  <div id="menu{{n}}-m4" class="menu{{n}} d 4">
       <input class="menu{{n}} d2 4" type="checkbox" value="home" name="day1_address" > <textbox class="menu{{n}} d2 4 text2">Home</textbox><br>
       <input class="menu{{n}} d2 4" type="checkbox" value="school" name="day1_address"> <textbox class="menu{{n}} d2 4 text2">School</textbox>
   </div>    
   </li>
 </ul>
+</div>
 
 <input type="hidden" id="_day1" name="day1" value="">
 <input type="hidden" id="_starthour1" name="start_hour1" value="">
