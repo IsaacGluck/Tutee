@@ -5,16 +5,39 @@
 {% endblock %}
 
 {% block info %}
-	<p>Advanced courses you've taken:
-	<select multiple size="1" form="info" name="courses">
-		<option value="chemistry">AP Chemistry</option>
-		<option value="physics">AP Physics</option>
-		<option value="literature">AP Literature</option>
-	</select></p>
-	<p>Your strongest subjects:
-	<select multiple autofocus size="1" form="info" name="subjects">
-		<option value="chemistry">Chemistry</option>
-		<option value="physics">Physics</option>
-		<option value="english">English</option>
-	</select></p>
+
+<p> Time (Enter Day;Hours):
+  <input type="text" name="times">Day;Hours</p>
+<p> Address: <input type="checkbox" name="Day1_Address" value="School">School</input><input type="checkbox" name="Day1_Address" value="Home">Home</input>
+<p>Advanced courses you've taken:
+  <select multiple size="1" form="info" name="courses">
+    <option value="chemistry">AP Chemistry</option>
+    <option value="physics">AP Physics</option>
+    <option value="literature">AP Literature</option>
+</select></p>
+<p>Your strongest subjects:
+  <select multiple autofocus size="1" form="info" name="subjects">
+    <option value="chemistry">Chemistry</option>
+    <option value="physics">Physics</option>
+    <option value="english">English</option>
+</select></p>
+
+
+
+
+<br>
+
+<div id="counter" val="0"></div>
+
+{% set n = 0 %}
+<div id="menu{{n}}">
+{% include "dropdown.html" %}
+</div>
+
+
+
+
+<button type="button" id="add">Add Another Day</button>
+
+
 {% endblock %}

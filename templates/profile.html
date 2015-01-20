@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+	<div class="container">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			            <span class="sr-only">Toggle navigation</span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			          </button>
+					<a class="navbar-brand" href="#">Tutee</a>
+			</div>
+				<div id="navbar" class="collapse navbar-collapse">
+		          <ul class="nav navbar-nav">
+			    <li><a href="/profile">Home</a></li>
+		            <li><a href="/search">Search</a></li>
+		            <li><a href="/settings">Account Settings</a></li>
+			    <li><a href="/inbox">Inbox</a></li>
+			    <li><a href="/about">About Tutee</a></li>
+		          </ul>
+		    	<ul class="nav navbar-nav navbar-right">
+		          <li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+			  <li><form method="POST"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
+		        </ul>
+		        </div>
+			</div>
+		</nav>
+		<div class="row">
+		  <div class="col-md-4">
+		    <div class="thumbnail">
+		      <img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg">
+		      <div class="caption">
+			<h3>{{ session["first_name"] }} {{ session["last_name"] }}</h3>
+			<h4>{{ session["school"] }}</h4>
+			<h5>{{ session["grade"] }}th Grade</h5>
+		      </div>
+		    </div>
+		  </div>
+
+		  <div class="col-md-8">
+		  	{% if session["type"]=="tutor"%}
+		  	<div class="panel panel-default">
+		  		<div class="panel-heading">
+		  			Favorite Subjects
+		  		</div>
+		  		<div class="panel-body">
+		  			{{session["subjects"]}}
+		  		</div>
+		  	</div>
+		  	<div class="panel panel-default">
+		  		<div class="panel-heading">
+		  			Favorite Classes
+		  		</div>
+		  		<div class="panel-body">
+		  			{{session[["classes"]]}}
+		  		</div>
+		  	</div>
+		  	{% endif %}
+		  </div>
+		</div>
+	</div>
+{% endblock %}

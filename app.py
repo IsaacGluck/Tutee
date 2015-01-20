@@ -1,37 +1,39 @@
-from flask import Flask, render_template, request, flash, session
+from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
+from search import search_operation
+from utils import authenticate, create_account, register_user, find_tutor, update_tutor
 import hashlib, uuid
+import random
+import json
+from functools import wraps
 
 app = Flask(__name__)
 
-## mongo 
+# mongo 
 conn = Connection()
 db = conn['users']
 
-def create_account(user_type, account):
-	if user_type == "tutor":
-		return db.tutors.insert(account)
-	return db.tutees.insert(account)
 
-# matches login attempts with user
-def authenticate(email, user_type, confirm_password):
-	if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } )
-	else:   
-		user = db.tutors.find_one( { 'email' : email } )
-	if user == None:
-		return False
-	salt = user["salt"]
-	hash_pass = user["password"]
-	hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
-	if hash_pass == hash_confirm:
-		return True
-	else:
-		return False
+def auth(page):
+    def decorate(f):
+        @wraps(f)
+        def inner(*args):
+            if 'logged_in' not in session:
+                flash("You must be logged in to see this page")
+                return redirect('/')
+            return f(*args)
+        return inner
+    return decorate
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-	return render_template("index.html")
+    if request.method == "GET":
+	   return render_template("index.html")
+    else:
+        if request.form['b']=="Login":
+            return redirect("/login/tutees")
+        else:
+            return redirect("/register/tutees")
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
@@ -39,52 +41,91 @@ def register(user_type):
 	if request.method == "GET":
 		return render_template(base_url)
 	else:
-
-		account = {}
-		account['first_name'] = request.form["first_name"]
-		account['last_name'] = request.form["last_name"]
-		account['email'] = request.form["email"]
-
-                password = request.form["password"]
-                salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent password compromisation even if hacker knew the hashing algo
-                hash_pass = hashlib.sha512(salt + password).hexdigest() #prepend the salt to the password, hash using sha512 algorithm, use hexdigest to store as string
-                account['salt'] = salt
-		account['password'] = hash_pass
-
-		confirm_password = request.form["confirm_password"]
-		account['school'] = request.form["school"]
-		account['grade'] = request.form["grade"]
-		if user_type == "tutor":
-			account['courses'] = request.form["courses"]
-			account['subjects'] = request.form["subjects"]
+                account = register_user(user_type, request.form, db)
 		if request.form['b'] == "Submit":
-			if confirm_password == password:
-				create_account(user_type, account)
+			if request.form['confirm_password'] == request.form['password']:
+				create_account(user_type, account, db)
 				flash(user_type + ": You have succesfully created an account")
 				return render_template("base.html")
 			else:
 				flash("Passwords do not match")
 				return render_template(base_url)
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-	if request.method == "GET":
-		return render_template("login.html")
-	else:
-		email = request.form["email"]
-		password = request.form["password"]
-		user_type = request.form["user_type"]
-	if request.form['b'] == "Submit":
-		if authenticate(email, user_type, password):
-			flash("You have succesfully logged in")
-			session['email'] = email
-			return render_template("base.html")
-		else:
-			flash("Your username or password is incorrect")
-			return render_template("login.html")
+# authenticates user, logs him into session. there are two different login pages:
+# login/tutee and login/tutor
+@app.route("/login/<user_type>", methods=["GET", "POST"])
+def login(user_type):
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        email = request.form["email"]
+        password = request.form["password"]
+        if request.form['b'] == "Submit":
+            user = authenticate(email, user_type, password, db)
+            if user:
+                # Loops over dictionary, creates new session element for each key
+                for key in user.keys():
+                    session[key] = user[key]
+                session["logged_in"] = True
+                flash("Welcome, " + session['first_name'])
+                return redirect("homepage")
+            else:
+                flash("Your username or password is incorrect")
+                return render_template("login.html")
+
+@app.route("/homepage", methods=["GET", "POST"])
+@auth("/homepage")
+def homepage():
+    if request.method == "GET":
+        return render_template("homepage.html")
+    else:
+        if request.form['b']=="Log Out":
+            return logout()
+
+@app.route("/profile", methods=["GET","POST"])
+@auth("/profile")
+def profile():
+    if request.method == "GET":
+        return render_template("profile.html")
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+        if request.method == "GET":
+                return render_template("search.html") 
+        else:
+                if request.form['b'] == "Submit":
+                        tutor_list = search_operation(request.form, db, session)
+                        flash(tutor_list)
+                        return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
+
+@auth("/settings")
+@app.route("/settings/<settings_type>", methods=["GET","POST"])
+def update_settings(settings_type):
+    if request.method == "GET":
+        html_file = "settings_" + settings_type + ".html"
+        return render_template(html_file)
+    if request.method == "POST":
+        if request.form["b"] == "Log Out":
+            return logout()
+        if settings_type == "profile":
+            if request.form["b"] == "Update Profile":
+                new_account = {}
+                old_email = session["email"]
+                for key in request.form.keys():
+                    new_account[key] = request.form[key]
+                    session[key] = request.form[key]
+                update_tutor(old_email, new_account, db)
+                return redirect("homepage")
+
+
+
+
+def logout():
+    session.pop('logged_in', None)
+    flash("You have been logged out")
+    return redirect('/')
 
 if __name__ == "__main__":
 	app.debug = True
 	app.secret_key = "shhhhhh"
 	app.run()
-
