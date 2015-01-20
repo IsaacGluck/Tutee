@@ -27,127 +27,17 @@
 
 <br>
 
-{% for n in range(2) %}
+<div id="counter" val="0"></div>
 
-menu{{n}}
-<div>
-<ul id="menu{{n}}-times" class="dropdownL">
-  <li class="list"><a class="m" child="m1" id="menu{{n}}-day" menu="{{n}}">Days</a>
-  <div id="menu{{n}}-m1" class="menu{{n}} d">
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="mon" day="{{n}}">Monday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="tues" day="{{n}}">Tuesday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="weds" day="{{n}}">Wednesday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="thurs" day="{{n}}">Thursday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="fri" day="{{n}}">Friday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="sat" day="{{n}}">Sunday</a>
-      <a class="menu{{n}} d2 d2F 1" parent="m1" val="sun" day="{{n}}">Saturday</a>
-    </div>   
-  </li>
-
-  <li class="list"><a class="m" child="m2" id="menu{{n}}-start" menu="{{n}}">Starting Time</a>
-  <div id="menu{{n}}-m2" class="menu{{n}} d">
-   
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-hour" child="hours" pos="0">Hour</a>
-    
-      <div class="menu{{n}} s 2 hours"> 
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">1</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">2</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">3</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">4</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">5</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">6</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">7</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">8</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">9</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">10</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">11</a>
-      <a class="menu{{n}} s2 2 hours" parent="hour" root="m2" day="{{n}}" day="{{n}}">12</a>
-    </div>
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-min" child="minutes" pos="1">Minute</a>
-    
-    <div class="menu{{n}} s 2 minutes">
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:00</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:05</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:10</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:15</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:20</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:25</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:30</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:35</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:40</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:45</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:50</a>
-      <a class="menu{{n}} s2 2 minutes" parent="min" root="m2" day="{{n}}">:55</a>
-    </div>
-
-    <a class="menu{{n}} d2 d2F 2" parent="m2" id="menu{{n}}-type" child="types" pos="2">Type</a>    
-    <div class="menu{{n}} s 2 types">
-      <a class="menu{{n}} s2 2 types" parent="type" root="m2" day="{{n}}">AM</a>
-      <a class="menu{{n}} s2 2 types" parent="type" root="m2" day="{{n}}">PM</a>
-    </div>
-  </li>
-
-  <li class="list"><a class="m" child="m3" id="menu{{n}}-end" menu="{{n}}">Ending Time</a>
-  <div id="menu{{n}}-m3" class="menu{{n}} d">
-   
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-hour2" child="hours2" pos="0">Hour</a>
-    
-      <div class="menu{{n}} s 3 hours2"> 
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">1</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">2</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">3</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">4</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">5</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">6</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">7</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">8</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">9</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">10</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">11</a>
-      <a class="menu{{n}} s2 3 hours2" parent="hour2" root="m3" day="{{n}}">12</a>
-    </div>
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-min2" child="minutes2" pos="1">Minute</a>
-    
-    <div class="menu{{n}} s 3 minutes2">
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:00</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:05</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:10</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:15</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:20</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:25</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:30</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:35</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:40</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:45</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:50</a>
-      <a class="menu{{n}} s2 3 minutes2" parent="min2" root="m3" day="{{n}}">:55</a>
-    </div>
-
-    <a class="menu{{n}} d2 d2F 3" parent="m3" id="menu{{n}}-type2" child="types2" pos="2">Type</a>    
-    <div class="menu{{n}} s 3 types2">
-      <a class="menu{{n}} s2 3 types2" parent="type2" root="m3" day="{{n}}">AM</a>
-      <a class="menu{{n}} s2 3 types2" parent="type2" root="m3" day="{{n}}">PM</a>
-    </div>
-  </li>
-
-  <li class="list"><a class="m" child="m4" menu="{{n}}">Location</a>
-  <div id="menu{{n}}-m4" class="menu{{n}} d 4">
-      <input class="menu{{n}} d2 4" type="checkbox" value="home" name="day1_address" > <textbox class="menu{{n}} d2 4 text2">Home</textbox><br>
-      <input class="menu{{n}} d2 4" type="checkbox" value="school" name="day1_address"> <textbox class="menu{{n}} d2 4 text2">School</textbox>
-  </div>    
-  </li>
-</ul>
+{% set n = 0 %}
+<div id="menu{{n}}">
+{% include "dropdown.html" %}
 </div>
 
-<input type="hidden" id="{{n}}-day1" name="{{n}}-day1" value="">
-<input type="hidden" id="{{n}}-starthour1" name="{{n}}-start_hour1" value="">
-<input type="hidden" id="{{n}}-startminute1" name="{{n}}-start_minute1" value="">
-<input type="hidden" id="{{n}}-starttype1" name="{{n}}-start_type1" value="">
-<input type="hidden" id="{{n}}-endhour1" name="{{n}}-end_hour1" value="">
-<input type="hidden" id="{{n}}-endminute1" name="{{n}}-end_minute1" value="">
-<input type="hidden" id="{{n}}-endtype1" name="{{n}}-end_type1" value="">
 
 
-<br><br><br>
-{%endfor%}
+
+<button type="button" id="add">Add Another Day</button>
+
+
 {% endblock %}

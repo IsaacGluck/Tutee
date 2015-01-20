@@ -4,6 +4,7 @@ var curSub = null;
 var curMenu = null;
 
 
+
 var menus = document.getElementsByClassName("m");
 for (var i=0; i<menus.length;i++) {
     menus[i].addEventListener('mouseover', showdrop);
@@ -74,6 +75,7 @@ for (var i=0; i< type2.length; i++) {
     type2[i].addEventListener('click', setType);
 }
 
+document.getElementById("add").addEventListener('click', addMenu);
 
 
 function hidedropstart(e){
@@ -87,15 +89,15 @@ function showdrop(e) {
 	closer = null;
     }
     /*
-    if (curM) {
-	//document.getElementById(curM).style.visibility = 'hidden';
-	var subs = document.getElementsByClassName( curM.slice(1,2) );
-	//console.log(subs);
-	for (var i =0; i < subs.length; i++) {
-	    //console.log(subs[i]);
-	    subs[i].style.visibility = 'hidden';
-    }
-*/
+      if (curM) {
+      //document.getElementById(curM).style.visibility = 'hidden';
+      var subs = document.getElementsByClassName( curM.slice(1,2) );
+      //console.log(subs);
+      for (var i =0; i < subs.length; i++) {
+      //console.log(subs[i]);
+      subs[i].style.visibility = 'hidden';
+      }
+    */
     
     if (curMenu) {
 	var open = document.getElementsByClassName("menu" + curMenu);
@@ -103,7 +105,7 @@ function showdrop(e) {
 	    open[i].style.visibility = 'hidden';
 	}
     }	
-	
+    
     
     curSub = null;
     var id = e.toElement.getAttribute("child");
@@ -139,12 +141,12 @@ function showsub(e) {
 	document.getElementsByClassName("menu" + curMenu + " s " + curM.slice(1,2) + " " + curSub)[0].style.marginTop = "" + parseInt( el.getAttribute("pos") ) * (height) + "px";
     }
 }
-  
+
 
 
 function hidedrop(e) {
     //console.log(curM);
-   // document.getElementById(curM).style.visibility = 'hidden';
+    // document.getElementById(curM).style.visibility = 'hidden';
     var subs = document.getElementsByClassName( "menu" + curMenu );
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'hidden';
@@ -159,7 +161,7 @@ function processdrop(e) {
 	window.clearTimeout(closer);
 	closer = null;
     }
- 
+    
 }
 
 function processsub(e) {
@@ -169,45 +171,45 @@ function processsub(e) {
     }
 }
 /*
-function processdrop2(e) {
-    var el = e.toElement;
-    if (closer) {
-	window.clearTimeout(closer);
-	closer = null;
-    }
-    if (el.getAttribute("class") == "d") {
-	curM = el.getAttribute("id");
-    }
-    else {
-	curM = e.toElement.getAttribute("parent");
-    }
-    //console.log( curM );
-    document.getElementById(curM).style.visibility = 'visible';
-}
+  function processdrop2(e) {
+  var el = e.toElement;
+  if (closer) {
+  window.clearTimeout(closer);
+  closer = null;
+  }
+  if (el.getAttribute("class") == "d") {
+  curM = el.getAttribute("id");
+  }
+  else {
+  curM = e.toElement.getAttribute("parent");
+  }
+  //console.log( curM );
+  document.getElementById(curM).style.visibility = 'visible';
+  }
 
-function processsub2(e) {
-    var el = e.toElement;
-    if (closer) {
-	window.clearTimeout(closer);
-	closer = null;
-    }
-    if (el.getAttribute("class") == "d") {
-	curM = el.getAttribute("id");
-    }
-    else if (el.getAttribute("class").slice(0,2) == "d2") {
-	curM = el.getAttribute("parent");
-    }
-    else {
-	curM = el.getAttribute("root");
-    }
-    document.getElementById(curM).style.visibility = 'visible';
-    var subs = document.getElementsByClassName( curM.slice(1,2) );
-    for (var i =0; i < subs.length; i++) {
-	subs[i].style.visibility = 'visible';
-    }
-}
+  function processsub2(e) {
+  var el = e.toElement;
+  if (closer) {
+  window.clearTimeout(closer);
+  closer = null;
+  }
+  if (el.getAttribute("class") == "d") {
+  curM = el.getAttribute("id");
+  }
+  else if (el.getAttribute("class").slice(0,2) == "d2") {
+  curM = el.getAttribute("parent");
+  }
+  else {
+  curM = el.getAttribute("root");
+  }
+  document.getElementById(curM).style.visibility = 'visible';
+  var subs = document.getElementsByClassName( curM.slice(1,2) );
+  for (var i =0; i < subs.length; i++) {
+  subs[i].style.visibility = 'visible';
+  }
+  }
 
-   */
+*/
 
 
 function setDay(e) {
@@ -242,7 +244,7 @@ function setMinute(e) {
     }
     else {
 	document.getElementById(num + "-endminute1").setAttribute("value", min.slice(1,3));
-	}
+    }
 }
 
 function setType(e) {
@@ -275,6 +277,34 @@ function checkComplete(men, num) {
     if (hour != "Hour" && min != "Minute" && type != "Type") {
 	var val = hour.slice(0,(hour.length - 3)) + min.slice(1,4) + " " + type;
 	document.getElementById("menu" + num + "-" + id).innerHTML = val;
+    }
 }
+
+function addMenu(e) {
+    var val = "" + (parseInt(document.getElementById("counter").getAttribute("val")) + 1);
+    console.log(val);
+    document.getElementById("counter").setAttribute("val", val);
+    var cur = document.getElementById("menu" + (parseInt(val)- 1));
+    newM = document.createElement("div");
+    newM.setAttribute("id", ("menu" + val));
+
+    var xhr= new XMLHttpRequest();
+    xhr.open('GET', '../static/js/dropdown.html', true);
+    xhr.onreadystatechange= function() {
+	if (this.readyState!==4) return;
+	if (this.status!==200) return; 
+	//console.log( this.responseText );
+	newM.innerHTML= String(this.responseText).replace(/{{n}}/g, val);
+    };
+    xhr.send(); 
+    cur.appendChild(newM);
+    //console.log( '"{{n}}"'.replace(/{{n}}/g, val));
+    //$("menu" + val).load("dropdown.html");
+    //newM.innerHTML =  cur.innerHTML.replace("{{n}}", val);
+    //console.log( cur.innerHTML.replace("{{n}}", val));
+   
 }
-	
+
+
+
+
