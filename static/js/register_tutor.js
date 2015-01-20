@@ -2,80 +2,86 @@ var curM = null;
 var closer = null;
 var curSub = null;
 var curMenu = null;
-
-
-
-var menus = document.getElementsByClassName("m");
-for (var i=0; i<menus.length;i++) {
-    menus[i].addEventListener('mouseover', showdrop);
-    menus[i].addEventListener('mouseout', hidedropstart);
-}
-
-
-var dropdowns = document.getElementsByClassName("d2");
-for (var i =0; i < dropdowns.length;i++) {
-    //console.log(dropdowns[i]);
-    dropdowns[i].addEventListener('mouseover', processdrop);
-    dropdowns[i].addEventListener('mouseout', hidedropstart);
-}
-
-var subs = document.getElementsByClassName("d2 d2F 2");
-for (var i=0; i < subs.length;i++) {
-    subs[i].addEventListener('mouseover', showsub);
-}
-
-var subss = document.getElementsByClassName("d2 d2F 3");
-for (var i=0; i < subss.length;i++) {
-    subss[i].addEventListener('mouseover', showsub);
-}
-
-var subs2  = document.getElementsByClassName("s2");
-for (var i=0; i < subs2.length;i++) {
-    subs2[i].addEventListener('mouseover', processsub);
-    subs2[i].addEventListener('mouseout', hidedropstart);
-}
-
-
-var days = document.getElementsByClassName("1");
-for (var i=0; i< days.length;i++) {
-    days[i].addEventListener('click', setDay);
-}
-
-var hours1 = document.getElementsByClassName("s2 2 hours");
-for (var i=0; i < hours1.length;i++) {
-    hours1[i].addEventListener('click',setHour);
-}
-
-
-var hours2 = document.getElementsByClassName("s2 3 hours2");
-for (var i=0; i < hours2.length;i++) {
-    hours2[i].addEventListener('click',setHour);
-}
-
-var minutes1 = document.getElementsByClassName("s2 2 minutes");
-for (var i=0; i< minutes1.length; i++) {
-    minutes1[i].addEventListener('click', setMinute);
-}
-
-
-var minutes2 = document.getElementsByClassName("s2 3 minutes2");
-for (var i=0; i< minutes2.length; i++) {
-    minutes2[i].addEventListener('click', setMinute);
-}
-
-
-var type1 = document.getElementsByClassName("s2 2 types");
-for (var i=0; i< type1.length; i++) {
-    type1[i].addEventListener('click', setType);
-}
-
-
-var type2 = document.getElementsByClassName("s2 3 types2");
-for (var i=0; i< type2.length; i++) {
-    type2[i].addEventListener('click', setType);
-}
-
 document.getElementById("add").addEventListener('click', addMenu);
+init();
+
+function init() {
+    console.log("hola");
+
+    var menus = document.getElementsByClassName("m");
+    for (var i=0; i<menus.length;i++) {
+	console.log(menus[i]);
+	menus[i].addEventListener('mouseover', showdrop);
+	menus[i].addEventListener('mouseout', hidedropstart);
+    }
+
+
+    var dropdowns = document.getElementsByClassName("d2");
+    for (var i =0; i < dropdowns.length;i++) {
+	//console.log(dropdowns[i]);
+	dropdowns[i].addEventListener('mouseover', processdrop);
+	dropdowns[i].addEventListener('mouseout', hidedropstart);
+    }
+
+    var subs = document.getElementsByClassName("d2 d2F 2");
+    for (var i=0; i < subs.length;i++) {
+	subs[i].addEventListener('mouseover', showsub);
+    }
+
+    var subss = document.getElementsByClassName("d2 d2F 3");
+    for (var i=0; i < subss.length;i++) {
+	subss[i].addEventListener('mouseover', showsub);
+    }
+
+    var subs2  = document.getElementsByClassName("s2");
+    for (var i=0; i < subs2.length;i++) {
+	subs2[i].addEventListener('mouseover', processsub);
+	subs2[i].addEventListener('mouseout', hidedropstart);
+    }
+
+
+    var days = document.getElementsByClassName("1");
+    for (var i=0; i< days.length;i++) {
+	
+	days[i].addEventListener('click', setDay);
+    }
+
+    var hours1 = document.getElementsByClassName("s2 2 hours");
+    for (var i=0; i < hours1.length;i++) {
+	hours1[i].addEventListener('click',setHour);
+    }
+
+
+    var hours2 = document.getElementsByClassName("s2 3 hours2");
+    for (var i=0; i < hours2.length;i++) {
+	hours2[i].addEventListener('click',setHour);
+    }
+
+    var minutes1 = document.getElementsByClassName("s2 2 minutes");
+    for (var i=0; i< minutes1.length; i++) {
+	minutes1[i].addEventListener('click', setMinute);
+    }
+
+
+    var minutes2 = document.getElementsByClassName("s2 3 minutes2");
+    for (var i=0; i< minutes2.length; i++) {
+	minutes2[i].addEventListener('click', setMinute);
+    }
+
+
+    var type1 = document.getElementsByClassName("s2 2 types");
+    for (var i=0; i< type1.length; i++) {
+	type1[i].addEventListener('click', setType);
+    }
+
+
+    var type2 = document.getElementsByClassName("s2 3 types2");
+    for (var i=0; i< type2.length; i++) {
+	type2[i].addEventListener('click', setType);
+    }
+
+}
+
 
 
 function hidedropstart(e){
@@ -216,20 +222,21 @@ function setDay(e) {
     var day = e.toElement.innerHTML;
     var num = e.toElement.getAttribute("day");
     document.getElementById("menu" + num + "-day").innerHTML = day;
-    document.getElementById(num + "-day1").setAttribute("value", day);
+    document.getElementById("" + num + "-day").setAttribute("value", day);
 }
 
 function setHour(e) {
+    console.log(e.toElement);
     var hour = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
     var num = e.toElement.getAttribute("day");
     document.getElementById("menu" + num + "-" +  parent).innerHTML = hour + ":00"
     checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById(num + "-starthour1").setAttribute("value", hour);
+	document.getElementById(num + "-starthour").setAttribute("value", hour);
     }
     else {
-	document.getElementById(num + "-endhour1").setAttribute("value", hour);
+	document.getElementById(num + "-endhour").setAttribute("value", hour);
     }
 }
 
@@ -240,10 +247,10 @@ function setMinute(e) {
     document.getElementById("menu" + num + "-" + parent).innerHTML = " " + min;
     checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById(num+ "-startminute1").setAttribute("value", min.slice(1,3));
+	document.getElementById(num+ "-startminute").setAttribute("value", min.slice(1,3));
     }
     else {
-	document.getElementById(num + "-endminute1").setAttribute("value", min.slice(1,3));
+	document.getElementById(num + "-endminute").setAttribute("value", min.slice(1,3));
     }
 }
 
@@ -254,10 +261,10 @@ function setType(e) {
     document.getElementById("menu" + num + "-" + parent).innerHTML = type;
     checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById(num+"-starttype1").setAttribute("value", type);
+	document.getElementById(num+"-starttype").setAttribute("value", type);
     }
     else {
-	document.getElementById(num+"-endtype1").setAttribute("value", type);
+	document.getElementById(num+"-endtype").setAttribute("value", type);
     }
 }
 
@@ -292,17 +299,14 @@ function addMenu(e) {
     xhr.open('GET', '../static/js/dropdown.html', true);
     xhr.onreadystatechange= function() {
 	if (this.readyState!==4) return;
-	if (this.status!==200) return; 
-	//console.log( this.responseText );
-	newM.innerHTML= String(this.responseText).replace(/{{n}}/g, val);
+	if (this.status!==200) return;
+	result =  String(this.responseText).replace(/\{\{n\}\}/g, val);
+	newM.innerHTML= result;
+	console.log(result);
+	cur.appendChild(newM);
+	init();
     };
     xhr.send(); 
-    cur.appendChild(newM);
-    //console.log( '"{{n}}"'.replace(/{{n}}/g, val));
-    //$("menu" + val).load("dropdown.html");
-    //newM.innerHTML =  cur.innerHTML.replace("{{n}}", val);
-    //console.log( cur.innerHTML.replace("{{n}}", val));
-   
 }
 
 
