@@ -209,69 +209,72 @@ function processsub2(e) {
 
    */
 
-    
+
 function setDay(e) {
-var day = e.toElement.innerHTML;
-document.getElementById("day").innerHTML = day;
- document.getElementById("_day1").setAttribute("value", day);
+    var day = e.toElement.innerHTML;
+    var num = e.toElement.getAttribute("day");
+    document.getElementById("menu" + num + "-day").innerHTML = day;
+    document.getElementById(num + "-day1").setAttribute("value", day);
 }
 
 function setHour(e) {
     var hour = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
-    document.getElementById(parent).innerHTML = hour + ":00"
-    checkComplete(curM.slice(1,2));
-    console.log("hi");
+    var num = e.toElement.getAttribute("day");
+    document.getElementById("menu" + num + "-" +  parent).innerHTML = hour + ":00"
+    checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById("_starthour1").setAttribute("value", hour);
+	document.getElementById(num + "-starthour1").setAttribute("value", hour);
     }
     else {
-	document.getElementById("_endhour1").setAttribute("value", hour);
+	document.getElementById(num + "-endhour1").setAttribute("value", hour);
     }
 }
 
 function setMinute(e) {
     var min = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
-    document.getElementById(parent).innerHTML = " " + min;
-    checkComplete(curM.slice(1,2));
+    var num = e.toElement.getAttribute("day");
+    document.getElementById("menu" + num + "-" + parent).innerHTML = " " + min;
+    checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById("_startminute1").setAttribute("value", min.slice(1,3));
+	document.getElementById(num+ "-startminute1").setAttribute("value", min.slice(1,3));
     }
     else {
-	document.getElementById("_endminute1").setAttribute("value", min.slice(1,3));
+	document.getElementById(num + "-endminute1").setAttribute("value", min.slice(1,3));
 	}
 }
 
 function setType(e) {
     var type = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
-    document.getElementById(parent).innerHTML = type;
-    checkComplete(curM.slice(1,2));
+    var num = e.toElement.getAttribute("day");
+    document.getElementById("menu" + num + "-" + parent).innerHTML = type;
+    checkComplete(curM.slice(1,2),num);
     if (e.toElement.getAttribute("root") == "m2") {
-	document.getElementById("_starttype1").setAttribute("value", type);
+	document.getElementById(num+"-starttype1").setAttribute("value", type);
     }
     else {
-	document.getElementById("_endtype1").setAttribute("value", type);
+	document.getElementById(num+"-endtype1").setAttribute("value", type);
     }
 }
 
-function checkComplete(num) {
-    if (num==2) {
-	var hour = document.getElementById("hour").innerHTML;
-	var min = document.getElementById("min").innerHTML;
-	var type = document.getElementById("type").innerHTML;
+function checkComplete(men, num) {
+    if (men==2) {
+	var hour = document.getElementById("menu" + num + "-hour").innerHTML;
+	var min = document.getElementById("menu" + num + "-min").innerHTML;
+	var type = document.getElementById("menu" + num + "-type").innerHTML;
 	var id = "start"
     }
     else {
-	var hour = document.getElementById("hour2").innerHTML;
-	var min = document.getElementById("min2").innerHTML;
-	var type = document.getElementById("type2").innerHTML;
+	var hour = document.getElementById("menu" + num + "-hour2").innerHTML;
+	var min = document.getElementById("menu" + num +"-min2").innerHTML;
+	var type = document.getElementById("menu" + num + "-type2").innerHTML;
 	var id = "end"
     }
     if (hour != "Hour" && min != "Minute" && type != "Type") {
 	var val = hour.slice(0,(hour.length - 3)) + min.slice(1,4) + " " + type;
-	document.getElementById(id).innerHTML = val;
+	document.getElementById("menu" + num + "-" + id).innerHTML = val;
 }
 }
 	
