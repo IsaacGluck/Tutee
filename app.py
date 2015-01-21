@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
 from search import search_operation
-from utils import authenticate, create_account, register_user
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee
 import hashlib, uuid
 import random
 import json
 from functools import wraps
-
 app = Flask(__name__)
 
 # mongo 
@@ -50,6 +49,7 @@ def register(user_type):
 			else:
 				flash("Passwords do not match")
 				return render_template(base_url)
+
 @app.route("/login", methods=["GET", "POST"])
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
@@ -77,9 +77,19 @@ def login(user_type):
 @auth("/homepage")
 def homepage():
     if request.method == "GET":
+        tutors = db.tutors.find()
+        for t in tutors:
+            print t['conversations']
+        tutees = db.tutees.find()
+        for t in tutees:
+            print t['conversations']
         return render_template("homepage.html")
     else:
-        if request.form['b']=="Log Out":
+        if request.form['s'] == "Send":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("homepage")
+        if request.form['b'] == "Log Out":
             return logout()
 
 @app.route("/profile", methods=["GET","POST"])
