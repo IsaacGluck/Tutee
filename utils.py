@@ -67,19 +67,20 @@ def register_user(user_type, form, db):
                 #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
                 subject = form['subjects']
                 account['%s' % subject] = True
-                print form
                 days = []
-                day1 = {}
-                day1['addresses'] = form.getlist("day1_address")
-                day1['day'] = form['day1']
-                day1['start_hour'] = form['start_hour1']
-                day1['start_min'] = form['start_minute1']
-                day1['start_type'] = form['start_type1']
-                day1['end_hour'] = form['end_hour1']
-                day1['end_min'] = form['end_minute1']
-                day1['end_type'] = form['end_type1']
-                
-                days.append(day1)
+                num = int(form['counter']) + 1
+                for i in range(num):
+                        day = {}
+                        day['addresses'] = form.getlist(str(i) + "-address")
+                        day['day'] = form[str(i) + '-day']
+                        day['start_hour'] = form[str(i) + '-start_hour']
+                        day['start_min'] = form[str(i) + '-start_minute']
+                        day['start_type'] = form[str(i) + '-start_type']
+                        day['end_hour'] = form[str(i) + '-end_hour']
+                        day['end_min'] = form[str(i) + '-end_minute']
+                        day['end_type'] = form[str(i) + '-end_type']
+                        days.append(day)
+
                 account['days'] = days
 
                 times = form["times"]
