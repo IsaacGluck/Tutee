@@ -3,14 +3,14 @@ var closer = null;
 var curSub = null;
 var curMenu = null;
 document.getElementById("add").addEventListener('click', addMenu);
+
+document.getElementById("counter").setAttribute("value", "0");
 init();
 
 function init() {
-    console.log("hola");
-
+  
     var menus = document.getElementsByClassName("m");
     for (var i=0; i<menus.length;i++) {
-	console.log(menus[i]);
 	menus[i].addEventListener('mouseover', showdrop);
 	menus[i].addEventListener('mouseout', hidedropstart);
     }
@@ -88,22 +88,12 @@ function hidedropstart(e){
     closer = window.setTimeout(hidedrop,1000);
 }
 
-
+// display current dropdown menu & close any others open
 function showdrop(e) {
     if (closer){
 	window.clearTimeout(closer);
 	closer = null;
     }
-    /*
-      if (curM) {
-      //document.getElementById(curM).style.visibility = 'hidden';
-      var subs = document.getElementsByClassName( curM.slice(1,2) );
-      //console.log(subs);
-      for (var i =0; i < subs.length; i++) {
-      //console.log(subs[i]);
-      subs[i].style.visibility = 'hidden';
-      }
-    */
     
     if (curMenu) {
 	var open = document.getElementsByClassName("menu" + curMenu);
@@ -117,15 +107,15 @@ function showdrop(e) {
     var id = e.toElement.getAttribute("child");
     curM = id;
     curMenu = e.toElement.getAttribute("menu");
-    //console.log(curM);
-    //document.getElementById(id).style.visibility = 'visible';
     document.getElementById("menu" + curMenu + "-" +id).style.visibility = 'visible';
     var subs = document.getElementsByClassName("d2 " +  curM.slice(1,2) + " menu" + curMenu);
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'visible';
     }
+
 }
 
+// show dropdown submenu & close any other subs
 function showsub(e) {
     if (closer) {
 	window.clearTimeout(closer);
@@ -149,10 +139,8 @@ function showsub(e) {
 }
 
 
-
+//hide dropdown menu
 function hidedrop(e) {
-    //console.log(curM);
-    // document.getElementById(curM).style.visibility = 'hidden';
     var subs = document.getElementsByClassName( "menu" + curMenu );
     for (var i =0; i < subs.length; i++) {
 	subs[i].style.visibility = 'hidden';
@@ -161,6 +149,7 @@ function hidedrop(e) {
     curSub = null;
     curMenu = null;
 }
+
 
 function processdrop(e) {
     if (closer){
@@ -176,48 +165,8 @@ function processsub(e) {
 	closer = null;
     }
 }
-/*
-  function processdrop2(e) {
-  var el = e.toElement;
-  if (closer) {
-  window.clearTimeout(closer);
-  closer = null;
-  }
-  if (el.getAttribute("class") == "d") {
-  curM = el.getAttribute("id");
-  }
-  else {
-  curM = e.toElement.getAttribute("parent");
-  }
-  //console.log( curM );
-  document.getElementById(curM).style.visibility = 'visible';
-  }
 
-  function processsub2(e) {
-  var el = e.toElement;
-  if (closer) {
-  window.clearTimeout(closer);
-  closer = null;
-  }
-  if (el.getAttribute("class") == "d") {
-  curM = el.getAttribute("id");
-  }
-  else if (el.getAttribute("class").slice(0,2) == "d2") {
-  curM = el.getAttribute("parent");
-  }
-  else {
-  curM = el.getAttribute("root");
-  }
-  document.getElementById(curM).style.visibility = 'visible';
-  var subs = document.getElementsByClassName( curM.slice(1,2) );
-  for (var i =0; i < subs.length; i++) {
-  subs[i].style.visibility = 'visible';
-  }
-  }
-
-*/
-
-
+//if click a day, display result and add to hidden field
 function setDay(e) {
     var day = e.toElement.innerHTML;
     var num = e.toElement.getAttribute("day");
@@ -225,6 +174,7 @@ function setDay(e) {
     document.getElementById("" + num + "-day").setAttribute("value", day);
 }
 
+//if click an hour, display result and add to hidden field
 function setHour(e) {
     console.log(e.toElement);
     var hour = e.toElement.innerHTML;
@@ -240,6 +190,7 @@ function setHour(e) {
     }
 }
 
+//if click a minute, display result and add to hidden field
 function setMinute(e) {
     var min = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
@@ -254,6 +205,7 @@ function setMinute(e) {
     }
 }
 
+//if click type, display result & add to hidden field
 function setType(e) {
     var type = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
@@ -268,6 +220,7 @@ function setType(e) {
     }
 }
 
+//check if three components of time are complete, if so displays
 function checkComplete(men, num) {
     if (men==2) {
 	var hour = document.getElementById("menu" + num + "-hour").innerHTML;
@@ -287,26 +240,27 @@ function checkComplete(men, num) {
     }
 }
 
+//add another dropdown menu for another day
 function addMenu(e) {
-    var val = "" + (parseInt(document.getElementById("counter").getAttribute("val")) + 1);
-    console.log(val);
-    document.getElementById("counter").setAttribute("val", val);
-    var cur = document.getElementById("menu" + (parseInt(val)- 1));
+    var val = "" + (parseInt(document.getElementById("counter").getAttribute("value")) + 1);
+    document.getElementById("counter").setAttribute("value", val);
+    var cur = document.getElementById("dropdowns");
+    //var cur = document.getElementById("menu" + (parseInt(val)- 1));
     newM = document.createElement("div");
     newM.setAttribute("id", ("menu" + val));
 
     var xhr= new XMLHttpRequest();
-    xhr.open('GET', '../static/js/dropdown.html', true);
+    xhr.open('GET', '../static/html/dropdown.html', true);
     xhr.onreadystatechange= function() {
 	if (this.readyState!==4) return;
 	if (this.status!==200) return;
 	result =  String(this.responseText).replace(/\{\{n\}\}/g, val);
 	newM.innerHTML= result;
-	console.log(result);
 	cur.appendChild(newM);
 	init();
     };
     xhr.send(); 
+    console.log(document.body);
 }
 
 
