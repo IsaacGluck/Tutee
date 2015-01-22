@@ -40,7 +40,7 @@ function init() {
     }
 
 
-    var days = document.getElementsByClassName("1");
+    var days = document.getElementsByClassName("d2 d2F 1");
     for (var i=0; i< days.length;i++) {
 	
 	days[i].addEventListener('click', setDay);
