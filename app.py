@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
+import gridfs
+from gridfs import GridFS
 from search import search_operation
 from utils import authenticate, create_account, register_user, find_tutor, update_tutor
 import hashlib, uuid
@@ -13,6 +15,7 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
+fs = gridfs.GridFS(db)
 
 def auth(page):
     def decorate(f):
@@ -116,9 +119,17 @@ def update_settings(settings_type):
                     session[key] = request.form[key]
                 update_tutor(old_email, new_account, db)
                 return redirect("homepage")
-
-
-
+            if request.form["b"] == "Update Profile Picture":
+                data = request.form["pic"]
+                gridin = fs.new_file()
+                fileID = fs.put( fs.read(data)  )
+                print(pic_id)
+                update_dict = {"pic_id":pic_id}
+                if session["type"]=="tutee":
+                    update_tutee(session["email"], update_dict, db)
+                else:
+                    update_tutor(session["email"], update_dict, db)
+                return render_template()
 
 def logout():
     session.pop('logged_in', None)
