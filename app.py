@@ -112,6 +112,7 @@ def results(tutor_list):
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
+        print session;
         return render_template(html_file)
     if request.method == "POST":
         if request.form["b"] == "Log Out":

@@ -1,0 +1,15 @@
+{% extends "settings.html" %}
+{% block head %}
+<script type="text/javascript" src="/static/js/register_tutor.js"></script>
+{% endblock %}
+{% block settings_type %}
+{% set c = len(session["days"])%}
+{% for n in range(c)%}
+{{session["days"][n]}}
+<button type="button" id="edit{{n}}">Edit</button>
+<button type="button" id="del{{n}}">Delete</button>
+{% endfor %}
+<br><br>
+<button type="button" id="add">Add Another Day</button>
+
+{% endblock %}
