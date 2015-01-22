@@ -27,9 +27,12 @@ def find_tutor(email, db):
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_tutor(email, update_dict, db):
-        db.tutors.update({'email' : email}, {'$set' : update_dict}, upsert=False)
+        db.tutors.update({'email' : email}, {'$set' : update_dict}, upsert=True)
         return True
 
+def update_tutee(email, update_dict, db):
+    db.tutees.update({'email' : email}, { '$set' : update_dict }, upsert=True)
+    return True
 
 def create_account(user_type, account, db):
 	if user_type == "tutor":
