@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block info %}
+
 <p> Time (Enter Day;Hours):
   <input type="text" name="times">Day;Hours</p>
 <p> Address: <input type="checkbox" name="Day1_Address" value="School">School</input><input type="checkbox" name="Day1_Address" value="Home">Home</input>
@@ -20,4 +21,27 @@
     <option value="physics">Physics</option>
     <option value="english">English</option>
 </select></p>
+
+
+
+
+<br>
+
+<input type="hidden" id="counter" name="counter" value="0"></div>
+
+
+<div id="dropdowns">
+
+{% set n = 0 %}
+<div id="menu{{n}}">
+{% include "dropdown.html" %}
+</div>
+
+</div>
+
+
+
+<button type="button" id="add">Add Another Day</button>
+
+
 {% endblock %}

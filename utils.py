@@ -29,13 +29,12 @@ def find_tutor(email, db):
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_tutor(email, update_dict, db):
-        db.tutors.update({'email' : email}, {'$set' : update_dict}, upsert=False)
+        db.tutors.update({'email' : email}, {'$set' : update_dict}, upsert=True)
         return True
 
 def update_tutee(email, update_dict, db):
-        db.tutees.update({'email' : email}, {'$set' : update_dict}, upsert=False)
-        return True
-
+    db.tutees.update({'email' : email}, { '$set' : update_dict }, upsert=True)
+    return True
 
 def create_account(user_type, account, db):
 	if user_type == "tutor":
@@ -75,6 +74,22 @@ def register_user(user_type, form, db):
                 #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
                 subject = form['subjects']
                 account['%s' % subject] = True
+                days = []
+                num = int(form['counter']) + 1
+                for i in range(num):
+                        day = {}
+                        day['addresses'] = form.getlist(str(i) + "-address")
+                        day['day'] = form[str(i) + '-day']
+                        day['start_hour'] = form[str(i) + '-start_hour']
+                        day['start_min'] = form[str(i) + '-start_minute']
+                        day['start_type'] = form[str(i) + '-start_type']
+                        day['end_hour'] = form[str(i) + '-end_hour']
+                        day['end_min'] = form[str(i) + '-end_minute']
+                        day['end_type'] = form[str(i) + '-end_type']
+                        days.append(day)
+
+                account['days'] = days
+
                 times = form["times"]
                 td = times.split(";")
                 x = 0

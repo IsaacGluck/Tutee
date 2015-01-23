@@ -1,7 +1,125 @@
 {% extends "base.html" %}
 
+{% block head %}
+<style>
+.dropdownL {position:relative;
+margin: 0;
+padding: 0;
+list-style: none;
+float: left;
+font: bold 11px arial;
+}
+
+.list {
+margin: 0;
+padding: 0;
+list-style: none;
+float: left;
+font: bold 11px arial;
+}
+
+.m {display: block;
+margin: 0 1px 0 0;
+padding: 4px 10px;
+width: 70px;
+height: 35px;
+background: #5970B2;
+color: #FFF;
+text-align: center;
+text-decoration: none
+}
+
+.m:hover
+{	background: #49A3FF}
+
+.d {
+position: absolute;
+z-index: 10;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	background: #EAEBD8;
+	border: 1px solid #5970B2}
+
+.d2 {
+position: relative;
+visibility: hidden
+}
+
+.text2 {
+position:relative;
+display:inline-block;
+width: 52px;
+margin: 0;
+padding: 5px 10px;
+text-align: left;
+text-decoration: none;
+background: #EAEBD8;
+color: #2875DE;
+font: 11px arial
+}
+
+.d2F {
+position: relative;
+display: block;
+margin: 0;
+padding: 5px 10px;
+width: 70px;
+height:18px;
+white-space: nowrap;
+text-align: left;
+text-decoration: none;
+background: #EAEBD8;
+color: #2875DE;
+font: 11px arial
+}
+
+
+.d2F:hover{
+background: #49A3FF;
+color: #FFF
+}
+
+.s {
+position:absolute;
+visibility: hidden;
+margin-right: -33px;
+margin-top: 10px;
+padding: 0;
+background: #EAEBD8;
+border: 1px solid #5970B2;
+right:1px;
+top: 0px;
+}
+
+.s2 {
+position:relative;
+visibility: hidden;
+display: block;
+margin: 0;
+padding: 5px 10px;
+width: 30px;
+white-space: nowrap;
+text-align: left;
+text-decoration: none;
+background: #EAEBD8;
+color: #2875DE;
+font: 11px arial
+}
+
+.s2:hover{
+background: #49A3FF;
+color: #FFF
+}
+
+
+
+</style>
+{% endblock %}
+
 {% block body %}
 	{% block header %}{% endblock %}
+
 	<form method="POST" id="info">
 		<p>First Name: <input type="text" name="first_name"></p>
 
@@ -28,9 +146,14 @@
 		    <option value="School">School</option>
 		</select></p>
 
+
+		
+
 		{% block info %}{% endblock %}
 
 		<p><button type="submit" name="b" value="Submit">Submit</button></p>
 		
 	</form>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/register_tutor.js"></script>
 {% endblock %}

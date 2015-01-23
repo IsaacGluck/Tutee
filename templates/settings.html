@@ -12,13 +12,12 @@
 			            <span class="icon-bar"></span>
 			          </button>
 					<a class="navbar-brand" href="#">Tutee</a>
-	
 			</div>
 				<div id="navbar" class="collapse navbar-collapse">
 		          <ul class="nav navbar-nav">
-			    <li><a href="/profile">Profile</a></li>
+			    <li><a href="/profile">Home</a></li>
 		            <li><a href="/search">Search</a></li>
-		            <li><a href="/settings/profile">Account Settings</a></li>
+		            <li><a href="/home">Home</a></li>
 			    <li><a href="/inbox">Inbox</a></li>
 			    <li><a href="/about">About Tutee</a></li>
 		          </ul>
@@ -29,13 +28,24 @@
 		        </div>
 			</div>
 		</nav>
-	<div class="form-group">
-	  <form method="POST" id="message">
-	  <label for="recepient">Recepient</label>
-	  <input type="text" class="form-control" name="recipient" placeholder="Enter Recipient">
-	  <label for="message">Message</label>
-	  <input type="text" class="form-control" name="message" placeholder="Message">
-	  <input type="submit" class="btn btn-default navbar-btn" name="s" value="Send"></form>
-  </div>
+		<div class="col-md-4">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Settings</h3>
+			  </div>
+			  <div class="panel-body">
+			  	<div class="list-group">
+				    <a href="settings/update_profile" class="list-group-item">Profile</a>
+				    {% if session["type"]=="tutor" %}
+					    <a href="settings/classes" class="list-group-item">Classes</a>
+					    <a href="settings/subjects" class="list-group-item">Subjects</a>
+					    <a href="settins/times" class="list-group-item">Times</a>
+					{% endif %}
+				</div>
+			  </div>
+			</div>
+		</div>
+		{% block settings_type %}
+		{% endblock %}
 	</div>
 {% endblock %}
