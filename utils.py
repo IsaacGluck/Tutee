@@ -96,8 +96,11 @@ def send_message(form, session, db):
                 recipient_cursor = db.tutees.find({'username':recipient_username})
         else:
                 recipient_cursor = db.tutors.find({'username':recipient_username})
+        recipient = {}
         for t in recipient_cursor:
                 recipient = t
+        if recipient == {}:
+                return "invalid recipient"
         conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
         time_total = str(ctime())
         date = time_total[4:10] + ", " + time_total[20:25]
