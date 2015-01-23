@@ -89,6 +89,9 @@ def register_user(user_type, form, db):
                         days.append(day)
 
                 account['days'] = days
+                
+                account['classes'] = form.getlist('course')
+                print form.getlist('course')
 
                 times = form["times"]
                 td = times.split(";")

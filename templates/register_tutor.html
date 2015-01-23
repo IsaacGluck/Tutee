@@ -10,7 +10,13 @@
   <input type="text" name="times">Day;Hours</p>
 <p> Address: <input type="checkbox" name="Day1_Address" value="School">School</input><input type="checkbox" name="Day1_Address" value="Home">Home</input>
 <p>Advanced courses you've taken:
-  <select multiple size="1" form="info" name="courses">
+
+
+{% include "classes.html" %}
+
+<br><br>
+
+<select multiple size="1" form="info" name="courses">
     <option value="chemistry">AP Chemistry</option>
     <option value="physics">AP Physics</option>
     <option value="literature">AP Literature</option>
