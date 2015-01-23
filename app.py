@@ -3,12 +3,11 @@ from pymongo import Connection
 import gridfs
 from gridfs import GridFS
 from search import search_operation
-from utils import authenticate, create_account, register_user, find_tutor, update_tutor
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor
 import hashlib, uuid
 import random
 import json
 from functools import wraps
-
 app = Flask(__name__)
 
 # mongo 
@@ -80,9 +79,19 @@ def login(user_type):
 @auth("/homepage")
 def homepage():
     if request.method == "GET":
+        tutors = db.tutors.find()
+        for t in tutors:
+            print t['conversations']
+        tutees = db.tutees.find()
+        for t in tutees:
+            print t['conversations']
         return render_template("homepage.html")
     else:
-        if request.form['b']=="Log Out":
+        if request.form['s'] == "Send":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("homepage")
+        if request.form['b'] == "Log Out":
             return logout()
 
 @app.route("/profile", methods=["GET","POST"])

@@ -1,5 +1,7 @@
 import hashlib, uuid
 import math
+import datetime
+from time import ctime
 from googlemaps import locate
 
 #misc useful helper functions
@@ -44,6 +46,7 @@ def register_user(user_type, form, db):
         account['first_name'] = form["first_name"]
         account['last_name'] = form["last_name"]
         account['type'] = user_type
+        account['username'] = form["username"]
         account['email'] = form["email"]
 
         password = form["password"]
@@ -53,6 +56,7 @@ def register_user(user_type, form, db):
         account['password'] = hash_pass
         account['school'] = form["school"]
         account['grade'] = form["grade"]
+        account['conversations'] = {}
         
         a1 = form["address1"]
         a1_type = form["address1_hs"] #is this address for home or for school
@@ -95,6 +99,57 @@ def register_user(user_type, form, db):
                         x += 2
                 account['match_score'] = 0.0 #used in comparing for searches
         return account
+
+
+#sends message by updating the "conversations" key for each user. Conversations' value is a dictionary, each key being the username of the other side of a given conversation. The value of each such key is a list of dictionaries, each dictionary containing a given message's content, sender, and time of sending. Example:
+# 'conversations': {person_talked_to: [{'sender':person_talked_to/me, 'message_text':'sup', 'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people....}
+def send_message(form, session, db):
+        recipient_username = form['recipient']
+        message = form['message']
+        sender_user_type = session['type']
+        if sender_user_type == "Tutor":
+                recipient_cursor = db.tutees.find({'username':recipient_username})
+        else:
+                recipient_cursor = db.tutors.find({'username':recipient_username})
+        recipient = {}
+        for t in recipient_cursor:
+                recipient = t
+        if recipient == {}:
+                return "invalid recipient"
+        conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
+        time_total = str(ctime())
+        date = time_total[4:10] + ", " + time_total[20:25]
+        time = time_total[11:19]
+
+        #first update the dictionary of the recipient of the message
+        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        #check if this conversation already exists. If so incorporate rest of conversation
+        if conversations.has_key(session['username']): #if they've already talked
+                add_message = conversations[session['username']]
+                add_message.append(new_message) #update the existant message chain,
+                conversations[session['username']] = add_message #insert as the new value in dict
+        else:
+                conversations[session['username']] = [new_message]
+        if sender_user_type == "Tutor":
+                update_tutee(recipient['email'], {'conversations':conversations}, db)
+        else:
+                update_tutor(recipient['email'], {'conversations':conversations}, db)
+        
+        #update dictionary of the sender
+        conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
+        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        if conversations.has_key(recipient['username']):
+                add_message = conversations[recipient['username']]
+                add_message.append(new_message)
+                conversations[recipient['username']] = add_message
+        else:
+                conversations[recipient['username']] = [new_message]
+        if sender_user_type == "Tutor":
+                update_tutor(session['email'], {'conversations':conversations}, db)
+        else:
+                update_tutee(session['email'], {'conversations':conversations}, db)
+        return message + " sent on " + date + " by " + session['username']
+
 
 #Calculates the distance given two dictionaries of addresses, using longitude and latitude
 def calculate_distance(address1, address2):
