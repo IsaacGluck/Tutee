@@ -3,6 +3,37 @@ var closer = null;
 var curSub = null;
 var curMenu = null;
 
+init();
+
+function init() {
+    var menus = document.getElementsByClassName("m");
+    for (var i=0; i<menus.length;i++) {
+	menus[i].addEventListener('mouseover', showdrop);
+	menus[i].addEventListener('mouseout', hidedropstart);
+    }
+
+
+    var dropdowns = document.getElementsByClassName("d2");
+    for (var i =0; i < dropdowns.length;i++) {
+	//console.log(dropdowns[i]);
+	dropdowns[i].addEventListener('mouseover', processdrop);
+	dropdowns[i].addEventListener('mouseout', hidedropstart);
+    }
+
+    
+    var subs = document.getElementsByClassName("sub")
+    for (var i=0; i<subs.length; i++){
+	subs[i].addEventListener('mouseover',showsub);
+    }
+
+    var subs2  = document.getElementsByClassName("s2");
+    for (var i=0; i < subs2.length;i++) {
+	subs2[i].addEventListener('mouseover', processsub);
+	subs2[i].addEventListener('mouseout', hidedropstart);
+    }
+
+}
+
 
 
 function hidedropstart(e){
@@ -48,14 +79,14 @@ function showsub(e) {
 	    sub[i].style.visibility = 'hidden';
 	}
     }
-    if (el.getAttribute("class") == "menu" + curMenu + " d2 d2F " + curM.slice(1,2)) {
-    curSub = el.getAttribute("child");
-    var sub = document.getElementsByClassName("menu" + curMenu + " " + curSub);
-    for (var i = 0; i < sub.length; i++) {
-	sub[i].style.visibility = 'visible';
-    }
-    var height = parseInt( window.getComputedStyle(el).height.slice(0,2));
-    document.getElementsByClassName("menu" + curMenu + " s " + curM.slice(1,2) + " " + curSub)[0].style.marginTop = "" + parseInt( el.getAttribute("pos") ) * (height) + "px";
+    if (el.getAttribute("class") == "menu" + curMenu + " d2 d2F " + curM.slice(1,2) + " sub") {
+	curSub = el.getAttribute("child");
+	var sub = document.getElementsByClassName("menu" + curMenu + " " + curSub);
+	for (var i = 0; i < sub.length; i++) {
+	    sub[i].style.visibility = 'visible';
+	}
+	var height = parseInt( window.getComputedStyle(el).height.slice(0,2));
+	document.getElementsByClassName("menu" + curMenu + " s " + curM.slice(1,2) + " " + curSub)[0].style.marginTop = "" + parseInt( el.getAttribute("pos") ) * (height) + "px";
     }
 }
 
@@ -97,7 +128,6 @@ function setDay(e) {
 
 //if click an hour, display result and add to hidden field
 function setHour(e) {
-    console.log(e.toElement);
     var hour = e.toElement.innerHTML;
     var parent = e.toElement.getAttribute("parent");
     var num = e.toElement.getAttribute("day");

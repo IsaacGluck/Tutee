@@ -1,47 +1,14 @@
 document.getElementById("add").addEventListener('click', addMenu);
 
 document.getElementById("counter").setAttribute("value", "0");
-init();
+init_times();
 
 
-function init() {
-  
-    var menus = document.getElementsByClassName("m");
-    for (var i=0; i<menus.length;i++) {
-	menus[i].addEventListener('mouseover', showdrop);
-	menus[i].addEventListener('mouseout', hidedropstart);
-    }
+function init_times() {
 
 
-    var dropdowns = document.getElementsByClassName("d2");
-    for (var i =0; i < dropdowns.length;i++) {
-	//console.log(dropdowns[i]);
-	dropdowns[i].addEventListener('mouseover', processdrop);
-	dropdowns[i].addEventListener('mouseout', hidedropstart);
-    }
-
-    var subs = document.getElementsByClassName("d2 d2F 2");
-    for (var i=0; i < subs.length;i++) {
-	subs[i].addEventListener('mouseover', showsub);
-    }
-
-    var subss = document.getElementsByClassName("d2 d2F 3");
-    for (var i=0; i < subss.length;i++) {
-	subss[i].addEventListener('mouseover', showsub);
-    }
-
-    var subs2  = document.getElementsByClassName("s2");
-    for (var i=0; i < subs2.length;i++) {
-	subs2[i].addEventListener('mouseover', processsub);
-	subs2[i].addEventListener('mouseout', hidedropstart);
-    }
-
-
-<<<<<<< Updated upstream
-    var days = document.getElementsByClassName("d2 d2F 1");
-=======
     var days = document.getElementsByClassName("d2 d2F 1 day");
->>>>>>> Stashed changes
+
     for (var i=0; i< days.length;i++) {
 	
 	days[i].addEventListener('click', setDay);
@@ -94,7 +61,7 @@ function addMenu(e) {
     newM.setAttribute("id", ("menu" + val));
 
     var xhr= new XMLHttpRequest();
-    xhr.open('GET', '../static/html/dropdown.html', true);
+    xhr.open('GET', '../static/html/dropdown.html?=1', true);
     xhr.onreadystatechange= function() {
 	if (this.readyState!==4) return;
 	if (this.status!==200) return;
@@ -102,6 +69,7 @@ function addMenu(e) {
 	newM.innerHTML= result;
 	cur.appendChild(newM);
 	init();
+	init_times();
     };
     xhr.send();
 }
