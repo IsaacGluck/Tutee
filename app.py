@@ -68,6 +68,7 @@ def login(user_type):
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
+                session['jdays']=json.dumps(session['days'])
                 session["logged_in"] = True
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")
@@ -80,8 +81,8 @@ def login(user_type):
 def homepage():
     if request.method == "GET":
         tutors = db.tutors.find()
-        for t in tutors:
-            print t['conversations']
+        #for t in tutors:
+         #   print t['conversations']
         tutees = db.tutees.find()
         for t in tutees:
             print t['conversations']
@@ -121,8 +122,7 @@ def results(tutor_list):
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
-        print session;
-        return render_template(html_file)
+        return render_template(html_file,days=json.loads(session['jdays']))
     if request.method == "POST":
         if request.form["b"] == "Log Out":
             return logout()

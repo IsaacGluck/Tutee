@@ -1,15 +1,28 @@
 {% extends "settings.html" %}
 {% block head %}
-<script type="text/javascript" src="/static/js/register_tutor.js"></script>
+
+<link rel="stylesheet" href="/static/stylesheets/dropdown.css">
+<script>
+var times = {{ days|tojson }};
+//console.log(x);
+</script>
+
 {% endblock %}
 {% block settings_type %}
-{% set c = len(session["days"])%}
-{% for n in range(c)%}
-{{session["days"][n]}}
+
+{% set n = -1 %}
+{% for d in session['days'] %}
+{% set n = n +1 %}
+<div id="menu{{n}}">
+<input type="hidden" id="{{n}}-dict" value="{{d}}">
+{% include "dropdown.html" %}
+</div>
+{{d}}
 <button type="button" id="edit{{n}}">Edit</button>
 <button type="button" id="del{{n}}">Delete</button>
 {% endfor %}
 <br><br>
 <button type="button" id="add">Add Another Day</button>
-
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/settings_days.js"></script>
 {% endblock %}
