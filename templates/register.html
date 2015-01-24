@@ -93,11 +93,10 @@ top: 0px;
 }
 
 .s2 {
-position:relative;
+position: relative;
 visibility: hidden;
-display: block;
+display: inline-block;
 margin: 0;
-padding: 5px 10px;
 width: 30px;
 white-space: nowrap;
 text-align: left;
@@ -107,7 +106,12 @@ color: #2875DE;
 font: 11px arial
 }
 
-.s2:hover{
+.s2F {
+padding: 5px 10px;
+display: block;
+}
+
+.s2F:hover{
 background: #49A3FF;
 color: #FFF
 }
@@ -124,6 +128,8 @@ color: #FFF
 		<p>First Name: <input type="text" name="first_name"></p>
 
 		<p>Last Name: <input type="text" name="last_name"></p>
+
+		<p>Username: <input type="text" name="username"></p>
 
 		<p>Email: <input type="text" name="email"></p>
 
@@ -153,5 +159,6 @@ color: #FFF
 		
 	</form>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
 <script type="text/javascript" src="/static/js/register_tutor.js"></script>
 {% endblock %}
