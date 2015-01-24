@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
 import gridfs
-from gridfs import GridFS
 from search import search_operation
 from utils import authenticate, create_account, register_user, find_tutor, update_tutor
 import hashlib, uuid
 import random
 import json
 from functools import wraps
+
 
 app = Flask(__name__)
 
@@ -102,6 +102,7 @@ def search():
                         return render_template("base.html") #Will redirect to a search return page, temp for testing purposes of returns
 
 @auth("/settings")
+@auth("/settings/profile")
 @app.route("/settings/<settings_type>", methods=["GET","POST"])
 def update_settings(settings_type):
     if request.method == "GET":
@@ -120,16 +121,15 @@ def update_settings(settings_type):
                 update_tutor(old_email, new_account, db)
                 return redirect("homepage")
             if request.form["b"] == "Update Profile Picture":
-                data = request.form["pic"]
-                gridin = fs.new_file()
-                fileID = fs.put( fs.read(data)  )
-                print(pic_id)
-                update_dict = {"pic_id":pic_id}
-                if session["type"]=="tutee":
-                    update_tutee(session["email"], update_dict, db)
-                else:
-                    update_tutor(session["email"], update_dict, db)
-                return render_template()
+                # data = request.form["pic"]
+                # file_id = fs.put(open(str(data), "rb").read()) 
+                # update_dict = {"pic_id":file_id}
+                # if session["type"]=="tutee":
+                #     update_tutee(session["email"], update_dict, db)
+                # else:
+                #     update_tutor(session["email"], update_dict, db)
+                return redirect("homepage")
+                
 
 def logout():
     session.pop('logged_in', None)
