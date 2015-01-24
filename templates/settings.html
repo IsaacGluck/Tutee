@@ -28,22 +28,17 @@
 		        </div>
 			</div>
 		</nav>
-		<div class="col-md-4">
-			<div class="panel panel-default">
-			  <div class="panel-heading">
-			    <h3 class="panel-title">Settings</h3>
+		<div class="col-md-4" role="navigation">
+			<nav class="menu">
+			  <h3 class="menu-heading" data-pjax>Settings</h3>
+			    <a href="settings/update_profile" class="list-group-item">Profile</a>
+			    {% if session["type"]=="tutor" %}
+				    <a href="settings/classes" class="list-group-item">Classes</a>
+				    <a href="settings/subjects" class="list-group-item">Subjects</a>
+				    <a href="settings/times" class="list-group-item">Times</a>
+				{% endif %}
 			  </div>
-			  <div class="panel-body">
-			  	<div class="list-group">
-				    <a href="settings/update_profile" class="list-group-item">Profile</a>
-				    {% if session["type"]=="tutor" %}
-					    <a href="settings/classes" class="list-group-item">Classes</a>
-					    <a href="settings/subjects" class="list-group-item">Subjects</a>
-					    <a href="settins/times" class="list-group-item">Times</a>
-					{% endif %}
-				</div>
-			  </div>
-			</div>
+			</nav>
 		</div>
 		{% block settings_type %}
 		{% endblock %}
