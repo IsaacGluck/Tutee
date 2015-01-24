@@ -7,8 +7,12 @@
 {% block info %}
 
 <p> Time (Enter Day;Hours):
-  <input type="text" name="times">Day;Hours</p>
-<p> Address: <input type="checkbox" name="Day1_Address" value="School">School</input><input type="checkbox" name="Day1_Address" value="Home">Home</input>
+  <input type="text" name="times">Day;Hours
+</p>
+<p> Address:
+<input type="checkbox" name="Day1_Address" value="School">School</input>
+<input type="checkbox" name="Day1_Address" value="Home">Home</input>
+</p>
 <p>Advanced courses you've taken:
 
 
@@ -20,20 +24,23 @@
     <option value="chemistry">AP Chemistry</option>
     <option value="physics">AP Physics</option>
     <option value="literature">AP Literature</option>
-</select></p>
+</select>
+</p>
+
 <p>Your strongest subjects:
   <select multiple autofocus size="1" form="info" name="subjects">
     <option value="chemistry">Chemistry</option>
     <option value="physics">Physics</option>
     <option value="english">English</option>
-</select></p>
+</select>
+</p>
 
 
 
 
 <br>
 
-<input type="hidden" id="counter" name="counter" value="0"></div>
+<input type="hidden" id="counter" name="counter" value="0"></input>
 
 
 <div id="dropdowns">
