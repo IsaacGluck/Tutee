@@ -11,16 +11,24 @@ var times = {{ days|tojson }};
 {% block settings_type %}
 
 {% set n = -1 %}
+<div id="dropdowns">
 {% for d in session['days'] %}
 {% set n = n +1 %}
 <div id="menu{{n}}">
 <input type="hidden" id="{{n}}-dict" value="{{d}}">
 {% include "dropdown.html" %}
+
+<button type="button" class="del_b" id="{{n}}-del">Delete</button>
 </div>
 {{d}}
-<button type="button" id="edit{{n}}">Edit</button>
-<button type="button" id="del{{n}}">Delete</button>
 {% endfor %}
+</div>
+<br>
+<button type="button" id="edit_b">Edit</button>
+<input type="hidden" id="counter" value="0">
+
+
+
 <br><br>
 <button type="button" id="add">Add Another Day</button>
 <script type="text/javascript" src="/static/js/dropdown.js"></script>

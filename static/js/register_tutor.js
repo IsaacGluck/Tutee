@@ -51,25 +51,3 @@ function init_times() {
 }
 
 
-//add another dropdown menu for another day
-function addMenu(e) {
-    var val = "" + (parseInt(document.getElementById("counter").getAttribute("value")) + 1);
-    document.getElementById("counter").setAttribute("value", val);
-    var cur = document.getElementById("dropdowns");
-    //var cur = document.getElementById("menu" + (parseInt(val)- 1));
-    newM = document.createElement("div");
-    newM.setAttribute("id", ("menu" + val));
-
-    var xhr= new XMLHttpRequest();
-    xhr.open('GET', '../static/html/dropdown.html?=1', true);
-    xhr.onreadystatechange= function() {
-	if (this.readyState!==4) return;
-	if (this.status!==200) return;
-	result =  String(this.responseText).replace(/\{\{n\}\}/g, val);
-	newM.innerHTML= result;
-	cur.appendChild(newM);
-	init();
-	init_times();
-    };
-    xhr.send();
-}

@@ -111,3 +111,7 @@ display: block;
 background: #49A3FF;
 color: #FFF
 }
+
+.del_b{
+visibility: hidden;
+}

@@ -81,8 +81,8 @@ def login(user_type):
 def homepage():
     if request.method == "GET":
         tutors = db.tutors.find()
-        #for t in tutors:
-         #   print t['conversations']
+        for t in tutors:
+            print t['conversations']
         tutees = db.tutees.find()
         for t in tutees:
             print t['conversations']
