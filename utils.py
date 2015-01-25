@@ -7,11 +7,11 @@ from googlemaps import locate
 #misc useful helper functions
 
 # matches login attempts with user, returns user's account dictionary
-def authenticate(email, user_type, confirm_password, db):
-        if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } , { "_id" : False } )
+def authenticate(username, user_type, confirm_password, db):
+        if user_type == "tutee":
+		user = db.tutees.find_one( { 'username' : username } , { "_id" : False } )
 	else:   
-		user = db.tutors.find_one( { 'email' : email } , { "_id" : False }  )
+		user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
 	if user == None:
 		return None
 	salt = user["salt"]
@@ -24,8 +24,15 @@ def authenticate(email, user_type, confirm_password, db):
 
 #helper method to find a tutor given an email
 def find_tutor(email, db):
-    user = db.tutors.find_one({'email':email})
-    return user
+        user = db.tutors.find_one({'email':email})
+        return user
+
+#if you don't know the user type
+def find_user(username, db):
+        user = db.tutors.find_one({'username':username})
+        if user == None:
+                user = db.tutees.find_one({'username':username})
+        return user
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_tutor(email, update_dict, db):
@@ -117,6 +124,7 @@ def send_message(form, session, db):
         recipient = {}
         for t in recipient_cursor:
                 recipient = t
+                print recipient
         if recipient == {}:
                 return "invalid recipient"
         conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved

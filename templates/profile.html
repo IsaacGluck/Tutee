@@ -33,15 +33,20 @@
 		    <div class="thumbnail">
 		      <img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg">
 		      <div class="caption">
-			<h3>{{ session["first_name"] }} {{ session["last_name"] }}</h3>
-			<h4>{{ session["school"] }}</h4>
-			<h5>{{ session["grade"] }}th Grade</h5>
+			<h3>
+			</ul></h3>
+			  {% with messages = get_flashed_messages() %}
+			  {% if messages %}
+    			  {% for message in messages %}
+<h3>{{message['first_name']}} {{message['last_name']}}</h3>
+<h4>{{message['school']}}			</h4>
+<h5>{{message['grade']}}th Grade	</h5>
 		      </div>
 		    </div>
 		  </div>
 
 		  <div class="col-md-8">
-		  	{% if session["type"]=="tutor"%}
+		  	{% if message["user_type"]=="tutor"%}
 		  	<div class="panel panel-default">
 		  		<div class="panel-heading">
 		  			Favorite Subjects
@@ -59,6 +64,9 @@
 		  		</div>
 		  	</div>
 		  	{% endif %}
+  {% endfor %}
+  		{% endif %}
+	{% endwith %}
 		  </div>
 		</div>
 	</div>

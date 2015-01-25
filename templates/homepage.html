@@ -16,7 +16,7 @@
 			</div>
 				<div id="navbar" class="collapse navbar-collapse">
 		          <ul class="nav navbar-nav">
-			    <li><a href="/profile">Profile</a></li>
+			    <li><a href="/profile/{{session['username']}}">Profile</a></li>
 		            <li><a href="/search">Search</a></li>
 		            <li><a href="/settings/profile">Account Settings</a></li>
 			    <li><a href="/inbox">Inbox</a></li>
@@ -24,7 +24,7 @@
 		          </ul>
 		    	<ul class="nav navbar-nav navbar-right">
 		          <li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  <li><form method="POST"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
+			  <li><form method="POST" id="Log Out"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
 		        </ul>
 		        </div>
 			</div>
@@ -35,7 +35,9 @@
 	  <input type="text" class="form-control" name="recipient" placeholder="Enter Recipient">
 	  <label for="message">Message</label>
 	  <input type="text" class="form-control" name="message" placeholder="Message">
-	  <input type="submit" class="btn btn-default navbar-btn" name="s" value="Send"></form>
+	  <input type="submit" class="btn btn-default navbar-btn" name="s" value="Send">
+	  ><input type="submit" class="btn btn-default navbar-btn" name="s" value="Log Out">
+	  </form>
   </div>
 	</div>
 {% endblock %}
