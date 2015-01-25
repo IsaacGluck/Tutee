@@ -60,10 +60,10 @@ def login(user_type):
     if request.method == "GET":
         return render_template("login.html")
     else:
-        email = request.form["email"]
+        username = request.form["username"]
         password = request.form["password"]
         if request.form['b'] == "Submit":
-            user = authenticate(email, user_type, password, db)
+            user = authenticate(username, user_type, password, db)
             if user:
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
