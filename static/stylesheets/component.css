@@ -32,6 +32,10 @@ a {
 	color: rgba(46, 204, 113,1.0);
 }
 
+.split-back a {
+	color: rgba(46, 204, 113,1.0);
+}
+
 .split-back a:visited {
 	color: rgba(46, 204, 113,1.0);
 }
