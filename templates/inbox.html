@@ -19,7 +19,7 @@
 			    <li><a href="/profile/{{session['username']}}">Profile</a></li>
 		            <li><a href="/search">Search</a></li>
 		            <li><a href="/settings/profile">Account Settings</a></li>
-			    <li><a href="/inbox">Inbox</a></li>
+			    <li><a href="/inbox">Inbox {% if session['count_unread'] > 0 %} ({{session["count_unread"]}}) {% endif %}</a></li>
 			    <li><a href="/about">About Tutee</a></li>
 		          </ul>
 		    	<ul class="nav navbar-nav navbar-right">
