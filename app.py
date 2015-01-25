@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, reverse
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists 
+
 import hashlib, uuid
 import random
 import json
 from functools import wraps
+from forms import RegisterForm
 
 app = Flask(__name__)
 
@@ -39,19 +41,19 @@ def index():
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
-	base_url = "register_" + user_type + ".html"
-	if request.method == "GET":
-		return render_template(base_url)
-	else:
-                account = register_user(user_type, request.form, db)
-		if request.form['b'] == "Submit":
-			if request.form['confirm_password'] == request.form['password']:
-				create_account(user_type, account, db)
-				flash(user_type + ": You have succesfully created an account")
-				return render_template("base.html")
-			else:
-				flash("Passwords do not match")
-				return render_template(base_url)
+    base_url = "register_" + user_type + ".html"
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if user_exists(request.form['email'], user_type, db):
+            flash("A user with this email already exists")
+            return render_template(base_url, form=form, user_type=user_type)
+        account = register_user(user_type, request.form, db)
+        create_account(user_type, account, db)
+        flash(user_type + ": You have succesfully created an account")
+        return redirect(url_for('login', user_type=user_type))
+    else:
+        flash("Email or password is not valid")
+        return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
