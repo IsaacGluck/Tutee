@@ -1,12 +1,16 @@
 
 body {
   height: 100%;
-  background: url(/static/img/background2.jpg) no-repeat center center fixed;
+  background: url(/static/img/school.png) repeat center center fixed;
   color: white !important;
 }
 
+form > p {
+  
+}
+
 .highlight {
-	color: rgba(231, 76, 60,1.0) !important;
+	color: rgba(46, 204, 113,1.0) !important;
 }
 
 .main {
@@ -15,6 +19,15 @@ body {
   text-transform: uppercase;
 }
 
+.button {
+  background-color: rgba(46, 204, 113,1.0);
+  color: #fff;
+  border: 1px solid rgba(46, 204, 113,1.0) !important; 
+}
+.button:hover {
+  background-color: #fff;
+  color: rgba(46, 204, 113,1.0);
+}
 
 .center-block {
   background-color: rgba(48, 48, 48, 0.8);
@@ -29,7 +42,7 @@ body {
 }
 
 .center-block:hover {
-	border-color: rgba(231, 76, 60,1.0);
+	border-color: rgba(46, 204, 113,1.0);
 }
 
 a {
