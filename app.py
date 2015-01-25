@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, reverse
 import hashlib, uuid
 import random
 import json
