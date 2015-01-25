@@ -1,12 +1,11 @@
-
 body {
   height: 100%;
   background: url(/static/img/school.png) repeat center center fixed;
   color: white !important;
 }
 
-form > p {
-  
+input {
+  color: black !important;
 }
 
 .highlight {
