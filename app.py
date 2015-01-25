@@ -51,6 +51,7 @@ def register(user_type):
         flash(user_type + ": You have succesfully created an account")
         return redirect(url_for('login', user_type=user_type))
     else:
+        flash("Email or password is not valid")
         return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
