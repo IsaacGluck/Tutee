@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from pymongo import Connection
 import gridfs
-from gridfs import GridFS
 from search import search_operation
 from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user
 import hashlib, uuid
 import random
 import json
 from functools import wraps
+
 app = Flask(__name__)
 
 # mongo 
@@ -60,10 +60,10 @@ def login(user_type):
     if request.method == "GET":
         return render_template("login.html")
     else:
-        username = request.form["username"]
+        email = request.form["email"]
         password = request.form["password"]
         if request.form['b'] == "Submit":
-            user = authenticate(username, user_type, password, db)
+            user = authenticate(email, user_type, password, db)
             if user:
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
@@ -103,6 +103,7 @@ def profile(username):
         if request.form['b'] == "Log Out":
             return logout()
 
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
         if request.method == "GET":
@@ -120,6 +121,7 @@ def results(tutor_list):
 
 
 @auth("/settings")
+@auth("/settings/profile")
 @app.route("/settings/<settings_type>", methods=["GET","POST"])
 def update_settings(settings_type):
     if request.method == "GET":
@@ -138,17 +140,15 @@ def update_settings(settings_type):
                 update_tutor(old_email, new_account, db)
                 return redirect("homepage")
             if request.form["b"] == "Update Profile Picture":
-                data = request.form["pic"]
-                gridin = fs.new_file()
-                fileID = fs.put( fs.read(data)  )
-                print(pic_id)
-                update_dict = {"pic_id":pic_id}
-                if session["type"]=="tutee":
-                    update_tutee(session["email"], update_dict, db)
-                else:
-                    update_tutor(session["email"], update_dict, db)
-                return render_template()
-
+                # data = request.form["pic"]
+                # file_id = fs.put(open(str(data), "rb").read()) 
+                # update_dict = {"pic_id":file_id}
+                # if session["type"]=="tutee":
+                #     update_tutee(session["email"], update_dict, db)
+                # else:
+                #     update_tutor(session["email"], update_dict, db)
+                return redirect("homepage")
+                
 @auth("/inbox")
 @app.route("/inbox", methods=["GET","POST"])
 def inbox():
@@ -157,6 +157,7 @@ def inbox():
     if request.method == "POST":
         if request.form['b'] == "Log Out":
             return logout()
+
 
 def logout():
     session.pop('logged_in', None)
