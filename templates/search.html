@@ -1,32 +1,64 @@
 {% extends "base.html" %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+{% endblock head %}
+
 {% block body %}
-<form method="POST" id="info">
-  <p> Course: <select multiple size="1" form="info" name="courses">
-		<option value="chemistry">AP Chemistry</option>
-		<option value="physics">AP Physics</option>
-		<option value="literature">AP Literature</option>
-  </select></p>
-  <p> Subject: <select multiple size="1" form="info" name="subjects">
-		<option value="chemistry">Chemistry</option>
-		<option value="physics">Physics</option>
-		<option value="literature">English</option>
-  </select></p>
 
-<p> Availability: 
-<input type="checkbox" name="days" value="Mon"> Monday <br>
-<p> Time: <input type="text" name="Mon_Time_Start"> - <input type="text" name="Mon_Time_End">
-<p> Address: <input type="checkbox" name="Mon_Address" value="School">School</input><input type="checkbox" name="Mon_Address" value="Home">Home</input>
-<p> Other <input type="text" name="Mon_Other"><br>
+<div class="container">
 
-<input type="checkbox" name="days" value="Tues"> Tuesday <br>
-<p> Time: <input type="text" name="Tues_Time_Start"> - <input type="text" name="Tues_Time_End">
-<p> Address: <input type="checkbox" name="Tues_Address" value="School">School</input><input type="checkbox" name="Tues_Address" value="Home">Home</input>
-<p> Other Address <input type="text" name="Tues_Other"><br>
+	<nav class="navbar navbar-tutee">
+		<div class="container-fluid">
+			<div id="navbar" class="collapse navbar-collapse">
+	       		<ul class="nav navbar-nav">
+	       			<li><a href="/homepage"><h3>Tutee</h3></a></li>
+				    <li><a href="/profile/{{session['username']}}"><h4>Profile</h4></a></li>
+			        <li><a href="/search"><h4>Search</h4></a></li>
+			        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
+				    <li><a href="/inbox"><h4>Inbox</h4></a></li>
+				    <li><a href="/about"><h4>About Tutee</h4></a></li>
+			    </ul>
+	    		<ul class="nav navbar-nav navbar-right">
+	          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+		  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+	        	</ul>
+	        </div>
+		</div>
+	</nav>
 
-<!--Front end design idea: Button to "add day," which will create new field for day, time, and address-->
+	<div class="panel panel-default grey">
+  		<div class="panel-body">
+  			<form method="POST" id="info">
+	  			<p> Course: <select multiple size="1" form="info" name="courses">
+					<option value="chemistry">AP Chemistry</option>
+					<option value="physics">AP Physics</option>
+					<option value="literature">AP Literature</option>
+	  			</select></p>
+	  			<p> Subject: <select multiple size="1" form="info" name="subjects">
+					<option value="chemistry">Chemistry</option>
+					<option value="physics">Physics</option>
+					<option value="literature">English</option>
+	  			</select></p>
 
-  {% block info %}{% endblock %}
-  <p><button type="submit" name="b" value="Submit">Submit</button></p>
-</form>
+				<p> Availability: </p>
+				<input type="checkbox" name="days" value="Mon"> Monday <br>
+				<p> Time: <input type="text" name="Mon_Time_Start"> - <input type="text" name="Mon_Time_End">
+				<p> Address: <input type="checkbox" name="Mon_Address" value="School">School</input><input type="checkbox" name="Mon_Address" value="Home">Home</input>
+				<p> Other <input type="text" name="Mon_Other"><br>
+
+				<input type="checkbox" name="days" value="Tues"> Tuesday <br>
+				<p> Time: <input type="text" name="Tues_Time_Start"> - <input type="text" name="Tues_Time_End">
+				<p> Address: <input type="checkbox" name="Tues_Address" value="School">School</input><input type="checkbox" name="Tues_Address" value="Home">Home</input>
+				<p> Other Address <input type="text" name="Tues_Other"><br>
+
+				<!--Front end design idea: Button to "add day," which will create new field for day, time, and address-->
+
+				  {% block info %}{% endblock %}
+				  <p><button class="btn btn-default navbar-btn button" type="submit" name="b" value="Submit">Submit</button></p>
+			</form>
+  		</div>
+	</div>
+</div>
 {% block header %}{% endblock %}
 {% endblock %}
