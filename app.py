@@ -67,10 +67,7 @@ def login(user_type):
             if user:
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
-                    if key != "conversations":
-                        session[key] = user[key]
-                    else:
-                        session[key] = reverse(user['conversations'])
+                    session[key] = user[key]
                 session["logged_in"] = True
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")

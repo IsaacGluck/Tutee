@@ -133,14 +133,13 @@ def send_message(form, session, db):
         time = time_total[11:19]
 
         #first update the dictionary of the recipient of the message
-        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':True}]
         #check if this conversation already exists. If so incorporate rest of conversation
         if conversations.has_key(session['username']): #if they've already talked
                 add_message = conversations[session['username']]
-                add_message.append(new_message) #update the existant message chain,
-                conversations[session['username']] = add_message #insert as the new value in dict
-        else:
-                conversations[session['username']] = [new_message]
+                for x in add_message:
+                        new_message.append(x) #so that new message is at the begginning
+        conversations[session['username']] = new_message #insert as the new value in dict
         if sender_user_type == "tutor":
                 update_tutee(recipient['email'], {'conversations':conversations}, db)
         else:
@@ -148,13 +147,12 @@ def send_message(form, session, db):
         
         #update dictionary of the sender
         conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
-        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':False}]
         if conversations.has_key(recipient['username']):
                 add_message = conversations[recipient['username']]
-                add_message.append(new_message)
-                conversations[recipient['username']] = add_message
-        else:
-                conversations[recipient['username']] = [new_message]
+                for x in add_message:
+                        new_message.append(x)
+        conversations[recipient['username']] = new_message
         if sender_user_type == "tutor":
                 update_tutor(session['email'], {'conversations':conversations}, db)
         else:

@@ -32,7 +32,7 @@
 		</form>
 	<div>
 	  {{session['conversations']}}
-	  {% for conversation in session['conversations'] %}
+	  {% for conversation in session['conversations'].keys() %}
 	  <div class="row">
 	    <div class="panel panel-default">
 	      <div class="panel-heading">
@@ -41,8 +41,17 @@
 	      <div class="panel-body">
 		<div class="col-md-3">
 		  {% for message in session['conversations'][conversation] %}
-		  <p><a href="/profile/{{message['sender']}}">{{message['sender']}}</a>: {{message['message_text']}}<br>
-		  <i>Sent at {{message['time']}} on {{message['date']}}</i></p>
+		  
+		    <p><a href="/profile/{{message['sender']}}">{{message['sender']}}</a>:
+		      {% if message['unread'] %}
+		      <b>{{message['message_text']}}, UNREAD</b><br>
+		      {% endif %}
+		      {% if message['unread'] == False %}
+		      {{message['message_text']}}<br>
+		      {% endif %}
+		      <i>Sent at {{message['time']}} on {{message['date']}}</i></p>{% if message['undread'] %}
+		  </b>
+		    {% endif %}
 		  {% endfor %}
 		  </div>
 	      </div>
