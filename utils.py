@@ -7,20 +7,30 @@ from googlemaps import locate
 #misc useful helper functions
 
 # matches login attempts with user, returns user's account dictionary
+def user_exists(email, user_type, db):
+    check = None
+    if user_type == "tutee":
+        check = db.tutees.find_one({'email':email})
+    else:
+        check == db.tutor.find_one({'email':email})
+    if check:
+        return True
+    return False
+
 def authenticate(username, user_type, confirm_password, db):
-        if user_type == "tutee":
-		user = db.tutees.find_one( { 'username' : username } , { "_id" : False } )
-	else:   
-		user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
-	if user == None:
-		return None
-	salt = user["salt"]
-	hash_pass = user["password"]
-	hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
-	if hash_pass == hash_confirm:
-		return user
-	else:
-		return None
+    if user_type == "tutee":
+        user = db.tutees.find_one( { 'username' : username } , { "_id" : False } )
+    else:   
+        user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
+    if user == None:
+        return None
+    salt = user["salt"]
+    hash_pass = user["password"]
+    hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
+    if hash_pass == hash_confirm:
+        return user
+    else:
+        return None
 
 #helper method to find a tutor given an email
 def find_tutor(email, db):
