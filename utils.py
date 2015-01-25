@@ -7,11 +7,11 @@ from googlemaps import locate
 #misc useful helper functions
 
 # matches login attempts with user, returns user's account dictionary
-def authenticate(email, user_type, confirm_password, db):
-        if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } , { "_id" : False } )
+def authenticate(username, user_type, confirm_password, db):
+        if user_type == "tutee":
+		user = db.tutees.find_one( { 'username' : username } , { "_id" : False } )
 	else:   
-		user = db.tutors.find_one( { 'email' : email } , { "_id" : False }  )
+		user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
 	if user == None:
 		return None
 	salt = user["salt"]
@@ -24,8 +24,15 @@ def authenticate(email, user_type, confirm_password, db):
 
 #helper method to find a tutor given an email
 def find_tutor(email, db):
-    user = db.tutors.find_one({'email':email})
-    return user
+        user = db.tutors.find_one({'email':email})
+        return user
+
+#if you don't know the user type
+def find_user(username, db):
+        user = db.tutors.find_one({'username':username})
+        if user == None:
+                user = db.tutees.find_one({'username':username})
+        return user
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_tutor(email, update_dict, db):
@@ -110,13 +117,14 @@ def send_message(form, session, db):
         recipient_username = form['recipient']
         message = form['message']
         sender_user_type = session['type']
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 recipient_cursor = db.tutees.find({'username':recipient_username})
         else:
                 recipient_cursor = db.tutors.find({'username':recipient_username})
         recipient = {}
         for t in recipient_cursor:
                 recipient = t
+                print recipient
         if recipient == {}:
                 return "invalid recipient"
         conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
@@ -133,7 +141,7 @@ def send_message(form, session, db):
                 conversations[session['username']] = add_message #insert as the new value in dict
         else:
                 conversations[session['username']] = [new_message]
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 update_tutee(recipient['email'], {'conversations':conversations}, db)
         else:
                 update_tutor(recipient['email'], {'conversations':conversations}, db)
@@ -147,7 +155,7 @@ def send_message(form, session, db):
                 conversations[recipient['username']] = add_message
         else:
                 conversations[recipient['username']] = [new_message]
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 update_tutor(session['email'], {'conversations':conversations}, db)
         else:
                 update_tutee(session['email'], {'conversations':conversations}, db)

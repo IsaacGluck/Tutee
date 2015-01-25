@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user
 import hashlib, uuid
 import random
 import json
@@ -79,26 +79,30 @@ def login(user_type):
 @auth("/homepage")
 def homepage():
     if request.method == "GET":
-        tutors = db.tutors.find()
-        for t in tutors:
-            print t['conversations']
-        tutees = db.tutees.find()
-        for t in tutees:
-            print t['conversations']
         return render_template("homepage.html")
     else:
         if request.form['s'] == "Send":
             message = send_message(request.form, session, db)
             flash(message)
             return redirect("homepage")
+        if request.form['s'] == "Log Out":
+            return logout()
+
+
+@app.route("/profile/<username>", methods=["GET","POST"])
+def profile(username):
+    if request.method == "GET":
+        user = find_user(username, db)
+        flasher = {}
+        for key in user:
+            flasher[key] = str(user[key])
+        flash(flasher)
+        print 'username' + user['username']
+        return render_template("profile.html")
+    if request.method == "POST":
         if request.form['b'] == "Log Out":
             return logout()
 
-@app.route("/profile", methods=["GET","POST"])
-@auth("/profile")
-def profile():
-    if request.method == "GET":
-        return render_template("profile.html")
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -145,6 +149,15 @@ def update_settings(settings_type):
                 #     update_tutor(session["email"], update_dict, db)
                 return redirect("homepage")
                 
+@auth("/inbox")
+@app.route("/inbox", methods=["GET","POST"])
+def inbox():
+    if request.method == "GET":
+        return render_template("inbox.html")
+    if request.method == "POST":
+        if request.form['b'] == "Log Out":
+            return logout()
+
 
 def logout():
     session.pop('logged_in', None)
