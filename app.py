@@ -99,6 +99,9 @@ def profile(username):
         flash(flasher)
         print 'username' + user['username']
         return render_template("profile.html")
+    if request.method == "POST":
+        if request.form['b'] == "Log Out":
+            return logout()
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -145,6 +148,15 @@ def update_settings(settings_type):
                 else:
                     update_tutor(session["email"], update_dict, db)
                 return render_template()
+
+@auth("/inbox")
+@app.route("/inbox", methods=["GET","POST"])
+def inbox():
+    if request.method == "GET":
+        return render_template("inbox.html")
+    if request.method == "POST":
+        if request.form['b'] == "Log Out":
+            return logout()
 
 def logout():
     session.pop('logged_in', None)

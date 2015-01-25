@@ -117,7 +117,7 @@ def send_message(form, session, db):
         recipient_username = form['recipient']
         message = form['message']
         sender_user_type = session['type']
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 recipient_cursor = db.tutees.find({'username':recipient_username})
         else:
                 recipient_cursor = db.tutors.find({'username':recipient_username})
@@ -141,7 +141,7 @@ def send_message(form, session, db):
                 conversations[session['username']] = add_message #insert as the new value in dict
         else:
                 conversations[session['username']] = [new_message]
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 update_tutee(recipient['email'], {'conversations':conversations}, db)
         else:
                 update_tutor(recipient['email'], {'conversations':conversations}, db)
@@ -155,7 +155,7 @@ def send_message(form, session, db):
                 conversations[recipient['username']] = add_message
         else:
                 conversations[recipient['username']] = [new_message]
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 update_tutor(session['email'], {'conversations':conversations}, db)
         else:
                 update_tutee(session['email'], {'conversations':conversations}, db)

@@ -24,19 +24,17 @@
 		          </ul>
 		    	<ul class="nav navbar-nav navbar-right">
 		          <li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  <li><form method="POST" id="Log Out"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
+			  <li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn" name="s" value="Log Out"></li>
 		        </ul>
 		        </div>
 			</div>
 		</nav>
 	<div class="form-group">
-	  <form method="POST" id="message">
 	  <label for="recepient">Recepient</label>
 	  <input type="text" class="form-control" name="recipient" placeholder="Enter Recipient">
 	  <label for="message">Message</label>
 	  <input type="text" class="form-control" name="message" placeholder="Message">
 	  <input type="submit" class="btn btn-default navbar-btn" name="s" value="Send">
-	  ><input type="submit" class="btn btn-default navbar-btn" name="s" value="Log Out">
 	  </form>
   </div>
 	</div>
