@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, reverse
 import hashlib, uuid
 import random
 import json
@@ -67,7 +67,10 @@ def login(user_type):
             if user:
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
-                    session[key] = user[key]
+                    if key != "conversations":
+                        session[key] = user[key]
+                    else:
+                        session[key] = reverse(user['conversations'])
                 session["logged_in"] = True
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")

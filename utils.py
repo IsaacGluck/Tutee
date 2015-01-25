@@ -133,7 +133,7 @@ def send_message(form, session, db):
         time = time_total[11:19]
 
         #first update the dictionary of the recipient of the message
-        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
         #check if this conversation already exists. If so incorporate rest of conversation
         if conversations.has_key(session['username']): #if they've already talked
                 add_message = conversations[session['username']]
@@ -161,6 +161,15 @@ def send_message(form, session, db):
                 update_tutee(session['email'], {'conversations':conversations}, db)
         return message + " sent on " + date + " by " + session['username']
 
+
+#takes dictionary of lists of messages, reorders each convo so most recent messages come first
+def reverse(conversations):
+        ret = {}
+        for key in conversations.keys():
+                conversations[key].reverse()
+                ret[key] = conversations[key]
+        return ret
+                
 
 #Calculates the distance given two dictionaries of addresses, using longitude and latitude
 def calculate_distance(address1, address2):
