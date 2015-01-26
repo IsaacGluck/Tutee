@@ -151,9 +151,10 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         days = [];
-        for k in session['days'].keys():
-            for x in session['days'][k]:
-                days.append(x);
+        if session["type"] == "tutor":
+            for k in session['days'].keys():
+                for x in session['days'][k]:
+                    days.append(x);
                 
         print days
         session['jdays']=json.dumps(days)
