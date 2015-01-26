@@ -32,7 +32,7 @@ function previewFile(){
 {% block settings_type %}
 <div class="panel panel-default grey">
 	<h3 class="settings-header">Update Profile</h3>
-	<div class="panel-body">
+	<div class="panel-body" >
 		<div class="row">
 			<div class="col-md-4">
 
@@ -42,18 +42,20 @@ function previewFile(){
 			</div>
 
 			<div class="col-md-8">
-				<p><label for="username">Username</label>
-				<input type="text" name="username"></input></p>
-				<p><label for="email">Email</label>
-				<input type="text" name="email" value=" {{ session["email"] }}" ></input></p>
-				<p><label for="school">School</label>
-				<input type="text" name="school" value=" {{ session["school"] }}" ></input></p>
-				<p><label for="grade">Grade</label>
-				<input type="text" name="grade" value=" {{ session["grade"] }}" ></input></p>
-				<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile">
+				<form method="POST" >
+					<p><label for="username">Username</label>
+					<input style="color:black !important" type="text" name="username" value="{{ session["username"] }}"></input></p>
+					<p><label for="email">Email</label>
+					<input style="color:black !important" type="text" name="email" value=" {{ session["email"] }}" ></input></p>
+					<p><label for="school">School</label>
+					<input style="color:black !important" type="text" name="school" value="{{ session["school"] }}" ></input></p>
+					<p><label for="grade">Grade</label>
+					<input style="color:black !important" type="text" name="grade" value="{{ session["grade"] }}" ></input></p>
+					<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile">
+				</form>
 
 				<div class="picture-form"><br><br><br>
-					<form method="POST">
+					<form method="POST" >
 						<p><label for="profile_picture">Upload Picture</label>
 						<input type="file" onchange="previewFile()"></p>
 						<input type="hidden" id="pic">
