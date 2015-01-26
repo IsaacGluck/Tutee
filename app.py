@@ -25,7 +25,7 @@ def auth(page):
             if 'logged_in' not in session:
                 flash("You must be logged in to see this page")
                 return redirect('/')
-            return f(*args)
+            return f(*args, **kwargs)
         return inner
     return decorate
 
@@ -37,7 +37,7 @@ def check_tut(page):
                 if session['type'] == "tutor":
                     flash("You must be a tutee to see this page")
                     return redirect('/homepage')
-            return f(*args)
+            return f(*args, **kwargs)
         return inner
     return decorate
                 
@@ -143,13 +143,13 @@ def search():
         if request.method == "GET":
             return render_template("search.html") 
         else:
+            print request.form
             if request.form['s'] == "Log Out":
                 return logout() 
-            if request.form['b'] == "Submit":
+            if request.form['s'] == "Submit":
                 tutor_list = search_operation(request.form, db, session)
-                print(request.form)
                 return render_template("search_results.html", tutor_list=tutor_list)
-            if request.form['b'] == "Make Appointment":
+            if request.form['s'] == "Make Appointment":
                 print(request.form)
                 tutor_username = request.form['username']
                 ## create_appointment    (tutor,          tutee,               subject,                 course)
@@ -178,7 +178,7 @@ def update_settings(settings_type):
     if request.method == "POST":
         if request.form["s"] == "Log Out":
             return logout()
-        if request.form["b"] == "Update Profile":
+        if request.form["s"] == "Update Profile":
             new_account = {}
             old_email = session["email"]
             for key in request.form.keys():
@@ -189,7 +189,7 @@ def update_settings(settings_type):
             elif session["type"] == "tutee":
                 update_tutee(old_email, new_account, db)
             return redirect(url_for("homepage"))
-        if request.form["b"] == "Update Times":
+        if request.form["s"] == "Update Times":
             print request.form
             days = create_days(request.form)
             new_account = {}
@@ -198,7 +198,7 @@ def update_settings(settings_type):
             update_tutor(session["email"], new_account, db)
             session['days'] = days
             return redirect(url_for("update_settings", settings_type="times"))
-        if request.form["b"] == "Update Profile Picture":
+        if request.form["s"] == "Update Profile Picture":
             # data = request.form["pic"]
             # file_id = fs.put(open(str(data), "rb").read()) 
             # update_dict = {"pic_id":file_id}
