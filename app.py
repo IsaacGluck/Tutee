@@ -67,11 +67,12 @@ def register(user_type):
 
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
-@app.route("/login/<user_type>", methods=["GET", "POST"])
-def login(user_type):
+@app.route("/login", methods=["GET", "POST"])
+def login():
     if request.method == "GET":
         return render_template("login.html")
     else:
+        user_type = request.form["user_type"]
         username = request.form["username"]
         password = request.form["password"]
         if request.form['b'] == "Submit":
