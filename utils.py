@@ -23,6 +23,7 @@ def authenticate(username, user_type, confirm_password, db):
     else:   
         user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
     if user == None:
+
         return None
     salt = user["salt"]
     hash_pass = user["password"]
@@ -30,6 +31,7 @@ def authenticate(username, user_type, confirm_password, db):
     if hash_pass == hash_confirm:
         return user
     else:
+        print("DIDNT FIND USER")
         return None
 
 #helper method to find a tutor given an email
