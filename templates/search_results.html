@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% block head %}
+<script>
+$('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').focus()
+  });
+</script>
+{% endblock %}
 {% block body %}
 	<div class="container">
 		<nav class="navbar navbar-default">
@@ -31,22 +38,47 @@
 		<div class="row">
 			<div class="panel panel-default">
 			  <div class="panel-heading">
-			    <h3 class="panel-title">{{ tutor["first_name"] }} {{ tutor["last_name"] }}</h3>
-			    
+			    <h3 class="panel-title">{{ tutor["username"] }}</h3>
 			  </div>
 			  <div class="panel-body">
 			  	<div class="col-md-3">
+			  		<h3>{{ tutor["first_name"] }} {{tutor["last_name"]}}</h3>
 				    <p>School: {{ tutor["school"] }}</p>
 				    <p>Grade: {{ tutor["grade"] }}</p>
 				</div>
-				<div class="col-md-3">
-					<form method="POST">
-			    		<button type="submit" name="b" value="Add Tutor">Add Tutor</button>
-			    	</form>
-			    </div>
+				<form method="POST" class="pull-right">
+			    		<button type="button" data-toggle="modal" data-target="#myModal">Create Appointment</button>
+			    </form>
 			  </div>
 			</div>
 		</div>
-	</div>
-{% endfor %}
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Make an appointment with {{ tutor["first_name"] }} {{ tutor["last_name"] }}</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST">
+							<input type="hidden" value="{{tutor["username"]}}" name="username"></input>
+							<div class="form-group">
+								<label for="subject" class="control-label">Subject: </label>
+								<input type="text" class="form-control" name="subject"id="subject"></input>
+							</div>
+							<div class="form-group">
+								<label for="class" class="control-label">Class: </label>
+								<input type="text" class="form-control" name="class"id="class"></input>
+							</div>
+					</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name="b" value="Make Appointment">Make appointment</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		
+
 {% endblock %}

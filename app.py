@@ -112,14 +112,18 @@ def search():
                 return render_template("search.html") 
         else:
                 if request.form['b'] == "Submit":
-                        tutor_list = search_operation(request.form, db, session)
-                        return render_template("search_results.html", tutor_list=tutor_list) #Will redirect to a search return page, temp for testing purposes of returns
-
-@auth("/results")
-@app.route("/results", methods=["GET", "POST"])
-def results(tutor_list):
-    if request.method == "GET":
-        return render_template("search_results.html", tutor_list=tutor_list)
+                    tutor_list = search_operation(request.form, db, session)
+                    return render_template("search_results.html", tutor_list=tutor_list)
+                if request.form['b'] == "Make Appointment":
+                    print(request.form)
+                    tutor_username = request.form['username']
+                    ## create_appointment    (tutor,          tutee,               subject,                 course)
+                    appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"])
+                    print(appt)
+                    db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
+                    db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
+                    flash("You have succesfully added your appt!")
+                    return redirect(url_for("homepage"))
 
 
 @auth("/settings")
@@ -132,24 +136,26 @@ def update_settings(settings_type):
     if request.method == "POST":
         if request.form["b"] == "Log Out":
             return logout()
-        if settings_type == "profile":
-            if request.form["b"] == "Update Profile":
-                new_account = {}
-                old_email = session["email"]
-                for key in request.form.keys():
-                    new_account[key] = request.form[key]
-                    session[key] = request.form[key]
+        if request.form["b"] == "Update Profile":
+            new_account = {}
+            old_email = session["email"]
+            for key in request.form.keys():
+                new_account[key] = request.form[key]
+                session[key] = request.form[key]
+            if session["type"] == "tutor":
                 update_tutor(old_email, new_account, db)
-                return redirect("homepage")
-            if request.form["b"] == "Update Profile Picture":
-                # data = request.form["pic"]
-                # file_id = fs.put(open(str(data), "rb").read()) 
-                # update_dict = {"pic_id":file_id}
-                # if session["type"]=="tutee":
-                #     update_tutee(session["email"], update_dict, db)
-                # else:
-                #     update_tutor(session["email"], update_dict, db)
-                return redirect("homepage")
+            elif session["type"] == "tutee":
+                update_tutee(old_email, new_account, db)
+            return redirect(url_for("homepage"))
+        if request.form["b"] == "Update Profile Picture":
+            # data = request.form["pic"]
+            # file_id = fs.put(open(str(data), "rb").read()) 
+            # update_dict = {"pic_id":file_id}
+            # if session["type"]=="tutee":
+            #     update_tutee(session["email"], update_dict, db)
+            # else:
+            #     update_tutor(session["email"], update_dict, db)
+            return redirect("homepage")
                 
 @auth("/inbox")
 @app.route("/inbox", methods=["GET","POST"])
@@ -165,6 +171,14 @@ def logout():
     session.pop('logged_in', None)
     flash("You have been logged out")
     return redirect('/')
+
+def create_appointment(tutor, tutee, subject, course):
+    appt = {}
+    appt['tutor'] = tutor
+    appt['tutee'] = tutee
+    appt['subject'] = subject
+    appt['class'] = course
+    return appt
 
 if __name__ == "__main__":
 	app.debug = True
