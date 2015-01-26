@@ -5,9 +5,12 @@
 
 {% endblock %}
 {% block settings_type %}
-<div id="edit_times"></div>
 
-<form method="POST">
+<div id="edit_times"></div>
+</form><form method="POST">
+<input type="hidden" id="counter" name="counter" value="0">
+
+
 {% set n = -1 %}
 <div id="dropdowns">
 {% for d in dicts %}
@@ -15,6 +18,7 @@
 
 <div id="menu{{n}}">
 <br>
+
 <input type="hidden" id="{{n}}-dict" value="{{d}}">
 {% include "dropdown.html" %}
 
@@ -30,7 +34,6 @@
 <button type="button" id="add" style="visibility:hidden">Add Another Day</button>
 <button type="submit" id="save_b" name="b" value="Update Times" class="button primary" style="visibility:hidden">Save</button>
 
-<input type="hidden" id="counter" name="counter" value="0">
 </form>
 
 

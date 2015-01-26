@@ -1,58 +1,67 @@
 {% extends "settings.html" %}
 {% block head2 %}
+
+<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+
 <script>
 function previewFile(){
-       var preview = document.querySelector('img'); //selects the query named img
-       var file    = document.querySelector('input[type=file]').files[0]; //sames as here
-       var reader  = new FileReader();
+        var preview = document.querySelector('img'); //selects the query named img
+        var file    = document.querySelector('input[type=file]').files[0]; 
+        var input    = document.getElementById('pic');
+        var reader  = new FileReader();
 
-       reader.onloadend = function () {
+        reader.onloadend = function () {
            preview.src = reader.result;
-       }
+           input.value = preview.src;
+           console.log(input.value)
+           console.log(preview.src)
+        }
 
-       if (file) {
-           reader.readAsDataURL(file); //reads the data as a URL
-       } else {
+       	if (file) {
+           reader.readAsDataURL(file);
+           console.log(preview.reader); //reads the data as a URL
+        } else {
            preview.src = "";
-       }
+        }
   }
 
   previewFile();  //calls the function named previewFile()
 </script>
-{% endblock %}
+{% endblock head2 %}
+
 {% block settings_type %}
-	<div class="col-md-8">
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Profile</h3>
-		  </div>
-		  <div class="panel-body">
-		    <div class="row">
-			  <div class="col-md-4">
-			    <div class="thumbnail">
-			      <img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg">
-			    </div>
+<div class="panel panel-default grey">
+	<h3 class="settings-header">Update Profile</h3>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4">
 
-			  	<form method="POST">
-			  		<p><label for="profile_picture">Upload Picture</label>
-			  		<input type="file" name="pic" id="pic" onchange="previewFile()"></p>
-			  		<button type="submit" name="b" value="Update Profile Picture" class="button primary">Update Profile Picture</button>
-			  </div>
+				<div class="thumbnail">
+					<img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg" onchange="previewFile()">
+				</div>
+			</div>
 
-			  <div class="col-md-8">
-				  	<p><label for="username">Username</label>
-				  	<input type="text" name="username"></input></p>
-				  	<p><label for="email">Email</label>
-				  	<input type="text" name="email" value=" {{ session["email"] }}" ></input></p>
-				  	<p><label for="school">School</label>
-				  	<input type="text" name="school" value=" {{ session["school"] }}" ></input></p>
-				  	<p><label for="grade">Grade</label>
-				  	<input type="text" name="grade" value=" {{ session["grade"] }}" ></input></p>
-				  	<button type="submit" name="b" value="Update Profile" class="button primary">Update Profile</button>
-			  	</form>
-			  </div>
-			 </div>
-		  </div>
+			<div class="col-md-8">
+				<p><label for="username">Username</label>
+				<input type="text" name="username"></input></p>
+				<p><label for="email">Email</label>
+				<input type="text" name="email" value=" {{ session["email"] }}" ></input></p>
+				<p><label for="school">School</label>
+				<input type="text" name="school" value=" {{ session["school"] }}" ></input></p>
+				<p><label for="grade">Grade</label>
+				<input type="text" name="grade" value=" {{ session["grade"] }}" ></input></p>
+				<input type="submit" class="btn btn-default navbar-btn button" name="b" value="Update Profile">
+
+				<div class="picture-form"><br><br><br>
+					<form method="POST">
+						<p><label for="profile_picture">Upload Picture</label>
+						<input type="file" onchange="previewFile()"></p>
+						<input type="hidden" id="pic">
+						<input type="submit" class="btn btn-default navbar-btn button" name="b" value="Update Profile Picture">
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
+</div>
 {% endblock %}

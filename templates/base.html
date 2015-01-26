@@ -9,7 +9,6 @@
 
 
 
-
 	<link href="http://fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css">
 	<link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -24,13 +23,13 @@
     <![endif]-->
 
 	{% block head %}
-	{% endblock %}
+	{% endblock head %}
 
 </head>
 <body>
 
 	{% block navbar %}
-	{% endblock %}
+	{% endblock navbar %}
 
 	{% with messages = get_flashed_messages() %}
   		{% if messages %}
@@ -42,7 +41,7 @@
 	
 
 	{% block body %}
-	{% endblock %}
+	{% endblock body %}
 
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

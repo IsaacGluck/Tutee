@@ -1,0 +1,81 @@
+body {
+  height: 100%;
+  background: url(/static/img/school.png) repeat center center fixed;
+  color: white !important;
+}
+
+.button {
+  background-color: rgba(46, 204, 113,1.0);
+  color: #fff;
+  /*border: 1px solid rgba(46, 204, 113,1.0) !important; */
+}
+
+.button:hover {
+  background-color: #fff;
+  color: rgba(46, 204, 113,1.0);
+}
+
+.navbar-tutee {
+	background-color: rgba(255,255,255,1.0);
+}
+
+.navbar-tutee h3 {
+	margin-top: 5px;
+}
+
+.navbar-tutee a {
+	color: rgba(46, 204, 113,1.0);
+	padding-bottom: 0 !important;
+	padding-left: 15px !important;
+	padding-top: 5px !important;
+	padding-right: 15px !important;
+	/*line-height: 15px;*/
+
+	background-color: transparent !important;
+	transition: transform 0.6s !important;
+	-moz-transition: -moz-transform 0.6s !important;
+	-webkit-transition: -webkit-transform 0.6s !important;
+}
+
+.navbar-tutee  a::before {
+	transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	-webkit-transform: translate3d(0,0,0);
+}
+
+.navbar-tutee a:hover,
+.navbar-tutee a:focus {
+	color: rgba(39, 174, 96,1.0);
+	text-decoration: none;
+  	transform: translateY(-15%);
+  	-moz-transform: translateY(-15%);
+  	-webkit-transform: translateY(-15%);
+}
+
+.grey {
+	background-color: rgba(48, 48, 48, 0.8);
+	border-radius: 10px;
+  	border: 10px solid rgba(255,255,255,0.0);
+  	padding: 10px;
+
+	transition: all 0.6s ease-in-out; 
+	-webkit-transition: all 0.6s ease-in-out; 
+	-moz-transition: all 0.6s ease-in-out; 
+	-o-transition: all 0.6s ease-in-out;
+}
+
+.grey h1, .grey h2, .grey h3, .grey h4, .grey h5 {
+	color: rgba(255,255,255,1.0);
+}
+
+.grey:hover {
+	border-color: rgba(46, 204, 113,1.0);
+	border-radius: 0px;
+}
+
+.settings-header {
+	padding-left: 15px;
+}
+
+.picture-form {
+}

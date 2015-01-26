@@ -7,25 +7,42 @@ from googlemaps import locate
 #misc useful helper functions
 
 # matches login attempts with user, returns user's account dictionary
-def authenticate(email, user_type, confirm_password, db):
-        if user_type == "tutee": 
-		user = db.tutees.find_one( { 'email' : email } , { "_id" : False } )
-	else:   
-		user = db.tutors.find_one( { 'email' : email } , { "_id" : False }  )
-	if user == None:
-		return None
-	salt = user["salt"]
-	hash_pass = user["password"]
-	hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
-	if hash_pass == hash_confirm:
-		return user
-	else:
-		return None
+def user_exists(email, user_type, db):
+    check = None
+    if user_type == "tutee":
+        check = db.tutees.find_one({'email':email})
+    else:
+        check == db.tutor.find_one({'email':email})
+    if check:
+        return True
+    return False
+
+def authenticate(username, user_type, confirm_password, db):
+    if user_type == "tutee":
+        user = db.tutees.find_one( { 'username' : username } , { "_id" : False } )
+    else:   
+        user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
+    if user == None:
+        return None
+    salt = user["salt"]
+    hash_pass = user["password"]
+    hash_confirm = hashlib.sha512(salt + confirm_password).hexdigest()
+    if hash_pass == hash_confirm:
+        return user
+    else:
+        return None
 
 #helper method to find a tutor given an email
 def find_tutor(email, db):
-    user = db.tutors.find_one({'email':email})
-    return user
+        user = db.tutors.find_one({'email':email})
+        return user
+
+#if you don't know the user type
+def find_user(username, db):
+        user = db.tutors.find_one({'username':username})
+        if user == None:
+                user = db.tutees.find_one({'username':username})
+        return user
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_tutor(email, update_dict, db):
@@ -57,6 +74,7 @@ def register_user(user_type, form, db):
         account['school'] = form["school"]
         account['grade'] = form["grade"]
         account['conversations'] = {}
+        account['count_unread'] = 0
         
         a1 = form["address1"]
         a1_type = form["address1_hs"] #is this address for home or for school
@@ -98,7 +116,7 @@ def send_message(form, session, db):
         recipient_username = form['recipient']
         message = form['message']
         sender_user_type = session['type']
-        if sender_user_type == "Tutor":
+        if sender_user_type == "tutor":
                 recipient_cursor = db.tutees.find({'username':recipient_username})
         else:
                 recipient_cursor = db.tutors.find({'username':recipient_username})
@@ -113,34 +131,46 @@ def send_message(form, session, db):
         time = time_total[11:19]
 
         #first update the dictionary of the recipient of the message
-        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':True}]
         #check if this conversation already exists. If so incorporate rest of conversation
         if conversations.has_key(session['username']): #if they've already talked
                 add_message = conversations[session['username']]
-                add_message.append(new_message) #update the existant message chain,
-                conversations[session['username']] = add_message #insert as the new value in dict
+                for x in add_message:
+                        new_message.append(x) #so that new message is at the begginning
+        conversations[session['username']] = new_message #insert as the new value in dict
+        count = recipient['count_unread'] + 1 #increment user's count of unread messages
+        if sender_user_type == "tutor":
+                update_tutee(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
         else:
-                conversations[session['username']] = [new_message]
-        if sender_user_type == "Tutor":
-                update_tutee(recipient['email'], {'conversations':conversations}, db)
-        else:
-                update_tutor(recipient['email'], {'conversations':conversations}, db)
+                update_tutor(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
+        
+        
+        
         
         #update dictionary of the sender
         conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
-        new_message = {'sender':session['username'], 'message_text':message, 'time':time, 'date':date}
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':False}]
         if conversations.has_key(recipient['username']):
                 add_message = conversations[recipient['username']]
-                add_message.append(new_message)
-                conversations[recipient['username']] = add_message
-        else:
-                conversations[recipient['username']] = [new_message]
-        if sender_user_type == "Tutor":
+                for x in add_message:
+                        new_message.append(x)
+        conversations[recipient['username']] = new_message
+        if sender_user_type == "tutor":
                 update_tutor(session['email'], {'conversations':conversations}, db)
         else:
                 update_tutee(session['email'], {'conversations':conversations}, db)
         return message + " sent on " + date + " by " + session['username']
 
+
+#takes dictionary of lists of messages, reorders each convo so most recent messages come first
+def reverse(conversations):
+        ret = {}
+        for key in conversations.keys():
+                conversations[key].reverse()
+                ret[key] = conversations[key]
+        return ret
+        
+                
 
 #Calculates the distance given two dictionaries of addresses, using longitude and latitude
 def calculate_distance(address1, address2):

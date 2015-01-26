@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Register</title>
+		<meta name="author" content="Codrops" />
+		<link rel="stylesheet" type="text/css" href="../static/stylesheets/component.css" />
+		<script src="../static/js/modernizr.custom.js"></script>
+	</head>
+	<body>
+		<div class="split-container">
+			<div id="splitlayout" class="splitlayout">
+				<div class="intro">
+					<div class="side side-left">
+						<div class="split-back" id="back-button">
+							<a href="/">Back To Home</a>
+						</div>
+						<div class="intro-content left" onclick="make_invisible('back-button');">
+							<h1><span>Register </span><span>Tutor</span></h1>
+						</div>
+						<div class="overlay"></div>
+					</div>
+					<div class="side side-right">
+						<div class="intro-content right">
+							<h1><span>Register </span><span>Tutee</span></h1>
+						</div>
+						<div class="overlay"></div>
+					</div>
+				</div><!-- /intro -->
+				<div class="page page-right">
+					<div class="page-inner">
+
+						<h2> Create a Tutor account </h2>
+						<form method="POST" id="info">
+							<p>First Name: <input type="text" name="first_name"></p>
+
+							<p>Last Name: <input type="text" name="last_name"></p>
+
+							<p>Username: <input type="text" name="username"></p>
+
+							<p>Email: <input type="text" name="email"></p>
+
+							<p>Password: <input type="password" name="password"></p>
+
+							<p>Confirm Password: <input type="password" name="confirm_password"></p>
+
+							<p>School: <input type="text" name="school"></p>
+
+							<p>Grade: <input type="numn" name="grade"></p>
+
+							<p> Address: 
+								<input type="text" name="address1">
+							</p>
+
+							<p>This is:
+								<select multiple size="1" form="info" name="address1_hs">
+									<option value="Home">Home</option>
+									<option value="School">School</option>
+								</select>
+							</p>
+
+							<p> Time (Enter Day;Hours):
+								<input type="text" name="times">Day;Hours
+							</p>
+							<p> Address: 
+								<input type="checkbox" name="Day1_Address" value="School">School</input>
+								<input type="checkbox" name="Day1_Address" value="Home">Home</input>
+							</p>
+							<p>Advanced courses you've taken:
+
+								<!-- {% include "classes.html" %} -->
+
+								<br><br>
+
+								<select multiple size="1" form="info" name="courses">
+									<option value="chemistry">AP Chemistry</option>
+									<option value="physics">AP Physics</option>
+									<option value="literature">AP Literature</option>
+								</select>
+							</p>
+							
+							<p>Your strongest subjects:
+								<select multiple size="1" form="info" name="subjects">
+									<option value="chemistry">Chemistry</option>
+									<option value="physics">Physics</option>
+									<option value="english">English</option>
+								</select>
+							</p>
+
+							<br>
+
+							<input type="hidden" id="counter" name="counter" value="0"></input>
+
+							<!-- <div id="dropdowns">
+								{% set n = 0 %}
+								<div id="menu{{n}}">
+									{% include "dropdown.html" %}
+								</div>
+							</div> -->
+
+							<button type="button" id="add">Add Another Day</button>
+
+							<p>
+								<button type="submit" name="b" value="Submit">Submit</button>
+							</p>
+						</form>
+
+
+					</div><!-- /page-inner -->
+				</div><!-- /page-right -->
+				<div class="page page-left">
+					<div class="page-inner">
+
+						<h2> Create a Tutee account </h2>
+						<form method="POST" id="info">
+							<p>First Name: <input type="text" name="first_name"></p>
+
+							<p>Last Name: <input type="text" name="last_name"></p>
+
+							<p>Username: <input type="text" name="username"></p>
+
+							<p>Email: <input type="text" name="email"></p>
+
+							<p>Password: <input type="password" name="password"></p>
+
+							<p>Confirm Password: <input type="password" name="confirm_password"></p>
+
+							<p>School: <input type="text" name="school"></p>
+
+							<p>Grade: <input type="numn" name="grade"></p>
+
+							<p> Address: 
+								<input type="text" name="address1"></p>
+
+							<p>This is:
+								<select multiple size="1" form="info" name="address1_hs">
+									<option value="Home">Home</option>
+									<option value="School">School</option>
+								</select>
+							</p>
+
+							<p>
+							<button type="submit" name="b" value="Submit">Submit</button>
+							</p>
+
+						</form>
+
+					</div><!-- /page-inner -->
+				</div><!-- /page-left -->
+				<a href="#" class="back back-right" title="back to intro" onclick="make_visible('back-button');">&rarr;</a>
+				<a href="#" class="back back-left" title="back to intro">&larr;</a>
+			</div><!-- /splitlayout -->
+		</div><!-- /container -->
+		<script src="../static/js/classie.js"></script>
+		<script src="../static/js/cbpSplitLayout.js"></script>
+		<script src="../static/js/dropdown.js"></script>
+		<script src="../static/js/register_tutor.js"></script>
+		<script type="text/javascript">
+			function make_invisible(id) {
+			    document.getElementById(id).style.visibility = "hidden";
+			};
+			function make_visible(id){
+				document.getElementById(id).style.visibility = "visible";
+			};
+		</script>
+	</body>
+</html>
+
+
