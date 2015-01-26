@@ -19,29 +19,64 @@
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></form></li>
 		        	</ul>
 		        </div>
 			</div>
 		</nav>
 
 
-		<div class="row">
-	    <div class="panel panel-default grey">
-		<div class="form-group">
 
-		  		<label for="recepient">Recepient</label>
-		  		<input type="text" class="form-control" name="recipient" placeholder="Enter Recipient">
-		  		<label for="message">Message</label>
-		  		<input type="text" class="form-control" name="message" placeholder="Message">
-		  		<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
-	  		</form>
-	  	</div>
-	  	</div>
-	  	</div>
+		<div>
+		<form method="POST">
+			    		<button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
+			    </form>
+		<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST">
+							<div class="form-group">
+							  <div class="control-group">
+							    <label for="recipient" style="color:black" class="control-label">Recipient: </label>
+							    <input type="text" class="form-control" placeholder="Username" name="recipient" id="recipient"></input>
+							  </div>
+							  <div class="control-group">
+							    <label for="message" style="color:black" class="control-label">Message: </label>
+							    <input type="text" class="form-control" placeholder="Message" name="message" id="message"></input>
+							  </div>
+							</div>
+					</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		{% for message in messages %}
 
+		{% if message == "invalid recipient" %}
+		<div class="alert alert-danger" role="alert">
+		  {{message}}
+		</div>
+		{% endif %}
+
+		{% if message != "invalid recipient" %}
+		<div class="alert alert-success" role="alert">
+		  {{message}}
+		</div>
+		{% endif %}
+
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
 	<div>
-	  {{session['conversations']}}
 	  {% for conversation in session['conversations'].keys() %}
 	  <div class="row">
 	    <div class="panel panel-default grey">
@@ -63,6 +98,12 @@
 		  {% endfor %}
 		  </div>
 	      </div>
+<form method="POST">
+  <input type="hidden" value="{{conversation}}" name="recipient"></input>
+  <label for="reply" class="control-label">Reply: </label>	
+  <input type="text" class="form-control" placeholder="Message" name="message"></input>
+  <button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
+</form>
 		<br>
 		{% endfor %}
 	    </div>

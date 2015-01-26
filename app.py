@@ -76,12 +76,12 @@ def login():
                 user_type = "tutee"
             else:
                 user_type = "tutor"
-            print(request.form)
-            print(user_type)
+            #print(request.form)
+            #print(user_type)
             user = authenticate(username, user_type, password, db)
-            print(user)
+            #print(user)
             if user:
-                print("UR A USER")
+                #print("UR A USER")
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
@@ -112,11 +112,15 @@ def profile(username):
         for key in user:
             flasher[key] = str(user[key])
         flash(flasher)
-        print 'username' + user['username']
+        #print 'username' + user['username']
         return render_template("profile.html")
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
+        if request.form['s'] == "Make Appointment":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -201,11 +205,17 @@ def inbox():
         session['count_unread'] = 0
         return render_template("inbox.html")
     if request.method == "POST":
+        print request.form
         if request.form['s'] == "Log Out":
             return logout()
-        if request.form['s'] == "Send":
+        if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
-            # flash(message) FOR TESTING
+            flash(message)
+            return redirect("inbox")
+        if request.form['s'] == "Reply":
+            print request.form
+            message = send_message(request.form, session, db)
+            flash(message)
             return redirect("inbox")
 
 
