@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+<link rel="stylesheet" href="/static/stylesheets/dropdown.css">
 
 <script>
 $('#myModal').on('shown.bs.modal', function () {
@@ -71,7 +72,10 @@ $('#myModal').on('shown.bs.modal', function () {
 								<label for="class" class="control-label">Class: </label>
 								<input type="text" class="form-control" name="class"id="class"></input>
 							</div>
+							{% set n = 0 %}
+							{% include "dropdown.html" %}
 					</div>
+					
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-primary" name="b" value="Make Appointment">Make appointment</button>
 						</div>
@@ -82,5 +86,9 @@ $('#myModal').on('shown.bs.modal', function () {
 		{% endfor %}
 	</div>
 		
-
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/dropdown_edit.js"></script>
+<script>
+document.getElementById("menu0").setAttribute("align", "center");
+</script>
 {% endblock %}

@@ -136,7 +136,7 @@ def search():
                 print(request.form)
                 tutor_username = request.form['username']
                 ## create_appointment    (tutor,          tutee,               subject,                 course)
-                appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"])
+                appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"], request.form)
                 print(appt)
                 db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
                 db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
@@ -212,12 +212,17 @@ def logout():
     flash("You have been logged out")
     return redirect('/')
 
-def create_appointment(tutor, tutee, subject, course):
+def create_appointment(tutor, tutee, subject, course,form):
     appt = {}
     appt['tutor'] = tutor
     appt['tutee'] = tutee
     appt['subject'] = subject
     appt['class'] = course
+    appt['day'] = form['0-day']
+    appt['start_time'] = form['0-start_hour'] + ":" + form['0-start_minute'] + form['0-start_type']
+    appt['end_time'] = form['0-end_hour'] + ":" + form['0-end_minute'] + form['0-end_type']
+    appt['location'] = form['0-address']
+    
     return appt
 
 if __name__ == "__main__":
