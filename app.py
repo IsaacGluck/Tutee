@@ -29,6 +29,18 @@ def auth(page):
         return inner
     return decorate
 
+def check_tut(page):
+    def decorate(f):
+        @wraps(f)
+        def inner(*args, **kwargs):
+            if 'type' in session:
+                if session['type'] == "tutor":
+                    flash("You must be a tutee to see this page")
+                    return redirect('/homepage')
+            return f(*args)
+        return inner
+    return decorate
+                
 
 ## FOR TESTING
 @app.route("/register_test", methods=["GET", "POST"])
@@ -126,6 +138,7 @@ def profile(username):
 
 @app.route("/search", methods=["GET", "POST"])
 @auth("/search")
+@check_tut("/search")
 def search():
         if request.method == "GET":
             return render_template("search.html") 
