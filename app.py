@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, flash, session, redirect, url_for
+from flask import Flask, render_template, request, flash, session, redirect, url_for, send_from_directory
 from pymongo import Connection
 import gridfs
+import os
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists 
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists
+from werkzeug import secure_filename
+import tempfile
 
 import hashlib, uuid
 import random
@@ -12,14 +15,16 @@ from forms import RegisterForm
 
 app = Flask(__name__)
 
+UPLOAD_FOLDER = tempfile.gettempdir()
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 # mongo 
 conn = Connection()
 db = conn['users']
 
 fs = gridfs.GridFS(db)
 
-db.tutors.remove()
-db.tutees.remove()
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 def auth(page):
     def decorate(f):
@@ -159,14 +164,34 @@ def update_settings(settings_type):
                 update_tutee(old_email, new_account, db)
             return redirect(url_for("homepage"))
         if request.form["b"] == "Update Profile Picture":
+            file = request.files['file']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                url = url_for('uploaded_file', filename=filename)
             # data = request.form["pic"]
-            # file_id = fs.put(open(str(data), "rb").read()) 
-            # update_dict = {"pic_id":file_id}
-            # if session["type"]=="tutee":
-            #     update_tutee(session["email"], update_dict, db)
-            # else:
-            #     update_tutor(session["email"], update_dict, db)
+            x = tempfile.gettempdir() + '/' + filename
+            file_id = fs.put(open(str(x), "rb").read())
+            update_dict = {"pic_id":file_id}
+            if session["type"]=="tutee":
+                 update_tutee(session["email"], update_dict, db)
+                 u = find_user(session["username"], db)
+                 session["pic_id"] = u["pic_id"]
+            else:
+                 update_tutor(session["email"], update_dict, db)
+                 u = find_user(session["username"], db)
+                 session["pic_id"] = u["pic_id"]
             return redirect("homepage")
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
                 
 @auth("/inbox")
 @app.route("/inbox", methods=["GET","POST"])
