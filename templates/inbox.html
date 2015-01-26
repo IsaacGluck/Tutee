@@ -19,7 +19,7 @@
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></form></li>
 		        	</ul>
 		        </div>
 			</div>
@@ -28,7 +28,7 @@
 
 
 		<div>
-		<form method="POST" class="pull-right">
+		<form method="POST">
 			    		<button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
 			    </form>
 		<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -98,6 +98,12 @@
 		  {% endfor %}
 		  </div>
 	      </div>
+<form method="POST">
+  <input type="hidden" value="{{conversation}}" name="recipient"></input>
+  <label for="reply" class="control-label">Reply: </label>	
+  <input type="text" class="form-control" placeholder="Message" name="message"></input>
+  <button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
+</form>
 		<br>
 		{% endfor %}
 	    </div>
