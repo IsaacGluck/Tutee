@@ -44,15 +44,19 @@ def search_operation(form, db, session):
                                 best_time = -99999;
                                 for d in tutor[day]:
                                 
-                                        tutor_start = d["time_start"]
-                                        tutor_end = tutor[day]["time_end"]
+                                        tutor_start = d["start_hour"]
+                                        tutor_end = tutor[day]["start_min"]
                                         #if the tutor starts
+                                        score = 0;
                                         if (tutee_end > tutor_start):
-                                        match_score += float(tutee_end - tutor_start) * 5
+                                                score += float(tutee_end - tutor_start) * 5
                                         if (tutee_end > tutor_end):
-                                                match_score -= float(tutee_end - tutor_end) * 5
-                                                if (tutee_start > tutor_start):
-                                                        match_score -= float(tutee_start - tutor_start) * 5
+                                                score -= float(tutee_end - tutor_end) * 5
+                                        if (tutee_start > tutor_start):
+                                                score -= float(tutee_start - tutor_start) * 5
+                                        if (score > best_time):
+                                                best_time = score
+                                match_score += score
                         except:
                                 pass
                 
