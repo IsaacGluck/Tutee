@@ -67,7 +67,7 @@ def register_user(user_type, form, db):
         account['type'] = user_type
         account['username'] = form["username"]
         account['email'] = form["email"]
-
+        account['appts'] = []
         password = form["password"]
         salt = uuid.uuid4().hex #creates salt, a randomized string attached to end of password before hashing to prevent password compromisation even if hacker knew the hashing algo
         hash_pass = hashlib.sha512(salt + password).hexdigest() #prepend the salt to the password, hash using sha512 algorithm, use hexdigest to store as string
