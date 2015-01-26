@@ -23,7 +23,7 @@ var times = {{ days|tojson }};
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+			  			<li><form method="POST" id="message" enctype="multipart/form-data"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
 		        	</ul>
 		        </div>
 			</div>

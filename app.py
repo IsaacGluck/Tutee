@@ -1,22 +1,36 @@
-from flask import Flask, render_template, request, flash, session, redirect, url_for
+from flask import Flask, render_template, request, flash, session, redirect, url_for, send_from_directory
 from pymongo import Connection
 import gridfs
+import os
 from search import search_operation
 from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days
-
+from werkzeug import secure_filename
+import tempfile
 import hashlib, uuid
 import random
 import json
+import urllib
 from functools import wraps
 from forms import RegisterForm
+import shutil
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = tempfile.gettempdir()
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # mongo 
 conn = Connection()
 db = conn['users']
 
+tut = db.tutees.find()
+#for t in tut:
+    #for key in t.keys():
+        #print key + " " + str(t[key])
+
 fs = gridfs.GridFS(db)
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 def auth(page):
     def decorate(f):
@@ -175,6 +189,11 @@ def update_settings(settings_type):
         print days
         session['jdays']=json.dumps(days)
         return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
+        pic_id = session["pic_id"]
+        o = ObjectId(pic_id)
+        l = fs.find({'files_id':o})
+        print l.count()
+        return render_template(html_file)
     if request.method == "POST":
         if request.form["s"] == "Log Out":
             return logout()
@@ -199,14 +218,36 @@ def update_settings(settings_type):
             session['days'] = days
             return redirect(url_for("update_settings", settings_type="times"))
         if request.form["s"] == "Update Profile Picture":
-            # data = request.form["pic"]
-            # file_id = fs.put(open(str(data), "rb").read()) 
-            # update_dict = {"pic_id":file_id}
-            # if session["type"]=="tutee":
-            #     update_tutee(session["email"], update_dict, db)
-            # else:
-            #     update_tutor(session["email"], update_dict, db)
+            file = request.files['file']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                y = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                url = url_for('uploaded_file', filename=filename)
+            x = tempfile.gettempdir() + '/' + filename
+            with open('static/img/%s_profpic.jpg' %session['username'], 'wb') as f:
+                shutil.copyfile(x, 'static/img/%s_profpic.jpg' %session['username'])
+            file_id = str(fs.put(open(str(x), "rb").read()))
+            update_dict = {"pic_id":'../static/img/%s_profpic.jpg' %session['username']}
+            if session["type"]=="tutee":
+                update_tutee(session["email"], update_dict, db)
+                u = find_user(session["username"], db)
+                session["pic_id"] = u["pic_id"]
+                print "still working"
+            else:
+                update_tutor(session["email"], update_dict, db)
+                u = find_user(session["username"], db)
+                session["pic_id"] = u["pic_id"]
             return redirect("homepage")
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
                 
 @app.route("/inbox", methods=["GET","POST"])
 @auth("/inbox")

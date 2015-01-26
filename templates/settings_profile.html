@@ -37,7 +37,7 @@ function previewFile(){
 			<div class="col-md-4">
 
 				<div class="thumbnail">
-					<img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg" onchange="previewFile()">
+					<img src="{{ session['pic_id'] }}" >
 				</div>
 			</div>
 
@@ -51,14 +51,10 @@ function previewFile(){
 				<p><label for="grade">Grade</label>
 				<input type="text" name="grade" value=" {{ session["grade"] }}" ></input></p>
 				<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile">
-
 				<div class="picture-form"><br><br><br>
-					<form method="POST">
-						<p><label for="profile_picture">Upload Picture</label>
-						<input type="file" onchange="previewFile()"></p>
-						<input type="hidden" id="pic">
-						<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile Picture">
-					</form>
+				    <p><input type="file" name="file" onchange="previewFile()">
+				      <input type="submit" name="s" value="Update Profile Picture">
+				  </form>
 				</div>
 			</div>
 		</div>
