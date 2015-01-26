@@ -37,17 +37,22 @@ def search_operation(form, db, session):
                                 match_score += float(3 - distance)
 
                                 #timing calculations
-                                tutor_start = tutor[day]["time_start"]
-                                tutor_end = tutor[day]["time_end"]
+                                
                                 tutee_start = form["%s_Time_Start" % day]
                                 tutee_end = form["%s_Time_End" % day]
-                                #if the tutor starts
-                                if (tutee_end > tutor_start):
+                                
+                                best_time = -99999;
+                                for d in tutor[day]:
+                                
+                                        tutor_start = d["time_start"]
+                                        tutor_end = tutor[day]["time_end"]
+                                        #if the tutor starts
+                                        if (tutee_end > tutor_start):
                                         match_score += float(tutee_end - tutor_start) * 5
-                                if (tutee_end > tutor_end):
-                                        match_score -= float(tutee_end - tutor_end) * 5
-                                if (tutee_start > tutor_start):
-                                        match_score -= float(tutee_start - tutor_start) * 5
+                                        if (tutee_end > tutor_end):
+                                                match_score -= float(tutee_end - tutor_end) * 5
+                                                if (tutee_start > tutor_start):
+                                                        match_score -= float(tutee_start - tutor_start) * 5
                         except:
                                 pass
                 
