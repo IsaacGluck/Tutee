@@ -32,6 +32,13 @@ def auth(page):
         return inner
     return decorate
 
+
+## FOR TESTING
+@app.route("/register_test", methods=["GET", "POST"])
+def register_test():
+    if request.method == "GET":
+       return render_template("register_update.html")
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
