@@ -98,7 +98,7 @@ def homepage():
     if request.method == "GET":
         user = find_user(session["username"], db)
         appts = user["appts"]
-        return render_template("homepage.html", appts=appts, other=other)
+        return render_template("homepage.html", appts=appts)
     else:
         if request.form['s'] == "Send":
             message = send_message(request.form, session, db)
