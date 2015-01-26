@@ -112,11 +112,14 @@ def profile(username):
         for key in user:
             flasher[key] = str(user[key])
         flash(flasher)
-        print 'username' + user['username']
+        #print 'username' + user['username']
         return render_template("profile.html")
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
+        if request.form['s'] == "Make Appointment":
+            message = send_message(request.form, session, db)
+            return render_template("inbox.html")
 
 
 @app.route("/search", methods=["GET", "POST"])
