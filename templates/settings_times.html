@@ -1,36 +1,39 @@
 {% extends "settings.html" %}
-{% block head %}
+{% block head2 %}
 
 <link rel="stylesheet" href="/static/stylesheets/dropdown.css">
-<script>
-var times = {{ days|tojson }};
-//console.log(x);
-</script>
 
 {% endblock %}
 {% block settings_type %}
+<div id="edit_times"></div>
 
+<form method="POST">
 {% set n = -1 %}
 <div id="dropdowns">
-{% for d in session['days'] %}
+{% for d in dicts %}
 {% set n = n +1 %}
+
 <div id="menu{{n}}">
+<br>
 <input type="hidden" id="{{n}}-dict" value="{{d}}">
 {% include "dropdown.html" %}
 
 <button type="button" class="del_b" id="{{n}}-del">Delete</button>
-</div>
-{{d}}
-{% endfor %}
-</div>
 <br>
-<button type="button" id="edit_b">Edit</button>
-<input type="hidden" id="counter" value="0">
+</div>
+{% endfor %}
+<br>
+</div>
+
+<br id="change">
+<button type="button" id="edit_b">Edit</button><br>
+<button type="button" id="add" style="visibility:hidden">Add Another Day</button>
+<button type="submit" id="save_b" name="b" value="Update Times" class="button primary" style="visibility:hidden">Save</button>
+
+<input type="hidden" id="counter" name="counter" value="0">
+</form>
 
 
-
-<br><br>
-<button type="button" id="add">Add Another Day</button>
 <script type="text/javascript" src="/static/js/dropdown.js"></script>
 <script type="text/javascript" src="/static/js/settings_days.js"></script>
 {% endblock %}

@@ -1,4 +1,7 @@
+console.log("hi");
 init();
+init_times();
+
 
 function init() {
     var menus = document.getElementsByClassName("m");
@@ -18,7 +21,7 @@ function init() {
     
     var subs = document.getElementsByClassName("sub")
     for (var i=0; i<subs.length; i++){
-	subs[i].addEventListener('mouseover',showsub);
+	subs[i].addEventListener('click',showsub);
     }
 
     var subs2  = document.getElementsByClassName("s2");

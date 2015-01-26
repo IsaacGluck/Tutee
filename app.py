@@ -3,7 +3,7 @@ from pymongo import Connection
 import gridfs
 from gridfs import GridFS
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, create_days
 import hashlib, uuid
 import random
 import json
@@ -68,7 +68,6 @@ def login(user_type):
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
-                session['jdays']=json.dumps(session['days'])
                 session["logged_in"] = True
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")
@@ -122,7 +121,14 @@ def results(tutor_list):
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
-        return render_template(html_file,days=json.loads(session['jdays']))
+        days = [];
+        for k in session['days'].keys():
+            for x in session['days'][k]:
+                days.append(x);
+                
+        print days
+        session['jdays']=json.dumps(days)
+        return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
             return logout()
@@ -146,6 +152,16 @@ def update_settings(settings_type):
                 else:
                     update_tutor(session["email"], update_dict, db)
                 return render_template()
+        if request.form["b"] == "Update Times":
+            print request.form
+            days = create_days(request.form)
+            new_account = {}
+            new_account['days'] = days
+            print days
+            update_tutor(session["email"], new_account, db)
+            session['days'] = days
+            return redirect(url_for("update_settings", settings_type="times"))
+            #return render_template("settings_times.html",days=json.loads(session['jdays']))           
 
 def logout():
     session.pop('logged_in', None)
