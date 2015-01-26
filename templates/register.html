@@ -1,124 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<style>
-.dropdownL {position:relative;
-margin: 0;
-padding: 0;
-list-style: none;
-float: left;
-font: bold 11px;
-}
-
-.list {
-margin: 0;
-padding: 0;
-list-style: none;
-float: left;
-font: bold 11px;
-}
-
-.m {display: block;
-margin: 0 1px 0 0;
-padding: 4px 10px;
-width: 70px;
-height: 35px;
-background: #5970B2;
-color: #FFF;
-text-align: center;
-text-decoration: none
-}
-
-.m:hover
-{	background: #49A3FF}
-
-.d {
-position: absolute;
-z-index: 10;
-	visibility: hidden;
-	margin: 0;
-	padding: 0;
-	background: #EAEBD8;
-	border: 1px solid #5970B2}
-
-.d2 {
-position: relative;
-visibility: hidden
-}
-
-.text2 {
-position:relative;
-display:inline-block;
-width: 52px;
-margin: 0;
-padding: 5px 10px;
-text-align: left;
-text-decoration: none;
-background: #EAEBD8;
-color: #2875DE;
-font: 11px;
-}
-
-.d2F {
-position: relative;
-display: block;
-margin: 0;
-padding: 5px 10px;
-width: 70px;
-height:18px;
-white-space: nowrap;
-text-align: left;
-text-decoration: none;
-background: #EAEBD8;
-color: #2875DE;
-font: 11px;
-}
-
-
-.d2F:hover{
-background: #49A3FF;
-color: #FFF
-}
-
-.s {
-position:absolute;
-visibility: hidden;
-margin-right: -33px;
-margin-top: 10px;
-padding: 0;
-background: #EAEBD8;
-border: 1px solid #5970B2;
-right:1px;
-top: 0px;
-}
-
-.s2 {
-position: relative;
-visibility: hidden;
-display: inline-block;
-margin: 0;
-width: 30px;
-white-space: nowrap;
-text-align: left;
-text-decoration: none;
-background: #EAEBD8;
-color: #2875DE;
-font: 11px;
-}
-
-.s2F {
-padding: 5px 10px;
-display: block;
-}
-
-.s2F:hover{
-background: #49A3FF;
-color: #FFF
-}
-
-
-
-</style>
+<link rel="stylesheet" href="/static/stylesheets/dropdown.css">
 {% endblock %}
 
 {% block body %}
@@ -154,5 +37,6 @@ color: #FFF
 	{{ form.csrf_token }}	
 	</form>
 <script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/dropdown_edit.js"></script>
 <script type="text/javascript" src="/static/js/register_tutor.js"></script>
 {% endblock %}

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists 
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days
 
 import hashlib, uuid
 import random
@@ -150,7 +150,14 @@ def search():
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
-        return render_template(html_file)
+        days = [];
+        for k in session['days'].keys():
+            for x in session['days'][k]:
+                days.append(x);
+                
+        print days
+        session['jdays']=json.dumps(days)
+        return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
             return logout()
@@ -165,6 +172,15 @@ def update_settings(settings_type):
             elif session["type"] == "tutee":
                 update_tutee(old_email, new_account, db)
             return redirect(url_for("homepage"))
+        if request.form["b"] == "Update Times":
+            print request.form
+            days = create_days(request.form)
+            new_account = {}
+            new_account['days'] = days
+            print days
+            update_tutor(session["email"], new_account, db)
+            session['days'] = days
+            return redirect(url_for("update_settings", settings_type="times"))
         if request.form["b"] == "Update Profile Picture":
             # data = request.form["pic"]
             # file_id = fs.put(open(str(data), "rb").read()) 

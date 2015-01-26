@@ -94,21 +94,9 @@ def register_user(user_type, form, db):
                 #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
                 subject = form['subjects']
                 account['%s' % subject] = True
-                days = []
-                num = int(form['counter']) + 1
-                for i in range(num):
-                        day = {}
-                        day['addresses'] = form.getlist(str(i) + "-address")
-                        day['day'] = form[str(i) + '-day']
-                        day['start_hour'] = form[str(i) + '-start_hour']
-                        day['start_min'] = form[str(i) + '-start_minute']
-                        day['start_type'] = form[str(i) + '-start_type']
-                        day['end_hour'] = form[str(i) + '-end_hour']
-                        day['end_min'] = form[str(i) + '-end_minute']
-                        day['end_type'] = form[str(i) + '-end_type']
-                        days.append(day)
-
-                account['days'] = days
+                
+                #print days
+                account['days'] = create_days(form)
                 
                 account['classes'] = form.getlist('course')
                 print form.getlist('course')
@@ -199,3 +187,22 @@ def calculate_distance(address1, address2):
         b = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         c = 3963.1 * b #multiply radius of the earth, 3963.1 miles
         return c
+
+def create_days(form):
+        days = {}
+        num = int(form['counter']) + 1
+        for i in range(num):
+                day = {}
+                dayName = form[str(i) + '-day']
+                day['day'] = dayName
+                day['addresses'] = form.getlist(str(i) + "-address")
+                day['start_hour'] = form[str(i) + '-start_hour']
+                day['start_min'] = form[str(i) + '-start_minute']
+                day['start_type'] = form[str(i) + '-start_type']
+                day['end_hour'] = form[str(i) + '-end_hour']
+                day['end_min'] = form[str(i) + '-end_minute']
+                day['end_type'] = form[str(i) + '-end_type']
+                if days.has_key(dayName) == False:
+                        days[dayName] = []
+                days[dayName].append(day)
+        return days

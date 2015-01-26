@@ -1,0 +1,42 @@
+{% extends "settings.html" %}
+{% block head2 %}
+
+<link rel="stylesheet" href="/static/stylesheets/dropdown.css">
+
+{% endblock %}
+{% block settings_type %}
+
+<div id="edit_times"></div>
+</form><form method="POST">
+<input type="hidden" id="counter" name="counter" value="0">
+
+
+{% set n = -1 %}
+<div id="dropdowns">
+{% for d in dicts %}
+{% set n = n +1 %}
+
+<div id="menu{{n}}">
+<br>
+
+<input type="hidden" id="{{n}}-dict" value="{{d}}">
+{% include "dropdown.html" %}
+
+<button type="button" class="del_b" id="{{n}}-del">Delete</button>
+<br>
+</div>
+{% endfor %}
+<br>
+</div>
+
+<br id="change">
+<button type="button" id="edit_b">Edit</button><br>
+<button type="button" id="add" style="visibility:hidden">Add Another Day</button>
+<button type="submit" id="save_b" name="b" value="Update Times" class="button primary" style="visibility:hidden">Save</button>
+
+</form>
+
+
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/settings_days.js"></script>
+{% endblock %}

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block head %}
-
-{% block head2 %}
+<script>
+var times = {{ days|tojson }};
+</script>
+{% block head2 %}{% endblock %}
 {% endblock %}
-{%endblock%}
+
 {% block navbar %}
 	<div class="container">
 		<nav class="navbar navbar-tutee">
