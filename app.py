@@ -76,12 +76,12 @@ def login():
                 user_type = "tutee"
             else:
                 user_type = "tutor"
-            print(request.form)
-            print(user_type)
+            #print(request.form)
+            #print(user_type)
             user = authenticate(username, user_type, password, db)
-            print(user)
+            #print(user)
             if user:
-                print("UR A USER")
+                #print("UR A USER")
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
@@ -95,17 +95,22 @@ def login():
 @app.route("/homepage", methods=["GET", "POST"])
 @auth("/homepage")
 def homepage():
+    user = find_user(session["username"], db)
+    appts = user["appts"]
+    print(appts)
     if request.method == "GET":
-        user = find_user(session["username"], db)
-        appts = user["appts"]
         return render_template("homepage.html", appts=appts)
     else:
-        if request.form['s'] == "Send":
-            message = send_message(request.form, session, db)
-            flash(message)
-            return redirect("homepage")
-        if request.form['s'] == "Log Out":
-            return logout()
+        print(request.form)
+        if request.form['b'] == 'Complete':
+            appt = appts.pop(int(request.form['index']))
+            flash("You have completed an appointment! Congrats")
+            db.tutees.update( {'username' : session['username'] }, { '$set' : {'appts' : appts} })
+            return render_template("homepage.html", appts=appts)
+        if request.form['s']:
+            if request.form['s'] == "Log Out":
+                return logout()
+
 
 
 @app.route("/profile/<username>", methods=["GET","POST"])
@@ -116,11 +121,15 @@ def profile(username):
         for key in user:
             flasher[key] = str(user[key])
         flash(flasher)
-        print 'username' + user['username']
+        #print 'username' + user['username']
         return render_template("profile.html")
     if request.method == "POST":
-        if request.form['b'] == "Log Out":
+        if request.form['s'] == "Log Out":
             return logout()
+        if request.form['s'] == "Make Appointment":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -128,6 +137,8 @@ def search():
         if request.method == "GET":
             return render_template("search.html") 
         else:
+            if request.form['s'] == "Log Out":
+                return logout() 
             if request.form['b'] == "Submit":
                 tutor_list = search_operation(request.form, db, session)
                 print(request.form)
@@ -136,8 +147,8 @@ def search():
                 print(request.form)
                 tutor_username = request.form['username']
                 ## create_appointment    (tutor,          tutee,               subject,                 course)
-                appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"])
-                print(appt)
+                appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"], request.form)
+                ## print(appt)
                 db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
                 db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
                 flash("You have succesfully added your appt!")
@@ -151,15 +162,16 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         days = [];
-        for k in session['days'].keys():
-            for x in session['days'][k]:
-                days.append(x);
+        if session["type"] == "tutor":
+            for k in session['days'].keys():
+                for x in session['days'][k]:
+                    days.append(x);
                 
         print days
         session['jdays']=json.dumps(days)
         return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
     if request.method == "POST":
-        if request.form["b"] == "Log Out":
+        if request.form["s"] == "Log Out":
             return logout()
         if request.form["b"] == "Update Profile":
             new_account = {}
@@ -202,8 +214,18 @@ def inbox():
         session['count_unread'] = 0
         return render_template("inbox.html")
     if request.method == "POST":
-        if request.form['b'] == "Log Out":
+        print request.form
+        if request.form['s'] == "Log Out":
             return logout()
+        if request.form['s'] == "Send Message":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
+        if request.form['s'] == "Reply":
+            print request.form
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
 
 
 def logout():
@@ -211,12 +233,17 @@ def logout():
     flash("You have been logged out")
     return redirect('/')
 
-def create_appointment(tutor, tutee, subject, course):
+def create_appointment(tutor, tutee, subject, course,form):
     appt = {}
     appt['tutor'] = tutor
     appt['tutee'] = tutee
     appt['subject'] = subject
     appt['class'] = course
+    appt['day'] = form['0-day']
+    appt['start_time'] = form['0-start_hour'] + ":" + form['0-start_minute'] + form['0-start_type']
+    appt['end_time'] = form['0-end_hour'] + ":" + form['0-end_minute'] + form['0-end_type']
+    appt['location'] = form['0-address']
+    
     return appt
 
 if __name__ == "__main__":

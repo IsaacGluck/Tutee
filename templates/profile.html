@@ -2,36 +2,15 @@
 
 {% block head %}
 	<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+<script>
+$('#sendMessage').on('shown.bs.modal', function () {
+    $('#myInput').focus()
+  });
+</script>
 {% endblock head %}
 
 {% block navbar %}
 	<div class="container">
-		<!-- <nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-			            <span class="sr-only">Toggle navigation</span>
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>
-			          </button>
-					<a class="navbar-brand" href="#">Tutee</a>
-			</div>
-				<div id="navbar" class="collapse navbar-collapse">
-		          <ul class="nav navbar-nav">
-			    <li><a href="/profile/{{session['username']}}">Profile</a></li>
-		            <li><a href="/search">Search</a></li>
-		            <li><a href="/settings">Account Settings</a></li>
-			    <li><a href="/inbox">Inbox</a></li>
-			    <li><a href="/about">About Tutee</a></li>
-		          </ul>
-		    	<ul class="nav navbar-nav navbar-right">
-		          <li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  <li><form method="POST"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
-		        </ul>
-		        </div>
-			</div>
-		</nav> -->
 		<nav class="navbar navbar-tutee">
 			<div class="container-fluid">
 
@@ -41,11 +20,11 @@
 					    <li><a href="/profile/{{session['username']}}"><h4>Profile</h4></a></li>
 				        <li><a href="/search"><h4>Search</h4></a></li>
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
-					    <li><a href="/inbox"><h4>Inbox</h4></a></li>
+					    <li><a href="/inbox"><h4>Messages</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li></form>
 		        	</ul>
 		        </div>
 			</div>
@@ -69,26 +48,54 @@
 
 		  <div class="col-md-8">
 		  	{% if message["type"]=="tutor"%}
-		  	<div class="panel panel-default">
-		  		<div class="panel-heading">
-		  			Favorite Subjects
-		  		</div>
+		  	<div class="panel panel-default grey">
+		  		<!-- <div class="panel-heading"> -->
+		  			<h3 class="under">Favorite Subjects</h3>
+		  		<!-- </div> -->
 		  		<div class="panel-body">
 		  			{{message['classes']}}
 		  		</div>
 		  	</div>
-		  	<div class="panel panel-default">
-		  		<div class="panel-heading">
-		  			Favorite Classes
-		  		</div>
+		  	<div class="panel panel-default grey">
+		  		<!-- <div class="panel-heading"> -->
+		  			<h3 class="under">Favorite Classes</h3>
+		  		<!-- </div> -->
 		  		<div class="panel-body">
 		  			{{message['courses']}}
 		  		</div>
 		  	</div>
 		  	{% endif %}
-  {% endfor %}
+		{% if session["type"] != message["type"] %}
+		<form method="POST" class="pull-right">
+			    		<button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
+			    </form>
+		<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST">
+							<input type="hidden" value="{{message['username']}}" name="recipient"></input>
+							<div class="form-group">
+								<label for="message" style="color:black" class="control-label">Message: </label>
+								<input type="text" class="form-control" name="message" id="message"></input>
+							</div>
+					</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name="s" value="Make Appointment">Send Message</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
+
+		{% endfor %}
   		{% endif %}
-	{% endwith %}
+		{% endwith %}
 		  </div>
 		</div>
 	</div>
