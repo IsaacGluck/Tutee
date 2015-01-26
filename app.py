@@ -100,10 +100,6 @@ def homepage():
         appts = user["appts"]
         return render_template("homepage.html", appts=appts)
     else:
-        if request.form['s'] == "Send":
-            message = send_message(request.form, session, db)
-            flash(message)
-            return redirect("homepage")
         if request.form['s'] == "Log Out":
             return logout()
 
@@ -119,7 +115,7 @@ def profile(username):
         print 'username' + user['username']
         return render_template("profile.html")
     if request.method == "POST":
-        if request.form['b'] == "Log Out":
+        if request.form['s'] == "Log Out":
             return logout()
 
 
@@ -128,6 +124,8 @@ def search():
         if request.method == "GET":
             return render_template("search.html") 
         else:
+            if request.form['s'] == "Log Out":
+                return logout() 
             if request.form['b'] == "Submit":
                 tutor_list = search_operation(request.form, db, session)
                 print(request.form)
@@ -159,7 +157,7 @@ def update_settings(settings_type):
         session['jdays']=json.dumps(days)
         return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
     if request.method == "POST":
-        if request.form["b"] == "Log Out":
+        if request.form["s"] == "Log Out":
             return logout()
         if request.form["b"] == "Update Profile":
             new_account = {}
@@ -202,8 +200,12 @@ def inbox():
         session['count_unread'] = 0
         return render_template("inbox.html")
     if request.method == "POST":
-        if request.form['b'] == "Log Out":
+        if request.form['s'] == "Log Out":
             return logout()
+        if request.form['s'] == "Send":
+            message = send_message(request.form, session, db)
+            # flash(message) FOR TESTING
+            return redirect("inbox")
 
 
 def logout():
