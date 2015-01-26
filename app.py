@@ -21,7 +21,7 @@ fs = gridfs.GridFS(db)
 def auth(page):
     def decorate(f):
         @wraps(f)
-        def inner(*args):
+        def inner(*args, **kwargs):
             if 'logged_in' not in session:
                 flash("You must be logged in to see this page")
                 return redirect('/')
@@ -105,6 +105,7 @@ def homepage():
 
 
 @app.route("/profile/<username>", methods=["GET","POST"])
+@auth("/profile/<username>")
 def profile(username):
     if request.method == "GET":
         user = find_user(username, db)
@@ -124,6 +125,7 @@ def profile(username):
 
 
 @app.route("/search", methods=["GET", "POST"])
+@auth("/search")
 def search():
         if request.method == "GET":
             return render_template("search.html") 
@@ -146,9 +148,8 @@ def search():
                 return redirect(url_for("homepage"))
 
 
-@auth("/settings")
-@auth("/settings/profile")
 @app.route("/settings/<settings_type>", methods=["GET","POST"])
+@auth("/settings/<settings_type>")
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
@@ -194,8 +195,8 @@ def update_settings(settings_type):
             #     update_tutor(session["email"], update_dict, db)
             return redirect("homepage")
                 
-@auth("/inbox")
 @app.route("/inbox", methods=["GET","POST"])
+@auth("/inbox")
 def inbox():
     if request.method == "GET":
         if session['type'] == "tutor":
