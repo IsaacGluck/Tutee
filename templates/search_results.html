@@ -1,38 +1,38 @@
 {% extends "base.html" %}
+
 {% block head %}
+<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+
 <script>
 $('#myModal').on('shown.bs.modal', function () {
     $('#myInput').focus()
   });
 </script>
-{% endblock %}
+{% endblock head %}
+
 {% block body %}
 	<div class="container">
-		<nav class="navbar navbar-default">
+		
+		<nav class="navbar navbar-tutee">
 			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-			            <span class="sr-only">Toggle navigation</span>
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>
-			          </button>
-					<a class="navbar-brand" href="#">Tutee</a>
-			</div>
 				<div id="navbar" class="collapse navbar-collapse">
-		          <ul class="nav navbar-nav">
-		            <li><a href="/search">Search</a></li>
-		            <li><a href="/home">Home</a></li>
-			    <li><a href="/inbox">Inbox</a></li>
-			    <li><a href="/about">About Tutee</a></li>
-		          </ul>
-		    	<ul class="nav navbar-nav navbar-right">
-		          <li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
-			  <li><form method="POST"><input type="submit" class="btn btn-default navbar-btn" name="b" value="Log Out"></form></li>
-		        </ul>
-		        </div>
+	       			<ul class="nav navbar-nav">
+	       				<li><a href="/homepage"><h3>Tutee</h3></a></li>
+				    	<li><a href="/profile/{{session['username']}}"><h4>Profile</h4></a></li>
+			        	<li><a href="/search"><h4>Search</h4></a></li>
+			        	<li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
+				    	<li><a href="/inbox"><h4>Inbox</h4></a></li>
+				    	<li><a href="/about"><h4>About Tutee</h4></a></li>
+			    	</ul>
+	    			<ul class="nav navbar-nav navbar-right">
+	          			<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+		  				<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+		  				</form>
+	        		</ul>
+	        	</div>
 			</div>
 		</nav>
+
 		<h2>We found {{ tutor_list|count }} tutor(s) that matched your search</h2>
 		{% for tutor in tutor_list %}
 		<div class="row">
