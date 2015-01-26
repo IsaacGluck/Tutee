@@ -33,6 +33,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			</div>
 		</nav>
 
+		<div class="panel panel-default grey">
 		<h2>We found {{ tutor_list|count }} tutor(s) that matched your search</h2>
 		{% for tutor in tutor_list %}
 		<div class="row">
@@ -79,6 +80,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			</div>
 		</div>
 		{% endfor %}
+	</div>
 		
 
 {% endblock %}
