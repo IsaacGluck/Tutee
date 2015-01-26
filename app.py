@@ -119,7 +119,8 @@ def profile(username):
             return logout()
         if request.form['s'] == "Make Appointment":
             message = send_message(request.form, session, db)
-            return render_template("inbox.html")
+            flash(message)
+            return redirect("inbox")
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -206,9 +207,12 @@ def inbox():
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
-        if request.form['s'] == "Send":
+        if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
-            # flash(message) FOR TESTING
+            if message == "invalid recipient":
+                flash("Invalid recipient")
+            else:
+                flash(message)
             return redirect("inbox")
 
 
