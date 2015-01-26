@@ -15,7 +15,9 @@ var times = {{ days|tojson }};
 		       		<ul class="nav navbar-nav">
 		       			<li><a href="/homepage"><h3>Tutee</h3></a></li>
 					    <li><a href="/profile/{{session['username']}}"><h4>Profile</h4></a></li>
+					   {% if session['type'] == "tutee" %}
 				        <li><a href="/search"><h4>Search</h4></a></li>
+					{% endif %}
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
 					    <li><a href="/inbox"><h4>Messages</h4></a></li>
 				    </ul>
