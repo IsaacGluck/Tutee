@@ -105,7 +105,8 @@ def homepage():
         if request.form['b'] == 'Complete':
             appt = appts.pop(int(request.form['index']))
             flash("You have completed an appointment! Congrats")
-            db.tutees.update( {'username' : session['username'] }, { '$set' : {'appts' : appts} })
+            db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
+            db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
             return render_template("homepage.html", appts=appts)
         if request.form['s']:
             if request.form['s'] == "Log Out":
