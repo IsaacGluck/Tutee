@@ -20,7 +20,7 @@
 					    <li><a href="/inbox"><h4>Messages</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
-		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+		          		<li><p style="color:black !important" class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
 			  			<li><form method="POST" id="logout"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></form></li>
 		        	</ul>
 		        </div>
@@ -49,11 +49,11 @@
 		{% endfor %}
 		<form method="POST" id="message">
 			<div class="form-group">
-			  <label for="recepient">Recepient</label>
+			  <p><label for="recepient">Recepient</label>
 			  <input type="text" class="form-control" name="recipient" placeholder="Enter Recipient">
 			  <label for="message">Message</label>
-			  <input type="text" class="form-control" name="message" placeholder="Message">
-			  <input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
+			  <input type="text" class="form-control" name="message" placeholder="Message"></p>
+			  <p><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
 			  </div>
 		</form>
 	</div>
