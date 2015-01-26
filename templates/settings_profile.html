@@ -50,14 +50,14 @@ function previewFile(){
 				<input type="text" name="school" value=" {{ session["school"] }}" ></input></p>
 				<p><label for="grade">Grade</label>
 				<input type="text" name="grade" value=" {{ session["grade"] }}" ></input></p>
-				<input type="submit" class="btn btn-default navbar-btn button" name="b" value="Update Profile">
+				<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile">
 
 				<div class="picture-form"><br><br><br>
 					<form method="POST">
 						<p><label for="profile_picture">Upload Picture</label>
 						<input type="file" onchange="previewFile()"></p>
 						<input type="hidden" id="pic">
-						<input type="submit" class="btn btn-default navbar-btn button" name="b" value="Update Profile Picture">
+						<input type="submit" class="btn btn-default navbar-btn button" name="s" value="Update Profile Picture">
 					</form>
 				</div>
 			</div>
