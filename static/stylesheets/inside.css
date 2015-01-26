@@ -81,5 +81,9 @@ body {
 	color: black !important;
 }
 
-.picture-form {
+.under {
+	text-align: center;
+	padding-bottom: 5px;
+	border-bottom: 1px rgba(255, 255, 255, 1.0) solid;
+	width: 30%;
 }
