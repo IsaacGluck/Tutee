@@ -96,7 +96,9 @@ def login():
 @auth("/homepage")
 def homepage():
     if request.method == "GET":
-        return render_template("homepage.html")
+        user = find_user(session["username"], db)
+        appts = user["appts"]
+        return render_template("homepage.html", appts=appts, other=other)
     else:
         if request.form['s'] == "Send":
             message = send_message(request.form, session, db)
@@ -128,6 +130,7 @@ def search():
         else:
             if request.form['b'] == "Submit":
                 tutor_list = search_operation(request.form, db, session)
+                print(request.form)
                 return render_template("search_results.html", tutor_list=tutor_list)
             if request.form['b'] == "Make Appointment":
                 print(request.form)
