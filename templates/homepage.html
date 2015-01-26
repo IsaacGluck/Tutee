@@ -27,7 +27,11 @@
 		{% for appt in appts %}
 		<div class="panel panel-default">
 		  <div class="panel-heading">
+		  	
 		    <h3 class="panel-title">Session with {{ appt["tutor"] }}</h3>
+			<button type="button" class="btn btn-default">
+			  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</button>
 		  </div>
 		  <div class="panel-body" style="color:black">
 			<p>Subject: {{ appt["subject"] }}</p>
