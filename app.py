@@ -154,7 +154,8 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         pic_id = session["pic_id"]
-        l = fs.find({'files_id':pic_id})
+        o = ObjectId(pic_id)
+        l = fs.find({'files_id':o})
         print l.count()
         return render_template(html_file)
     if request.method == "POST":
