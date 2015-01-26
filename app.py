@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from pymongo import Connection
 import gridfs
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists 
+
 import hashlib, uuid
 import random
 import json
 from functools import wraps
+from forms import RegisterForm
 
 app = Flask(__name__)
 
@@ -15,6 +17,9 @@ conn = Connection()
 db = conn['users']
 
 fs = gridfs.GridFS(db)
+
+db.tutors.remove()
+db.tutees.remove()
 
 def auth(page):
     def decorate(f):
@@ -46,19 +51,19 @@ def index():
 
 @app.route("/register/<user_type>", methods=["GET", "POST"])
 def register(user_type):
-	base_url = "register_" + user_type + ".html"
-	if request.method == "GET":
-		return render_template(base_url)
-	else:
-                account = register_user(user_type, request.form, db)
-		if request.form['b'] == "Submit":
-			if request.form['confirm_password'] == request.form['password']:
-				create_account(user_type, account, db)
-				flash(user_type + ": You have succesfully created an account")
-				return render_template("base.html")
-			else:
-				flash("Passwords do not match")
-				return render_template(base_url)
+    base_url = "register_" + user_type + ".html"
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if user_exists(request.form['email'], user_type, db):
+            flash("A user with this email already exists")
+            return render_template(base_url, form=form, user_type=user_type)
+        account = register_user(user_type, request.form, db)
+        create_account(user_type, account, db)
+        flash(user_type + ": You have succesfully created an account")
+        return redirect(url_for('login', user_type=user_type))
+    else:
+        flash("Email or password is not valid")
+        return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
@@ -67,10 +72,10 @@ def login(user_type):
     if request.method == "GET":
         return render_template("login.html")
     else:
-        email = request.form["email"]
+        username = request.form["username"]
         password = request.form["password"]
         if request.form['b'] == "Submit":
-            user = authenticate(email, user_type, password, db)
+            user = authenticate(username, user_type, password, db)
             if user:
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
@@ -160,6 +165,11 @@ def update_settings(settings_type):
 @app.route("/inbox", methods=["GET","POST"])
 def inbox():
     if request.method == "GET":
+        if session['type'] == "tutor":
+            update_tutor(session['email'], {'count_unread':0}, db)
+        else:
+            update_tutee(session['email'], {'count_unread':0}, db)
+        session['count_unread'] = 0
         return render_template("inbox.html")
     if request.method == "POST":
         if request.form['b'] == "Log Out":
