@@ -74,6 +74,7 @@ def register_user(user_type, form, db):
         account['school'] = form["school"]
         account['grade'] = form["grade"]
         account['conversations'] = {}
+        account['count_unread'] = 0
         
         a1 = form["address1"]
         a1_type = form["address1_hs"] #is this address for home or for school
@@ -134,7 +135,6 @@ def send_message(form, session, db):
         recipient = {}
         for t in recipient_cursor:
                 recipient = t
-                print recipient
         if recipient == {}:
                 return "invalid recipient"
         conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
@@ -150,10 +150,14 @@ def send_message(form, session, db):
                 for x in add_message:
                         new_message.append(x) #so that new message is at the begginning
         conversations[session['username']] = new_message #insert as the new value in dict
+        count = recipient['count_unread'] + 1 #increment user's count of unread messages
         if sender_user_type == "tutor":
-                update_tutee(recipient['email'], {'conversations':conversations}, db)
+                update_tutee(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
         else:
-                update_tutor(recipient['email'], {'conversations':conversations}, db)
+                update_tutor(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
+        
+        
+        
         
         #update dictionary of the sender
         conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
@@ -177,6 +181,7 @@ def reverse(conversations):
                 conversations[key].reverse()
                 ret[key] = conversations[key]
         return ret
+        
                 
 
 #Calculates the distance given two dictionaries of addresses, using longitude and latitude

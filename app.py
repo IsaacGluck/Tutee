@@ -18,6 +18,9 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
+db.tutors.remove()
+db.tutees.remove()
+
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -28,6 +31,13 @@ def auth(page):
             return f(*args)
         return inner
     return decorate
+
+
+## FOR TESTING
+@app.route("/register_test", methods=["GET", "POST"])
+def register_test():
+    if request.method == "GET":
+       return render_template("register_update.html")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -161,6 +171,11 @@ def update_settings(settings_type):
 @app.route("/inbox", methods=["GET","POST"])
 def inbox():
     if request.method == "GET":
+        if session['type'] == "tutor":
+            update_tutor(session['email'], {'count_unread':0}, db)
+        else:
+            update_tutee(session['email'], {'count_unread':0}, db)
+        session['count_unread'] = 0
         return render_template("inbox.html")
     if request.method == "POST":
         if request.form['b'] == "Log Out":
