@@ -22,6 +22,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 conn = Connection()
 db = conn['users']
 
+tut = db.tutees.find()
+#for t in tut:
+    #for key in t.keys():
+        #print key + " " + str(t[key])
+
 fs = gridfs.GridFS(db)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -148,6 +153,9 @@ def search():
 def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
+        pic_id = session["pic_id"]
+        l = fs.find({'files_id':pic_id})
+        print l.count()
         return render_template(html_file)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
@@ -169,18 +177,18 @@ def update_settings(settings_type):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 url = url_for('uploaded_file', filename=filename)
-            # data = request.form["pic"]
             x = tempfile.gettempdir() + '/' + filename
-            file_id = fs.put(open(str(x), "rb").read())
+            file_id = str(fs.put(open(str(x), "rb").read()))
             update_dict = {"pic_id":file_id}
             if session["type"]=="tutee":
-                 update_tutee(session["email"], update_dict, db)
-                 u = find_user(session["username"], db)
-                 session["pic_id"] = u["pic_id"]
+                update_tutee(session["email"], update_dict, db)
+                u = find_user(session["username"], db)
+                session["pic_id"] = u["pic_id"]
+                print "still working"
             else:
-                 update_tutor(session["email"], update_dict, db)
-                 u = find_user(session["username"], db)
-                 session["pic_id"] = u["pic_id"]
+                update_tutor(session["email"], update_dict, db)
+                u = find_user(session["username"], db)
+                session["pic_id"] = u["pic_id"]
             return redirect("homepage")
 
 def allowed_file(filename):
