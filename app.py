@@ -18,9 +18,6 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
-db.tutors.remove()
-db.tutees.remove()
-
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -60,7 +57,7 @@ def register(user_type):
         account = register_user(user_type, request.form, db)
         create_account(user_type, account, db)
         flash(user_type + ": You have succesfully created an account")
-        return redirect(url_for('login', user_type=user_type))
+        return redirect(url_for('login'))
     else:
         flash("Email or password is not valid")
         return render_template(base_url, form=form, user_type=user_type)
@@ -72,12 +69,19 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     else:
-        user_type = request.form["user_type"]
         username = request.form["username"]
         password = request.form["password"]
-        if request.form['b'] == "Submit":
+        if request.form['b']:
+            if request.form['b'] == "login_tutee":
+                user_type = "tutee"
+            else:
+                user_type = "tutor"
+            print(request.form)
+            print(user_type)
             user = authenticate(username, user_type, password, db)
+            print(user)
             if user:
+                print("UR A USER")
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
@@ -92,7 +96,9 @@ def login():
 @auth("/homepage")
 def homepage():
     if request.method == "GET":
-        return render_template("homepage.html")
+        user = find_user(session["username"], db)
+        appts = user["appts"]
+        return render_template("homepage.html", appts=appts, other=other)
     else:
         if request.form['s'] == "Send":
             message = send_message(request.form, session, db)
@@ -120,21 +126,22 @@ def profile(username):
 @app.route("/search", methods=["GET", "POST"])
 def search():
         if request.method == "GET":
-                return render_template("search.html") 
+            return render_template("search.html") 
         else:
-                if request.form['b'] == "Submit":
-                    tutor_list = search_operation(request.form, db, session)
-                    return render_template("search_results.html", tutor_list=tutor_list)
-                if request.form['b'] == "Make Appointment":
-                    print(request.form)
-                    tutor_username = request.form['username']
-                    ## create_appointment    (tutor,          tutee,               subject,                 course)
-                    appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"])
-                    print(appt)
-                    db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
-                    db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
-                    flash("You have succesfully added your appt!")
-                    return redirect(url_for("homepage"))
+            if request.form['b'] == "Submit":
+                tutor_list = search_operation(request.form, db, session)
+                print(request.form)
+                return render_template("search_results.html", tutor_list=tutor_list)
+            if request.form['b'] == "Make Appointment":
+                print(request.form)
+                tutor_username = request.form['username']
+                ## create_appointment    (tutor,          tutee,               subject,                 course)
+                appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"])
+                print(appt)
+                db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
+                db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
+                flash("You have succesfully added your appt!")
+                return redirect(url_for("homepage"))
 
 
 @auth("/settings")

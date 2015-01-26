@@ -22,6 +22,7 @@
 	    		<ul class="nav navbar-nav navbar-right">
 	          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
 		  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
+		  		</form>
 	        	</ul>
 	        </div>
 		</div>
@@ -29,6 +30,7 @@
 
 	<div class="panel panel-default grey">
   		<div class="panel-body">
+  			<div class="black-input">
   			<form method="POST" id="info">
 	  			<p> Course: <select multiple size="1" form="info" name="courses">
 					<option value="chemistry">AP Chemistry</option>
@@ -57,6 +59,7 @@
 				  {% block info %}{% endblock %}
 				  <p><button class="btn btn-default navbar-btn button" type="submit" name="b" value="Submit">Submit</button></p>
 			</form>
+		</div>
   		</div>
 	</div>
 </div>
