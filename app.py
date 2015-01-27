@@ -236,7 +236,8 @@ def update_settings(settings_type):
             new_account = {}
             new_account['days'] = days
             new_account['complete'] = 1
-            print new_account
+            for k in days.keys():
+                new_account[k] = True
             update_tutor(session["email"], new_account, db)
             session['days'] = days
             session['complete'] = 1

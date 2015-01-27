@@ -11,14 +11,13 @@ def search_operation(form, db, session):
         print form
         print session
 
-        tutor_list = db.tutors.find({"%s"%subject:True, day:True})
+        tutor_list = db.tutors.find({"%s"%subject:True, "%s"%day:True})
 
         tutor_ret = [] # list of tutors to be returned
 
-        
-
         #for each tutor on the new list, give them a score based on secondary features
         for tutor in tutor_list:
+                print tutor
                 if tutor["complete"] == 1:
                         match_score = 0.0
                         email = tutor['email']
