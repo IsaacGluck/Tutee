@@ -199,6 +199,7 @@ def search():
                     print "You must select a type for starting and ending times"
                     
                 tutor_list = search_operation(request.form, db, session)
+                tutor_list.reverse() #to put highest score at top
                 return render_template("search_results.html", tutor_list=tutor_list)
             if request.form['s'] == "Send Message":
                 message = send_message(request.form, session, db)
