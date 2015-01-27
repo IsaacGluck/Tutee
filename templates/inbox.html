@@ -112,10 +112,16 @@
 	      {% endfor %}
 	      <form method="POST">
 		<input type="hidden" value="{{username}}" name="recipient"></input>
-		<label for="reply" class="control-label">Reply: </label>	
-		<input type="text" class="form-control" placeholder="Message" name="message"></input>
-		<button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
-	      </form>
+		<!-- <label for="reply" class="control-label">Reply: </label>	 -->
+		
+		<div class="input-group">
+			<span class="input-group-btn">
+        		<button type="submit" class="btn btn-default button-rounded" name="s" value="Reply">Reply to {{ username }}</button>
+      		</span>
+			<input type="text" class="form-control" placeholder="Message" name="message">
+    	</div>
+	    
+	    </form>
 
 
 	    </div>
