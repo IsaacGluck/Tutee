@@ -19,7 +19,7 @@
 				        <li><a href="/search"><h4>Search</h4></a></li>
 						{% endif %}
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
-					    <li><a href="/inbox"><h4>Messages</h4></a></li>
+					    <li><a href="/inbox"><h4>Messages ({{session['count_unread']}})</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p style="color:black !important" class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
@@ -45,7 +45,7 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading clearfix">
 		  	<form method="POST" id="removeAppt">
-			  	<button type="submit" class="btn btn-default pull-right" name="b" value="Complete">
+			  	<button type="submit" class="btn btn-default pull-right" name="s" value="Complete">
 				  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 				</button>
 				<input type="hidden" name="index" value="{{loop.index0}}">
@@ -71,5 +71,17 @@
 			  <p><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
 			</div>
 		</form>
+
+	{% with messages = get_flashed_messages() %}
+  		{% if messages %}
+    		{% for message in messages %}
+		<div class="alert alert-warning" role="alert">
+      			{{ message }}
+		</div>
+    		{% endfor %}
+  		{% endif %}
+	{% endwith %}
+
 	</div>
+
 {% endblock %}
