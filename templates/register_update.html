@@ -69,60 +69,27 @@
 				</div><!-- /page-right -->
 				<div class="page page-right">
 					<div class="page-inner">
-						<h2> Create a Tutor account </h2>
-						<form method="POST" id="tutor">
-							<input type="hidden" name="type" value="tutor"></input>
+						<h2> Create a Tutee account </h2>
+						<form method="POST" action="{{ url_for('register', user_type=user_type) }}" id="info">
 							<p>First Name: <input type="text" name="first_name"></p>
-
 							<p>Last Name: <input type="text" name="last_name"></p>
-
 							<p>Username: <input type="text" name="username"></p>
+							<p>Email: {{ form.email }}</p>
 
-							<p>Email: <input type="text" name="email"></p>
-
-							<p>Password: <input type="password" name="password"></p>
-
-							<p>Confirm Password: <input type="password" name="confirm_password"></p>
+							<p>Password: {{ form.password }}</p>
 
 							<p>School: <input type="text" name="school"></p>
-
 							<p>Grade: <input type="numn" name="grade"></p>
+							<p> Home Address: 
+							  <input type="text" name="address1"></p>
+							<p> School Address:
+							  <input type="text" name="address2"></p>
 
-							<p> Address: 
-								<input type="text" name="address1">
-							</p>
+							<p><button type="submit" name="b" value="Submit">Submit</button></p>
 
-							<p>This is:
-								<select multiple size="1" form="info" name="address1_hs">
-									<option value="Home">Home</option>
-									<option value="School">School</option>
-								</select>
-							</p>
-
-							<p> Time (Enter Day;Hours):
-								<input type="text" name="times">Day;Hours
-							</p>
-							<p> Address: 
-								<input type="checkbox" name="Day1_Address" value="School">School</input>
-								<input type="checkbox" name="Day1_Address" value="Home">Home</input>
-							</p>
-							<p>Advanced courses you've taken:
-
-							{% include "classes.html" %}
-
-							<br><br>
-
-							</p>
-
-							<p>Your strongest subjects:
-							  
-							{% include "subjects.html" %}<br><br>
-							
-							</p>
-
-
-
-							<br>
+							{{ form.csrf_token }}
+						</form>
+>>>>>>> 0ac55f1c55bf00db30d74e69ecc680e05ebd0608
 
 							<p>
 								<button type="submit" name="b" value="Submit">Submit</button>
