@@ -7,12 +7,30 @@ body {
 .button {
   background-color: rgba(46, 204, 113,1.0);
   color: #fff;
-  /*border: 1px solid rgba(46, 204, 113,1.0) !important; */
+  border: 1px solid rgba(46, 204, 113,1.0) !important; 
+  border-radius: 0;
 }
 
-.button:hover {
+.button-rounded {
+  background-color: rgba(46, 204, 113,1.0);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255,1.0) !important;
+  border-radius: 4px;
+}
+
+.button:hover{
   background-color: #fff;
   color: rgba(46, 204, 113,1.0);
+}
+
+.button-rounded:hover {
+	background-color: #fff;
+  	color: rgba(46, 204, 113,1.0);
+  	border: 1px solid rgba(46, 204, 113,1.0) !important;
+}
+
+.long {
+	width: 100%;
 }
 
 .navbar-tutee {
@@ -54,8 +72,8 @@ body {
 
 .grey {
 	background-color: rgba(48, 48, 48, 0.8);
-	border-radius: 10px;
-  	border: 10px solid rgba(255,255,255,0.0);
+	border-radius: 0px;
+  	border: 0px solid rgba(255,255,255,0.0);
   	padding: 10px;
 
 	transition: all 0.6s ease-in-out; 
@@ -64,12 +82,33 @@ body {
 	-o-transition: all 0.6s ease-in-out;
 }
 
+.modal-grey {
+	background-color: rgba(255, 255, 255, 1.0);
+	border-radius: 0px;
+  	border: 0px solid rgba(255,255,255,0.0);
+  	padding: 10px;
+
+	transition: all 0.6s ease-in-out; 
+	-webkit-transition: all 0.6s ease-in-out; 
+	-moz-transition: all 0.6s ease-in-out; 
+	-o-transition: all 0.6s ease-in-out;
+}
+
+.no-border {
+
+}
+
 .grey h1, .grey h2, .grey h3, .grey h4, .grey h5 {
 	color: rgba(255,255,255,1.0);
 }
 
 .grey:hover {
-	border-color: rgba(46, 204, 113,1.0);
+	border: 10px solid rgba(46, 204, 113,1.0);
+	border-radius: 0px;
+}
+
+.modal-grey:hover {
+	border: 10px solid rgba(46, 204, 113,1.0);
 	border-radius: 0px;
 }
 
