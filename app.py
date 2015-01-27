@@ -214,22 +214,18 @@ def update_settings(settings_type):
             return redirect(url_for("update_settings", settings_type="times"))
         if request.form["s"] == "Update Profile Picture":
             file = request.files['file']
-            if file and allowed_file(file.filename):
+            if file and allowed_file(file.filename): #check extension
                 filename = secure_filename(file.filename)
                 y = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 url = url_for('uploaded_file', filename=filename)
-                x = tempfile.gettempdir() + '/' + filename
-                
-                #find the file extension
-                if filename[-4] == '.':
-                    extension = filename[-3:]
-                else:
-                    extension = filename[-4:] #this being jpeg, instead of jpg/png
+                src = tempfile.gettempdir() + '/' + filename #tempfile.gettempdir() is flask's temporary storage directory
 
-                with open('static/img/profile_pics/%s_profpic.%s' %(session['username'], extension), 'wb') as f:
-                    shutil.copyfile(x, 'static/img/profile_pics/%s_profpic.%s' %(session['username'], extension))
-                update_dict = {"pic_id":'../static/img/profile_pics/%s_profpic.%s' %(session['username'], extension)}
+                img_storage = 'static/img/profile_pics/%s_%s' %(session['username'], filename)
+                open(session["pic_id"][1:],"w").close() #close the current profile picture's file
+                with open(img_storage, 'wb') as f:
+                    shutil.copyfile(src, img_storage) #store the file in the Tutee system
 
+                update_dict = {"pic_id":'../%s' % img_storage}
                 if session["type"]=="tutee":
                     update_tutee(session["email"], update_dict, db)
                     u = find_user(session["username"], db)
@@ -239,7 +235,7 @@ def update_settings(settings_type):
                     u = find_user(session["username"], db)
                     session["pic_id"] = u["pic_id"]
                 return redirect("homepage")
-                
+
             else: #invalid file name
                 return redirect("settings/profile")
 
