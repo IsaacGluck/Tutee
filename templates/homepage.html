@@ -4,6 +4,8 @@
 	<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
 {% endblock head %}
 
+
+
 {% block navbar %}
 	<div class="container">
 		<nav class="navbar navbar-tutee">
@@ -17,7 +19,7 @@
 				        <li><a href="/search"><h4>Search</h4></a></li>
 						{% endif %}
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
-					    <li><a href="/inbox"><h4>Messages</h4></a></li>
+					    <li><a href="/inbox"><h4>Messages ({{session['count_unread']}})</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p style="color:black !important" class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
@@ -26,11 +28,24 @@
 		        </div>
 			</div>
 		</nav>
+{%endblock%}
+{% block body %}
+{% block flashing %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+	{%endfor %}
+{% endif %}
+{% endwith %}
+{% endblock %}
 		{% for appt in appts %}
 		<div class="panel panel-default">
 		  <div class="panel-heading clearfix">
 		  	<form method="POST" id="removeAppt">
-			  	<button type="submit" class="btn btn-default pull-right" name="b" value="Complete">
+			  	<button type="submit" class="btn btn-default pull-right" name="s" value="Complete">
 				  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 				</button>
 				<input type="hidden" name="index" value="{{loop.index0}}">
@@ -54,7 +69,19 @@
 			  <label for="message">Message</label>
 			  <input type="text" class="form-control" name="message" placeholder="Message"></p>
 			  <p><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
-			  </div>
+			</div>
 		</form>
+
+	{% with messages = get_flashed_messages() %}
+  		{% if messages %}
+    		{% for message in messages %}
+		<div class="alert alert-warning" role="alert">
+      			{{ message }}
+		</div>
+    		{% endfor %}
+  		{% endif %}
+	{% endwith %}
+
 	</div>
+
 {% endblock %}

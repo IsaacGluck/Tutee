@@ -25,6 +25,7 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
+
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -75,10 +76,8 @@ def register(user_type):
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
         create_account(user_type, account, db)
-        flash(user_type + ": You have succesfully created an account")
         return redirect(url_for('login'))
     else:
-        flash("Email or password is not valid")
         return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
@@ -120,16 +119,18 @@ def homepage():
     if request.method == "GET":
         return render_template("homepage.html", appts=appts)
     else:
-        print(request.form)
-        if request.form['b'] == 'Complete':
+        if request.form['s'] == 'Complete':
             appt = appts.pop(int(request.form['index']))
-            flash("You have completed an appointment! Congrats")
+            flash("You have completed an appointment!")
             db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
             db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
             return render_template("homepage.html", appts=appts)
-        if request.form['s']:
-            if request.form['s'] == "Log Out":
-                return logout()
+        if request.form['s'] == "Log Out":
+            return logout()
+        if request.form['s'] == "Send":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
 
 
 
@@ -205,6 +206,7 @@ def update_settings(settings_type):
                 update_tutor(old_email, new_account, db)
             elif session["type"] == "tutee":
                 update_tutee(old_email, new_account, db)
+            flash("You have succesfully updated your settings")
             return redirect(url_for("homepage"))
         if request.form["s"] == "Update Times":
             print request.form
@@ -252,26 +254,51 @@ def uploaded_file(filename):
 @auth("/inbox")
 def inbox():
     if request.method == "GET":
+        #automatically redirect to chat with most recent messenger, as fbook does
+        username = ""
+        for key in session["conversations"].keys():
+            username = key
+            break
+        if username == "":
+            flash("no messages yet, try starting a conversation")
+            return redirect('homepage')
+        return redirect("inbox/%s"%username)
+
+
+@app.route("/inbox/<username>", methods=["GET","POST"])
+@auth("/inbox/<username>")
+def conversation(username):
+    if request.method == "GET":
+        conversations = session['conversations']
+        now_read = conversations[username]['unread_count'] #newly read messages
+        
+        conversations[username]['unread_count'] = 0 #this conversation now has all conversations read
+        for message in conversations[username]['messages']:
+            message['unread'] = False
+        
+        count_unread = session['count_unread'] - now_read
+
         if session['type'] == "tutor":
-            update_tutor(session['email'], {'count_unread':0}, db)
+            update_tutor(session['email'], {'conversations':conversations, 'count_unread':count_unread}, db)
         else:
-            update_tutee(session['email'], {'count_unread':0}, db)
-        session['count_unread'] = 0
-        return render_template("inbox.html")
+            update_tutee(session['email'], {'conversations':conversations, 'count_unread':count_unread}, db)
+        session['count_unread'] = count_unread
+        session['conversations'] = conversations
+
+        convo = conversations[username]['messages']
+        return render_template("inbox.html", username = username, convo = convo)
     if request.method == "POST":
-        print request.form
         if request.form['s'] == "Log Out":
             return logout()
         if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
             flash(message)
-            return redirect("inbox")
+            return redirect("inbox/%s"%username)
         if request.form['s'] == "Reply":
             print request.form
             message = send_message(request.form, session, db)
             flash(message)
-            return redirect("inbox")
-
+            return redirect("inbox/%s"%username)
 
 def logout():
     session.pop('logged_in', None)
