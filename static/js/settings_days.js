@@ -106,5 +106,34 @@ function deleteM(e){
     el.parentNode.removeChild(el);
     var cnt = document.getElementById("counter").getAttribute("value");
     document.getElementById("counter").setAttribute("value", String(parseInt(cnt) - 1));
+    if (parseInt(num) < parseInt(cnt) && cnt !=0){
+	for (var i = parseInt(num); i<parseInt(cnt);i++){
+	    cur_html = document.getElementById("menu" + (i+1)).innerHTML;
+	    console.log(cur_html);
+	    var menuNum = new RegExp( "menu" + String(i+1),"g" );
+	    new_html = cur_html.replace( menuNum, "menu" + String(i));
+	    var dayNum = new RegExp( 'day="' + String(i+1) + '"', "g");
+	    new_html = new_html.replace( dayNum, 'day="' + String(i) + '"');
+	    var menuAtt = new RegExp( 'menu="' + String(i+1) + '"',"g");
+	    new_html = new_html.replace( menuAtt, 'menu="' + String(i) + '"');
+	    console.log(new_html);
+	    document.getElementById("menu" + (i+1)).innerHTML = new_html;
+	    document.getElementById("menu" + (i+1)).setAttribute("id", "menu" + String(i));
+	    document.getElementById(String(i+1) +"-del").setAttribute("id", String(i) + "-del");
+	    document.getElementById(String(i) + "-del").addEventListener('click',deleteM);
+	    // menu(i+1) becomes menu(i)
+	}
+	inputs = document.getElementsByTagName("input");
+	for (var i=0; i < inputs.length; i++) {
+	    if (inputs[i].getAttribute("type") == "hidden" && parseInt(inputs[i].getAttribute("id").slice(0,1))>num){
+		pos = String(parseInt(inputs[i].getAttribute("id").slice(0,1)) - 1);
+		id = inputs[i].getAttribute("id");
+		inputs[i].setAttribute("id", pos + id.slice(1,id.length));
+		name = inputs[i].getAttribute("name");
+		inputs[i].setAttribute("name", pos + name.slice(1,name.length));
+	    }
+	    
+	}
+    }
     
- }
+}
