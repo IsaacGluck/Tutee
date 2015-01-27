@@ -55,10 +55,33 @@ $('#myModal').on('shown.bs.modal', function () {
 					<td>{{ tutor["grade"] }}</td>
 					<td>
 						<form method="POST" class="pull-right">
+						  <button type="button" data-toggle="modal" class="btn btn-default button" data-target="#sendMessage">Send Message</button>
 			    			<button type="button" data-toggle="modal" class="btn btn-default button" data-target="#myModal">Create Appointment</button>
 			    		</form>
 			    	</td>
 				</tr>
+				<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST">
+							<input type="hidden" value="{{tutor['username']}}" name="recipient"></input>
+							<div class="form-group">
+								<label for="message" style="color:black" class="control-label">Message: </label>
+								<input type="text" class="form-control" name="message" id="message"></input>
+							</div>
+					</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
+						</div>
+					</form>
+				</div>
+			</div>
+				
+
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content modal-grey">
