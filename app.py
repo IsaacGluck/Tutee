@@ -225,16 +225,24 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         days = [];
+        classes = [];
+        subjects = [];
         print session
         if session["type"] == "tutor":
             for k in session['days'].keys():
                 print k
                 for x in session['days'][k]:
                     days.append(x);
+            classes = session["courses"]
+            subjects = session["subjects"]
+
+        
                 
         print days
         session['jdays']=json.dumps(days)
-        return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
+        session['jclasses'] = json.dumps(classes)
+        session['jsubjects'] = json.dumps(subjects)
+        return render_template(html_file,days=json.loads(session['jdays']),dicts=days,classes=json.loads(session['jclasses']), subjects=json.loads(session['jsubjects']))
     if request.method == "POST":
         if request.form["s"] == "Log Out":
             return logout()
@@ -265,6 +273,22 @@ def update_settings(settings_type):
             session['complete'] = 1
 
             return redirect(url_for("update_settings", settings_type="times"))
+
+        if request.form["s"] == "Update Classes":
+            courses = request.form.getlist("course")
+            subs = request.form.getlist("subject")
+            new_account = {}
+            new_account['courses'] = courses
+            new_account['subjects'] = subs
+            for s in subs:
+                new_account[s] = True
+                session[s] = True
+            session['courses'] = courses
+            session['subjects'] = subs
+            update_tutor(session['email'],new_account,db)
+            return redirect(url_for("update_settings", settings_type="classes"))
+                         
+            
         if request.form["s"] == "Update Profile Picture":
             file = request.files['file']
             if file and allowed_file(file.filename): #check extension

@@ -5,6 +5,22 @@
 <link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
 
 {% endblock %}
+
+
 {% block settings_type %}
+
+<form class="grey" method="POST">
+
+{% include "classes.html" %}
+<br><br>
+
+{%include "subjects.html" %}<br><br>
+<button type="submit" id="save_b" name="s" value="Update Classes" class="button">Save</button>
+
+</form>
+
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/dropdown_edit.js"></script>
+<script type="text/javascript" src="/static/js/settings_classes.js"></script>
 
 {%endblock%}
