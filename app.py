@@ -86,14 +86,16 @@ def register(user_type):
     base_url = "register_" + user_type + ".html"
     form = RegisterForm()
     if form.validate_on_submit():
+
         if user_exists(request.form['email'], user_type, db):
-            ## flash("A user with this email already exists")
+            flash("A user with this email already exists")
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
         create_account(user_type, account, db)
         return redirect(url_for('login'))
-    else:
-        return render_template(base_url, form=form, user_type=user_type)
+    if request.method=="POST":
+        flash("Your email or password is not valid. Please try again.")
+    return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
 # login/tutee and login/tutor
@@ -122,8 +124,8 @@ def login():
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")
             else:
-                ## flash("Your username or password is incorrect")
-                return render_template("login.html")
+                flash("Your username or password is incorrect")
+                return render_template("index.html")
 
 @app.route("/homepage", methods=["GET", "POST"])
 @auth("/homepage")
