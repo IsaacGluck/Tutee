@@ -2,6 +2,7 @@
 
 {% block head %}
 	<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
+	<link rel="stylesheet" type="text/css" href="/static/stylesheets/dropdown.css">
 {% endblock head %}
 
 {% block body %}
@@ -31,29 +32,13 @@
   		<div class="panel-body">
   			<div class="black-input">
   			<form method="POST" id="info">
-	  			<p> Course: <select multiple size="1" form="info" name="courses">
-					<option value="chemistry">AP Chemistry</option>
-					<option value="physics">AP Physics</option>
-					<option value="literature">AP Literature</option>
-	  			</select></p>
-	  			<p> Subject: <select multiple size="1" form="info" name="subjects">
-					<option value="chemistry">Chemistry</option>
-					<option value="physics">Physics</option>
-					<option value="literature">English</option>
-	  			</select></p>
+	  			<p> Subject: {% include "subjects.html" %}<br><br>
+				  </p>
 
 				<p> Availability: </p>
-				<input type="checkbox" name="days" value="Mon"> Monday <br>
-				<p> Time: <input type="text" name="Mon_Time_Start"> - <input type="text" name="Mon_Time_End">
-				<p> Address: <input type="checkbox" name="Mon_Address" value="School">School</input><input type="checkbox" name="Mon_Address" value="Home">Home</input>
-				<p> Other <input type="text" name="Mon_Other"><br>
-
-				<input type="checkbox" name="days" value="Tues"> Tuesday <br>
-				<p> Time: <input type="text" name="Tues_Time_Start"> - <input type="text" name="Tues_Time_End">
-				<p> Address: <input type="checkbox" name="Tues_Address" value="School">School</input><input type="checkbox" name="Tues_Address" value="Home">Home</input>
-				<p> Other Address <input type="text" name="Tues_Other"><br>
-
-				<!--Front end design idea: Button to "add day," which will create new field for day, time, and address-->
+				{% set n =0 %}
+				{% include "dropdown.html" %}<br><br><br>
+				
 
 				  {% block info %}{% endblock %}
 				  <p><button class="btn btn-default navbar-btn button" type="submit" form="info" name="s" value="Submit">Submit</button></p>
@@ -62,5 +47,7 @@
   		</div>
 	</div>
 </div>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/dropdown_edit.js"></script>
 {% block header %}{% endblock %}
 {% endblock %}
