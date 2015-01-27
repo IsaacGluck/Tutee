@@ -26,6 +26,7 @@ def search_operation(form, db, session):
                         #find the days for which addresses work
                         try:
                                 tutee_loc = form["0-address"]
+                                
                                 print tutor
                         
                                 tutee_address = session[tutee_loc.capitalize() + "_Address"]
