@@ -179,7 +179,7 @@ function addMenu(e) {
 	if (document.getElementById("edit_times") != null) {
 	    button = document.createElement("button");
 	    button.setAttribute("type", "button");
-	    button.setAttribute("class", "del_b");
+	    button.setAttribute("class", "button");
 	    button.setAttribute("id", String(val) + "-del")
 	    button.innerHTML = "Delete";
 	    if (document.getElementById("save_b").style.visibility == "visible") {

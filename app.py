@@ -87,7 +87,7 @@ def register(user_type):
     form = RegisterForm()
     if form.validate_on_submit():
         if user_exists(request.form['email'], user_type, db):
-            flash("A user with this email already exists")
+            ## flash("A user with this email already exists")
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
         create_account(user_type, account, db)
@@ -122,7 +122,7 @@ def login():
                 flash("Welcome, " + session['first_name'])
                 return redirect("homepage")
             else:
-                flash("Your username or password is incorrect")
+                ## flash("Your username or password is incorrect")
                 return render_template("login.html")
 
 @app.route("/homepage", methods=["GET", "POST"])
@@ -200,8 +200,10 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         days = [];
+        print session
         if session["type"] == "tutor":
             for k in session['days'].keys():
+                print k
                 for x in session['days'][k]:
                     days.append(x);
                 
@@ -225,10 +227,13 @@ def update_settings(settings_type):
             return redirect(url_for("homepage"))
         if request.form["s"] == "Update Times":
             print request.form
+
             days = create_days(request.form)
+            print days
             new_account = {}
             new_account['days'] = days
             new_account['complete'] = 1
+            print new_account
             update_tutor(session["email"], new_account, db)
             session['days'] = days
             session['complete'] = 1

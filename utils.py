@@ -204,19 +204,32 @@ def create_days(form):
         days = {}
         num = int(form['counter']) + 1
         for i in range(num):
-                day = {}
-                dayName = form[str(i) + '-day']
-                day['day'] = dayName
-                day['addresses'] = form.getlist(str(i) + "-address")
-                day['start_hour'] = form[str(i) + '-start_hour']
-                day['start_min'] = form[str(i) + '-start_minute']
-                day['start_type'] = form[str(i) + '-start_type']
-                day['end_hour'] = form[str(i) + '-end_hour']
-                day['end_min'] = form[str(i) + '-end_minute']
-                day['end_type'] = form[str(i) + '-end_type']
-                if days.has_key(dayName) == False:
-                        days[dayName] = []
-                days[dayName].append(day)
+            # error handling
+            if form[str(i) + '-day'] == "":
+                print "You must select a day"
+            if len(form.getlist(str(i) + "-address")) == 0:
+                print "You must select at least one location"
+            if (form[str(i) + '-start_hour'] == "") | (form[str(i) + '-end_hour'] == ""):
+                print "You must select an hour for starting and ending times"
+            if (form[str(i) + '-start_minute'] == "") | (form[str(i) + '-end_minute'] == ""):
+                print "You must select a minute for starting and ending times"
+            if (form[str(i) + '-start_type'] == "") | (form[str(i) + '-end_type'] == ""):
+                print "You must select a type for starting and ending times"
+                    
+            
+            day = {}
+            dayName = form[str(i) + '-day']
+            day['day'] = dayName
+            day['addresses'] = form.getlist(str(i) + "-address")
+            day['start_hour'] = form[str(i) + '-start_hour']
+            day['start_min'] = form[str(i) + '-start_minute']
+            day['start_type'] = form[str(i) + '-start_type']
+            day['end_hour'] = form[str(i) + '-end_hour']
+            day['end_min'] = form[str(i) + '-end_minute']
+            day['end_type'] = form[str(i) + '-end_type']
+            if days.has_key(dayName) == False:
+                    days[dayName] = []
+            days[dayName].append(day)
         return days
 
 #quick helper to check if a picture has a legitimate file extension

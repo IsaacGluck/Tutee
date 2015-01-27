@@ -8,14 +8,21 @@
     <meta name="author" content="Codrops" />
     <link rel="stylesheet" type="text/css" href="../static/stylesheets/component.css" />
     <script src="../static/js/modernizr.custom.js"></script>
+    <script>
+      $(function() {
+        $( "#dialog" ).dialog();
+      });
+  </script>
   </head>
   <body>
+    
     <div class="split-container">
       <div id="splitlayout" class="splitlayout">
         <div class="intro">
           <div class="side side-left">
             <div class="split-back" id="back-button">
               <a href="/">Back To Home</a>
+
             </div>
             <div class="intro-content left" onclick="make_invisible('back-button');">
               <h1><span>Login </span><span>Tutor</span></h1>
