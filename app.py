@@ -13,16 +13,17 @@ import urllib
 from functools import wraps
 from forms import RegisterForm
 import shutil
+from werkzeug.contrib.fixers import ProxyFix
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = tempfile.gettempdir()
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY']="secret key"
 
 # mongo 
 conn = Connection()
 db = conn['users']
-
 fs = gridfs.GridFS(db)
 
 
@@ -342,6 +343,8 @@ def create_appointment(tutor, tutee, subject, course,form):
     appt['location'] = form['0-address']
     
     return appt
+
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if __name__ == "__main__":
 	app.debug = True
