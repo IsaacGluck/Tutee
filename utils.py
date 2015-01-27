@@ -81,6 +81,8 @@ def register_user(user_type, form, db):
         
         a1 = form["address1"]
         loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
+        if loc == "IV":
+            return loc #Invalid address
 
         address1 = {}
         address1["longitude"] = loc[0] #longitude
@@ -91,6 +93,8 @@ def register_user(user_type, form, db):
 
         a2 = form["address2"]
         loc2 = locate(a2) #returns three part array, longtitude, latitude, and zip, for parameter address
+        if loc2 == "IV":
+            return loc2 #Invalid address
 
         address2 = {}
         address2["longitude"] = loc2[0] #longitude

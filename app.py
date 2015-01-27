@@ -16,7 +16,7 @@ import shutil
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = tempfile.gettempdir()
+UPLOAD_FOLDER = tempfile.gettempdir() #for profile pictures
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # mongo 
@@ -24,6 +24,14 @@ conn = Connection()
 db = conn['users']
 
 fs = gridfs.GridFS(db)
+
+t = db.tutors.find()
+for tutor in t:
+    print tutor
+
+t = db.tutees.find()
+for tutor in t:
+    print tutor
 
 
 def auth(page):
@@ -91,6 +99,9 @@ def register(user_type):
             flash("A user with this email already exists")
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
+        if account == "IV":
+            flash("Invalid address. Make sure it looks like: 825 West End Ave #4A, New York.")
+            return redirect("register/%s"%user_type)
         create_account(user_type, account, db)
         return redirect(url_for('login'))
     if request.method=="POST":
