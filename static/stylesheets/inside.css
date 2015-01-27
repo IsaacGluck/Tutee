@@ -4,6 +4,12 @@ body {
   color: white !important;
 }
 
+.long {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 100%;
+}
+
 .button {
   background-color: rgba(46, 204, 113,1.0);
   color: #fff;
@@ -18,6 +24,7 @@ body {
   border-radius: 4px;
 }
 
+
 .button:hover{
   background-color: #fff;
   color: rgba(46, 204, 113,1.0);
@@ -28,6 +35,8 @@ body {
   	color: rgba(46, 204, 113,1.0);
   	border: 1px solid rgba(46, 204, 113,1.0) !important;
 }
+
+
 
 .long {
 	width: 100%;
