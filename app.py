@@ -3,7 +3,7 @@ from pymongo import Connection
 import gridfs
 import os
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days, allowed_file
 from werkzeug import secure_filename
 import tempfile
 import hashlib, uuid
@@ -23,14 +23,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 conn = Connection()
 db = conn['users']
 
-tut = db.tutees.find()
-#for t in tut:
-    #for key in t.keys():
-        #print key + " " + str(t[key])
-
 fs = gridfs.GridFS(db)
-
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 def auth(page):
     def decorate(f):
@@ -238,10 +231,6 @@ def update_settings(settings_type):
 
             else: #invalid file name
                 return redirect("settings/profile")
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 @app.route('/uploads/<filename>')

@@ -6,6 +6,8 @@ from googlemaps import locate
 
 #misc useful helper functions
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
 # matches login attempts with user, returns user's account dictionary
 def user_exists(email, user_type, db):
     check = None
@@ -23,7 +25,6 @@ def authenticate(username, user_type, confirm_password, db):
     else:   
         user = db.tutors.find_one( { 'username' : username } , { "_id" : False }  )
     if user == None:
-
         return None
     salt = user["salt"]
     hash_pass = user["password"]
@@ -206,3 +207,8 @@ def create_days(form):
                         days[dayName] = []
                 days[dayName].append(day)
         return days
+
+#quick helper to check if a picture has a legitimate file extension
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
