@@ -17,6 +17,8 @@ def locate(address):
     lng = long_lat["lng"] #longitude
     lat = long_lat["lat"] #latitude
 
-    zipcode = google_dict["address_components"][8]["long_name"] #in array a_c, slot 8 is a dict with key long_name, the zip code
-
-    return [lng, lat, zipcode]
+    try:
+        zipcode = google_dict["address_components"][8]["long_name"] #in array a_c, slot 8 is a dict with key long_name, the zip code
+        return [lng, lat, zipcode]
+    except:
+        return "IV" #Invalid address
