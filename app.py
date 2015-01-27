@@ -68,10 +68,8 @@ def register(user_type):
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
         create_account(user_type, account, db)
-        flash(user_type + ": You have succesfully created an account")
         return redirect(url_for('login'))
     else:
-        flash("Email or password is not valid")
         return render_template(base_url, form=form, user_type=user_type)
 
 # authenticates user, logs him into session. there are two different login pages:
@@ -198,6 +196,7 @@ def update_settings(settings_type):
                 update_tutor(old_email, new_account, db)
             elif session["type"] == "tutee":
                 update_tutee(old_email, new_account, db)
+            flash("You have succesfully updated your settings")
             return redirect(url_for("homepage"))
         if request.form["s"] == "Update Times":
             print request.form
