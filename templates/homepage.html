@@ -4,6 +4,8 @@
 	<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
 {% endblock head %}
 
+
+
 {% block navbar %}
 	<div class="container">
 		<nav class="navbar navbar-tutee">
@@ -26,6 +28,19 @@
 		        </div>
 			</div>
 		</nav>
+{%endblock%}
+{% block body %}
+{% block flashing %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+	{%endfor %}
+{% endif %}
+{% endwith %}
+{% endblock %}
 		{% for appt in appts %}
 		<div class="panel panel-default">
 		  <div class="panel-heading clearfix">
@@ -54,7 +69,7 @@
 			  <label for="message">Message</label>
 			  <input type="text" class="form-control" name="message" placeholder="Message"></p>
 			  <p><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Send">
-			  </div>
+			</div>
 		</form>
 	</div>
 {% endblock %}

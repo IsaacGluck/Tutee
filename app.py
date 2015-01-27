@@ -116,7 +116,7 @@ def homepage():
         print(request.form)
         if request.form['b'] == 'Complete':
             appt = appts.pop(int(request.form['index']))
-            flash("You have completed an appointment! Congrats")
+            flash("You have completed an appointment!")
             db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
             db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
             return render_template("homepage.html", appts=appts)

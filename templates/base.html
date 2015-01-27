@@ -28,9 +28,15 @@
 </head>
 <body>
 
+
+
 	{% block navbar %}
 	{% endblock navbar %}
 
+	
+
+	{% block body %}
+	{% block flashing %}
 	{% with messages = get_flashed_messages() %}
   		{% if messages %}
     		{% for message in messages %}
@@ -38,9 +44,7 @@
     		{% endfor %}
   		{% endif %}
 	{% endwith %}
-	
-
-	{% block body %}
+	{% endblock %}
 	{% endblock body %}
 
 
