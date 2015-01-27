@@ -34,13 +34,13 @@ $('#sendMessage').on('shown.bs.modal', function () {
 		<div class="row">
 		  <div class="col-md-4">
 		    <div class="thumbnail grey">
-		      <img src="http://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg">
-		      <div class="caption">
-			<h3>
-			</ul></h3>
 			  {% with messages = get_flashed_messages() %}
 			  {% if messages %}
     			  {% for message in messages %}
+			  <img src="{{message['pic_id']}}">
+		      <div class="caption">
+			<h3>
+			</ul></h3>
 <h3>{{message['first_name']}} {{message['last_name']}}</h3>
 <h4>{{message['school']}}			</h4>
 <h5>{{message['grade']}}th Grade	</h5>
