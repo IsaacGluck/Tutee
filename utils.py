@@ -102,12 +102,12 @@ def register_user(user_type, form, db):
 
         if user_type == "tutor":            
                 
-                #print days
-                days  = create_days(form)
-                account['days'] = days
-                for k in days:
-                    print k
-                    account[k] = True
+                # #print days
+                # days  = create_days(form)
+                # account['days'] = days
+                # for k in days:
+                #     print k
+                #     account[k] = True
             
                 courses = form.getlist('course')
                 subjects = form.getlist('subject')
@@ -119,7 +119,8 @@ def register_user(user_type, form, db):
                     account[subject] = True
                     
                 account['match_score'] = 0.0 #used in comparing for searches
-        print account
+                account['complete'] = 0
+        # print account
         return account
 
 

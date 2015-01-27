@@ -120,17 +120,16 @@ def homepage():
     if request.method == "GET":
         return render_template("homepage.html", appts=appts)
     else:
-        print(request.form)
-        if request.form['b'] == 'Complete':
-            appt = appts.pop(int(request.form['index']))
-            flash("You have completed an appointment! Congrats")
-            db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
-            db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
-            return render_template("homepage.html", appts=appts)
-        if request.form['s']:
+        if 'b' in request.form:
+            if request.form['b'] == 'Complete':
+                appt = appts.pop(int(request.form['index']))
+                flash("You have completed an appointment! Congrats")
+                db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
+                db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
+                return render_template("homepage.html", appts=appts)
+        if 's' in request.form:
             if request.form['s'] == "Log Out":
                 return logout()
-
 
 
 @app.route("/profile/<username>", methods=["GET","POST"])
@@ -211,9 +210,11 @@ def update_settings(settings_type):
             days = create_days(request.form)
             new_account = {}
             new_account['days'] = days
-            print days
+            new_account['complete'] = 1
             update_tutor(session["email"], new_account, db)
             session['days'] = days
+            session['complete'] = 1
+
             return redirect(url_for("update_settings", settings_type="times"))
         if request.form["s"] == "Update Profile Picture":
             file = request.files['file']
