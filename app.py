@@ -164,7 +164,7 @@ def profile(username):
             flasher[key] = str(user[key]).decode('utf-8')   
         flash(flasher)
         #print 'username' + user['username']
-        return render_template("profile.html")
+        return render_template("profile.html", courses=user["courses"], subjects=user["subjects"])
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
