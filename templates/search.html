@@ -49,5 +49,19 @@
 </div>
 <script type="text/javascript" src="/static/js/dropdown.js"></script>
 <script type="text/javascript" src="/static/js/dropdown_edit.js"></script>
+<script>
+var locs = document.getElementsByClassName("menu0 d2 4");
+for (var i = 0; i < locs.length; i++) {
+locs[i].setAttribute("type","radio");
+}
+locs[0].checked = "true";
+
+var subjects = document.getElementsByClassName("menub d2 1");
+for (var i = 0; i < subjects.length;i++){
+subjects[i].setAttribute("type","radio");
+}
+subjects[0].checked = "true";
+		  
+</script>
 {% block header %}{% endblock %}
 {% endblock %}

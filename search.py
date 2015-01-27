@@ -24,26 +24,11 @@ def search_operation(form, db, session):
                 addresses = []
                 #find the days for which addresses work
                 try:
-                        tutee_home_school = form.getlist("0-address")
-                        #tutor_home_school = tutor['days'][day]['addresses']
-                       
-                        tutee_address = session["Home_Address"]
-                        tutor_address = tutor["Home_Address"]
-                        
-                        
-                        # tutor_address = tutor[tutor_home_school]
-                        
-                        #tutor_address = tutor["%s_Address" % tutor_home_school] #get the dictionary of the actual address info
-
-                        #tutee_home_school = form["%s_Address" % day] #is the tutee home or school for that day
-                        #tutee_address = session["%s_Address" % tutee_home_school] # get the dictionary of tutee's actual address info that day
-
-                        if (tutor_address["zipcode"] == tutee_address["zipcode"]):
-                                match_score += 4.0
-                                distance = calculate_distance(tutor_address, tutee_address)
-                                match_score += float(3 - distance)
-
-                                #timing calculations
+                        tutee_loc = form["0-address"]
+                        print tutor
+                
+                        tutee_address = session[tutee_loc.capitalize() + "_Address"]
+                        print tutee_address
                                 
                         tutee_start = float(form["0-start_hour"]) + (float(form["0-start_minute"]) * .01)
                         if form["0-start_type"] == "PM":
@@ -58,7 +43,21 @@ def search_operation(form, db, session):
                                
                         best_time = -99999
                         for d in tutor['days'][day]:
+                                distances = []
+                                print d['addresses']
+                                for a in d['addresses']:
+                                        tutor_address = tutor[a.capitalize() + "_Address"]
+                                        print tutor_address
+                                        dist = 0.0
+                                        if (tutor_address["zipcode"] == tutee_address["zipcode"]):
+                                                dist += 4.0
+                                        distance = calculate_distance(tutor_address, tutee_address)
+                                        dist += float(3 - distance)
+                                        distances.append(dist)
+                                print distances
+                                score = max(distances)
                                 
+
                                 tutor_start = float(d["start_hour"]) + (float(d["start_min"]) *.01)
                                 if d["start_type"] == "PM":
                                         tutor_start += 12
@@ -67,7 +66,6 @@ def search_operation(form, db, session):
                                 if d["end_type"] == "PM":
                                         tutor_end += 12 
 
-                                score = 0.0;
                                 if (tutee_end > tutor_start):
                                         score += float(tutee_end - tutor_start) * 5
                                 if (tutee_end > tutor_end):

@@ -80,7 +80,6 @@ def register_user(user_type, form, db):
         account['count_unread'] = 0
         
         a1 = form["address1"]
-        a1_type = form["address1_hs"] #is this address for home or for school
         loc = locate(a1) #returns three part array, longtitude, latitude, and zip, for parameter address
 
         address1 = {}
@@ -88,7 +87,18 @@ def register_user(user_type, form, db):
         address1["latitude"] = loc[1] #latitude
         address1["zipcode"] = loc[2] #zipcode
         address1["address"] = a1 #actual address
-        account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
+        account["Home_Address"] = address1 #store dictionary of all a1's info
+
+        a2 = form["address2"]
+        loc2 = locate(a2) #returns three part array, longtitude, latitude, and zip, for parameter address
+
+        address2 = {}
+        address2["longitude"] = loc2[0] #longitude
+        address2["latitude"] = loc2[1] #latitude
+        address2["zipcode"] = loc2[2] #zipcode
+        address2["address"] = a2 #actual address
+        account["School_Address"] = address2 #store dictionary of all a1's info
+   
 
         if user_type == "tutor":            
                 
