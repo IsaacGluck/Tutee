@@ -252,26 +252,36 @@ def uploaded_file(filename):
 @auth("/inbox")
 def inbox():
     if request.method == "GET":
+        for key in session["conversations"].keys():
+            username = key
+            break
+        return redirect("inbox/%s"%username)
+
+
+@app.route("/inbox/<username>", methods=["GET","POST"])
+@auth("/inbox/<username>")
+def conversation(username):
+    if request.method == "GET":
         if session['type'] == "tutor":
             update_tutor(session['email'], {'count_unread':0}, db)
         else:
             update_tutee(session['email'], {'count_unread':0}, db)
         session['count_unread'] = 0
-        return render_template("inbox.html")
+        conversations = session['conversations']
+        convo = conversations[username]
+        return render_template("inbox.html", username = username, convo = convo)
     if request.method == "POST":
-        print request.form
         if request.form['s'] == "Log Out":
             return logout()
         if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
             flash(message)
-            return redirect("inbox")
+            return redirect("inbox/%s"%username)
         if request.form['s'] == "Reply":
             print request.form
             message = send_message(request.form, session, db)
             flash(message)
-            return redirect("inbox")
-
+            return redirect("inbox/%s"%username)
 
 def logout():
     session.pop('logged_in', None)

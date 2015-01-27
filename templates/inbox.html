@@ -17,7 +17,7 @@
 				        <li><a href="/search"><h4>Search</h4></a></li>
 						{% endif %}
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
-					    <li><a href="/inbox"><h4>Messages</h4></a></li>
+					    <li><a href="/inbox"><h4>Messages ({{session['count_unread']}})</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
 		          		<li><p style="color:black !important" class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
@@ -26,90 +26,96 @@
 		        </div>
 			</div>
 		</nav>
+	</div>
 
 
 
-		<div>
-		<form method="POST">
-			    		<button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
-			    </form>
-		<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
-					</div>
-					<div class="modal-body">
-						<form method="POST">
-							<div class="form-group">
-							  <div class="control-group">
-							    <label for="recipient" style="color:black" class="control-label">Recipient: </label>
-							    <input type="text" class="form-control" placeholder="Username" name="recipient" id="recipient"></input>
-							  </div>
-							  <div class="control-group">
-							    <label for="message" style="color:black" class="control-label">Message: </label>
-							    <input type="text" class="form-control" placeholder="Message" name="message" id="message"></input>
-							  </div>
-							</div>
-					</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-		{% for message in messages %}
-
-		{% if message == "invalid recipient" %}
-		<div class="alert alert-danger" role="alert">
-		  {{message}}
-		</div>
-		{% endif %}
-
-		{% if message != "invalid recipient" %}
-		<div class="alert alert-success" role="alert">
-		  {{message}}
-		</div>
-		{% endif %}
-
-		{% endfor %}
-		{% endif %}
-		{% endwith %}
 	<div>
-	  {% for conversation in session['conversations'].keys() %}
-	  <div class="row">
-	    <div class="panel panel-default grey">
-		 <h3 class="under">{{conversation}}</h3>
-	      <div class="panel-body">
-		<div class="col-md-3">
-		  {% for message in session['conversations'][conversation] %}
-		  
-		    <p><a href="/profile/{{message['sender']}}">{{message['sender']}}</a>:
-		      {% if message['unread'] %}
-		      <b>{{message['message_text']}}, UNREAD</b><br>
-		      {% endif %}
-		      {% if message['unread'] == False %}
-		      {{message['message_text']}}<br>
-		      {% endif %}
-		      <i>Sent at {{message['time']}} on {{message['date']}}</i></p>{% if message['undread'] %}
-		  </b>
-		    {% endif %}
-		  {% endfor %}
-		  </div>
+	  <form method="POST">
+	    <button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
+	  </form>
+	  <div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+		<div class="modal-header">
+		  <h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
+		</div>
+		<div class="modal-body">
+		  <form method="POST">
+		    <div class="form-group">
+		      <div class="control-group">
+			<label for="recipient" style="color:black" class="control-label">Recipient: </label>
+			<input type="text" class="form-control" placeholder="Username" name="recipient" id="recipient"></input>
+		      </div>
+		      <div class="control-group">
+			<label for="message" style="color:black" class="control-label">Message: </label>
+			<input type="text" class="form-control" placeholder="Message" name="message" id="message"></input>
+		      </div>
+		    </div>
+		</div>
+		<div class="modal-footer">
+		  <button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
+		</div>
+		</form>
 	      </div>
-<form method="POST">
-  <input type="hidden" value="{{conversation}}" name="recipient"></input>
-  <label for="reply" class="control-label">Reply: </label>	
-  <input type="text" class="form-control" placeholder="Message" name="message"></input>
-  <button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
-</form>
-		<br>
-		{% endfor %}
 	    </div>
 	  </div>
-	</div>
-</div>
+		
+	  {% with messages = get_flashed_messages() %}
+	  {% if messages %}
+
+	  {% for message in messages %}
+
+	  {% if message == "invalid recipient" %}
+	  <div class="alert alert-danger" role="alert">
+	    {{message}}
+	  </div>
+	  {% endif %}
+
+	  {% if message != "invalid recipient" %}
+	  <div class="alert alert-success" role="alert">
+	    {{message}}
+	  </div>
+	  {% endif %}
+
+	  {% endfor %}
+	  {% endif %}
+	  {% endwith %}
+	  <div class="row">
+	    <div class="list-group col-md-4 panel-default grey">
+		{% for conversation in session['conversations'].keys() %}
+		
+		<a href="{{conversation}}" class="list-group-item">
+		  <h4 class="list-group-item-heading">{{conversation}}</h4>
+		  <p class="list-group-item-text">{{session['conversations'][conversation][0]['message_text']}}</p>
+		</a>
+		{% endfor %}
+	      </div>
+
+<div class="col-md-8">
+	    <div class="panel panel-default grey">
+	      <h3 class="under">{{username}}</h3>
+	      {% for message in convo %}
+	      <p><a href="/profile/{{message['sender']}}">{{message['sender']}}</a>:
+		{% if message['unread'] %}
+		<b>{{message['message_text']}}, UNREAD</b><br>
+		{% endif %}
+		{% if message['unread'] == False %}
+		{{message['message_text']}}<br>
+		{% endif %}
+		<i>Sent at {{message['time']}} on {{message['date']}}</i></p>{% if message['undread'] %}
+	      {% endif %}
+	      {% endfor %}
+	      <form method="POST">
+		<input type="hidden" value="{{username}}" name="recipient"></input>
+		<label for="reply" class="control-label">Reply: </label>	
+		<input type="text" class="form-control" placeholder="Message" name="message"></input>
+		<button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
+	      </form>
+
+
+	    </div>
+	  </div>
+
+
 {% endblock %}
