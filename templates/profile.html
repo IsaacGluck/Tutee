@@ -35,7 +35,7 @@ $('#sendMessage').on('shown.bs.modal', function () {
 					    <li><a href="/inbox"><h4>Messages ({{session['count_unread']}})</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
-		          		<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+		          		<li><p style="color:black !important"class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
 			  			<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li></form>
 		        	</ul>
 		        </div>
@@ -67,7 +67,7 @@ $('#sendMessage').on('shown.bs.modal', function () {
 		  		<div class="panel-body">
 				  {{message['subjects']}}<br>
 				  {% for m in message['subjects'] %}
-		  			{{m}}
+		  			{{ m.decode('utf8') }}
 				  {%endfor%}
 		  		</div>
 		  	</div>
