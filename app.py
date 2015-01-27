@@ -114,13 +114,23 @@ def login():
 @app.route("/homepage", methods=["GET", "POST"])
 @auth("/homepage")
 def homepage():
+    user = find_user(session["username"], db)
+    appts = user["appts"]
+    print(appts)
     if request.method == "GET":
-        user = find_user(session["username"], db)
-        appts = user["appts"]
         return render_template("homepage.html", appts=appts)
     else:
-        if request.form['s'] == "Log Out":
-            return logout()
+        print(request.form)
+        if request.form['b'] == 'Complete':
+            appt = appts.pop(int(request.form['index']))
+            flash("You have completed an appointment! Congrats")
+            db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
+            db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
+            return render_template("homepage.html", appts=appts)
+        if request.form['s']:
+            if request.form['s'] == "Log Out":
+                return logout()
+
 
 
 @app.route("/profile/<username>", methods=["GET","POST"])
@@ -161,7 +171,7 @@ def search():
                 tutor_username = request.form['username']
                 ## create_appointment    (tutor,          tutee,               subject,                 course)
                 appt = create_appointment(tutor_username, session['username'], request.form["subject"], request.form["class"], request.form)
-                print(appt)
+                ## print(appt)
                 db.tutees.update( {'username' : session['username'] }, { '$addToSet' : {'appts' : appt} })
                 db.tutors.update( {'username' : tutor_username      }, { '$addToSet' : {'appts' : appt} })
                 flash("You have succesfully added your appt!")
