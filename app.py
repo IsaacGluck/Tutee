@@ -158,7 +158,8 @@ def profile(username):
         user = find_user(username, db)
         flasher = {}
         for key in user:
-            flasher[key] = str(user[key])
+            ##print(user[key].encode())
+            flasher[key] = str(user[key]).decode('utf-8')   
         flash(flasher)
         #print 'username' + user['username']
         return render_template("profile.html")
