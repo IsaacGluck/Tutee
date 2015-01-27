@@ -26,9 +26,9 @@
 		        </div>
 			</div>
 		</nav>
+{% endblock navbar %}
+{% block body %}
 	</div>
-
-
 
 	<div>
 	  <form method="POST">
@@ -63,7 +63,6 @@
 		
 	  {% with messages = get_flashed_messages() %}
 	  {% if messages %}
-
 	  {% for message in messages %}
 
 	  {% if message == "invalid recipient" %}
@@ -112,5 +111,7 @@
 	    </div>
 	  </div>
 
-
 {% endblock %}
+
+
+

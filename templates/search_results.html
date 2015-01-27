@@ -24,64 +24,75 @@ $('#myModal').on('shown.bs.modal', function () {
 				    	<li><a href="/inbox"><h4>Messages</h4></a></li>
 			    	</ul>
 	    			<ul class="nav navbar-nav navbar-right">
-	          			<li><p class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
+	          			<li><p style="color:black !important" class="navbar-text">Signed in as {{ session["first_name"] }} {{ session["last_name"] }}</p></li>
 		  				<li><form method="POST" id="message"><input type="submit" class="btn btn-default navbar-btn button" name="s" value="Log Out"></li>
 		  				</form>
 	        		</ul>
 	        	</div>
 			</div>
 		</nav>
-
 		<div class="panel panel-default grey">
-		<h2>We found {{ tutor_list|count }} tutor(s) that matched your search</h2>
-		{% for tutor in tutor_list %}
-		<div class="row">
-			<div class="panel panel-default">
-			  <div class="panel-heading">
-			    <h3 class="panel-title">{{ tutor["username"] }}</h3>
-			  </div>
-			  <div class="panel-body">
-			  	<div class="col-md-3">
-			  		<h3>{{ tutor["first_name"] }} {{tutor["last_name"]}}</h3>
-				    <p>School: {{ tutor["school"] }}</p>
-				    <p>Grade: {{ tutor["grade"] }}</p>
-				</div>
-				<form method="POST" class="pull-right">
-			    		<button type="button" data-toggle="modal" style="color:black" data-target="#myModal">Create Appointment</button>
-			    </form>
-			  </div>
+			<div class="panel-body">
+				<h2>We found {{ tutor_list|count }} tutor(s) that matched your search</h2>
 			</div>
-		</div>
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" style="color:black" id="myModalLabel">Make an appointment with {{ tutor["first_name"] }} {{ tutor["last_name"] }}</h4>
-					</div>
-					<div class="modal-body">
-						<form method="POST">
-							<input type="hidden" value="{{tutor["username"]}}" name="username"></input>
-							<div class="form-group">
-								<label for="subject" style="color:black" class="control-label">Subject: </label>
-								<input type="text" class="form-control" name="subject"id="subject"></input>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Name</th>
+					<th>School</th>
+					<th>Grade</th>
+					<th>Appointment</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for tutor in tutor_list %}
+				<tr>
+					<th>{{ tutor["username"] }}</th>
+					<td>{{ tutor["first_name"] }} {{tutor["last_name"]}}</td>
+					<td>{{ tutor["school"] }}</td>
+					<td>{{ tutor["grade"] }}</td>
+					<td>
+						<form method="POST" class="pull-right">
+			    			<button type="button" data-toggle="modal" class="btn btn-default button" data-target="#myModal">Create Appointment</button>
+			    		</form>
+			    	</td>
+				</tr>
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content modal-grey">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" style="color:black" id="myModalLabel">Make an appointment with {{ tutor["first_name"] }} {{ tutor["last_name"] }}</h4>
 							</div>
-							<div class="form-group">
-								<label for="class" style="color:black" class="control-label">Class: </label>
-								<input type="text" class="form-control" name="class"id="class"></input>
+							<div class="modal-body">
+								<form method="POST">
+									<input type="hidden" value="{{tutor["username"]}}" name="username"></input>
+									<div class="form-group">
+										<label for="subject" style="color:black" class="control-label">Subject: </label>
+										<input type="text" class="form-control" name="subject"id="subject"></input>
+									</div>
+									<div class="form-group">
+										<label for="class" style="color:black" class="control-label">Class: </label>
+										<input type="text" class="form-control" name="class"id="class"></input>
+									</div>
+									{% set n = 0 %}
+									{% include "dropdown.html" %}
 							</div>
-							{% set n = 0 %}
-							{% include "dropdown.html" %}
-					</div>
 					
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" name="s" value="Make Appointment">Make appointment</button>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-default button" name="s" value="Make Appointment">Make appointment</button>
+								</div>
+							</form>
 						</div>
-					</form>
+					</div>
 				</div>
-			</div>
-		</div>
-		{% endfor %}
+				{% endfor %}
+			</tbody>
+		</table>
+
+		
 	</div>
 		
 <script type="text/javascript" src="/static/js/dropdown.js"></script>
