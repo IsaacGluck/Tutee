@@ -25,7 +25,6 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
-
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -169,7 +168,7 @@ def profile(username):
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
-        if request.form['s'] == "Make Appointment":
+        if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
             flash(message)
             return redirect("inbox")
@@ -201,6 +200,11 @@ def search():
                     
                 tutor_list = search_operation(request.form, db, session)
                 return render_template("search_results.html", tutor_list=tutor_list)
+            if request.form['s'] == "Send Message":
+                message = send_message(request.form, session, db)
+                flash(message)
+                return redirect("inbox")
+
             if request.form['s'] == "Make Appointment":
                 print(request.form)
                 tutor_username = request.form['username']
