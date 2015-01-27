@@ -189,11 +189,6 @@ def update_settings(settings_type):
         print days
         session['jdays']=json.dumps(days)
         return render_template(html_file,days=json.loads(session['jdays']),dicts=days)
-        pic_id = session["pic_id"]
-        o = ObjectId(pic_id)
-        l = fs.find({'files_id':o})
-        print l.count()
-        return render_template(html_file)
     if request.method == "POST":
         if request.form["s"] == "Log Out":
             return logout()
@@ -223,21 +218,30 @@ def update_settings(settings_type):
                 filename = secure_filename(file.filename)
                 y = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 url = url_for('uploaded_file', filename=filename)
-            x = tempfile.gettempdir() + '/' + filename
-            with open('static/img/%s_profpic.jpg' %session['username'], 'wb') as f:
-                shutil.copyfile(x, 'static/img/%s_profpic.jpg' %session['username'])
-            file_id = str(fs.put(open(str(x), "rb").read()))
-            update_dict = {"pic_id":'../static/img/%s_profpic.jpg' %session['username']}
-            if session["type"]=="tutee":
-                update_tutee(session["email"], update_dict, db)
-                u = find_user(session["username"], db)
-                session["pic_id"] = u["pic_id"]
-                print "still working"
-            else:
-                update_tutor(session["email"], update_dict, db)
-                u = find_user(session["username"], db)
-                session["pic_id"] = u["pic_id"]
-            return redirect("homepage")
+                x = tempfile.gettempdir() + '/' + filename
+                
+                #find the file extension
+                if filename[-4] == '.':
+                    extension = filename[-3:]
+                else:
+                    extension = filename[-4:] #this being jpeg, instead of jpg/png
+
+                with open('static/img/profile_pics/%s_profpic.%s' %(session['username'], extension), 'wb') as f:
+                    shutil.copyfile(x, 'static/img/profile_pics/%s_profpic.%s' %(session['username'], extension))
+                update_dict = {"pic_id":'../static/img/profile_pics/%s_profpic.%s' %(session['username'], extension)}
+
+                if session["type"]=="tutee":
+                    update_tutee(session["email"], update_dict, db)
+                    u = find_user(session["username"], db)
+                    session["pic_id"] = u["pic_id"]
+                else:
+                    update_tutor(session["email"], update_dict, db)
+                    u = find_user(session["username"], db)
+                    session["pic_id"] = u["pic_id"]
+                return redirect("homepage")
+                
+            else: #invalid file name
+                return redirect("settings/profile")
 
 def allowed_file(filename):
     return '.' in filename and \
