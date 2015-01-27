@@ -49,16 +49,18 @@ $('#myModal').on('shown.bs.modal', function () {
 			<tbody>
 				{% for tutor in tutor_list %}
 				<tr>
-					<th>{{ tutor["username"] }}</th>
+					<th><a href="profile/{{tutor['username']}}">{{ tutor["username"] }}</a></th>
 					<td>{{ tutor["first_name"] }} {{tutor["last_name"]}}</td>
 					<td>{{ tutor["school"] }}</td>
 					<td>{{ tutor["grade"] }}</td>
 					<td>
 						<form method="POST" class="pull-right">
-			    			<button type="button" data-toggle="modal" class="btn btn-default button" data-target="#myModal">Create Appointment</button>
+			    			  <button type="button" data-toggle="modal" class="btn btn-default button" data-target="#myModal">Create Appointment</button>
 			    		</form>
 			    	</td>
 				</tr>
+				
+
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content modal-grey">

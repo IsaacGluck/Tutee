@@ -17,7 +17,7 @@ from werkzeug.contrib.fixers import ProxyFix
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = tempfile.gettempdir()
+UPLOAD_FOLDER = tempfile.gettempdir() #for profile pictures
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY']="secret key"
 
@@ -25,7 +25,6 @@ app.config['SECRET_KEY']="secret key"
 conn = Connection()
 db = conn['users']
 fs = gridfs.GridFS(db)
-
 
 def auth(page):
     def decorate(f):
@@ -92,6 +91,9 @@ def register(user_type):
             flash("A user with this email already exists")
             return render_template(base_url, form=form, user_type=user_type)
         account = register_user(user_type, request.form, db)
+        if account == "IV":
+            flash("Invalid address. Make sure it looks like: 825 West End Ave #4A, New York.")
+            return redirect("register/%s"%user_type)
         create_account(user_type, account, db)
         return redirect(url_for('login'))
     if request.method=="POST":
@@ -167,7 +169,7 @@ def profile(username):
     if request.method == "POST":
         if request.form['s'] == "Log Out":
             return logout()
-        if request.form['s'] == "Make Appointment":
+        if request.form['s'] == "Send Message":
             message = send_message(request.form, session, db)
             flash(message)
             return redirect("inbox")
@@ -184,8 +186,27 @@ def search():
             if request.form['s'] == "Log Out":
                 return logout() 
             if request.form['s'] == "Submit":
+                print request.form
+
+                if request.form['0-day'] == "":
+                    print "You must select a day"
+                if len(request.form.getlist("0-address")) == 0:
+                    print "You must select at least one location"
+                if (request.form['0-start_hour'] == "") | (request.form['0-end_hour'] == ""):
+                    print "You must select an hour for starting and ending times"
+                if (request.form['0-start_minute'] == "") | (request.form['0-end_minute'] == ""):
+                    print "You must select a minute for starting and ending times"
+                if (request.form['0-start_type'] == "") | (request.form['0-end_type'] == ""):
+                    print "You must select a type for starting and ending times"
+                    
                 tutor_list = search_operation(request.form, db, session)
+                tutor_list.reverse() #to put highest score at top
                 return render_template("search_results.html", tutor_list=tutor_list)
+            if request.form['s'] == "Send Message":
+                message = send_message(request.form, session, db)
+                flash(message)
+                return redirect("inbox")
+
             if request.form['s'] == "Make Appointment":
                 print(request.form)
                 tutor_username = request.form['username']
@@ -237,7 +258,8 @@ def update_settings(settings_type):
             new_account = {}
             new_account['days'] = days
             new_account['complete'] = 1
-            print new_account
+            for k in days.keys():
+                new_account[k] = True
             update_tutor(session["email"], new_account, db)
             session['days'] = days
             session['complete'] = 1
