@@ -17,8 +17,19 @@ var times = {{ days|tojson }};
 					    <li><a href="/profile/{{session['username']}}"><h4>Profile</h4></a></li>
 					   {% if session['type'] == "tutee" %}
 				        <li><a href="/search"><h4>Search</h4></a></li>
-					{% endif %}
 				        <li><a href="/settings/profile"><h4>Account Settings</h4></a></li>
+						{% endif %}
+				        
+				        {% if session['type'] == "tutor" %}
+				        <li class="dropdown">
+				        	<a class="dropdown-toggle" data-toggle="dropdown" role="button"><h4>Account Settings</h4></a>
+				        	<ul class="dropdown-menu" role="menu">
+				        		<li><a href="/settings/profile">Profile</a></li>
+				        		<li><a href="/settings/classes">Classes</a></li>
+				        		<li><a href="/settings/times">Times</a></li>
+				        	</ul>
+				        </li>
+				        {% endif %} 
 					    <li><a href="/inbox"><h4>Messages ({{session['count_unread']}})</h4></a></li>
 				    </ul>
 		    		<ul class="nav navbar-nav navbar-right">
