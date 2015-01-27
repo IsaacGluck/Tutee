@@ -120,6 +120,7 @@ function deleteM(e){
 	    document.getElementById("menu" + (i+1)).innerHTML = new_html;
 	    document.getElementById("menu" + (i+1)).setAttribute("id", "menu" + String(i));
 	    document.getElementById(String(i+1) +"-del").setAttribute("id", String(i) + "-del");
+	    document.getElementById(String(i) + "-del").addEventListener('click',deleteM);
 	    init();
 	    init_times();
 	}
