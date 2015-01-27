@@ -2,11 +2,12 @@
 {% block head2 %}
 
 <link rel="stylesheet" href="/static/stylesheets/dropdown.css">
+<link rel="stylesheet" type="text/css" href="../static/stylesheets/inside.css">
 
 {% endblock %}
 {% block settings_type %}
 <div id="edit_times"></div>
-</form><form method="POST">
+<form class="grey" method="POST">
 <input type="hidden" id="counter" name="counter" value="0">
 
 
@@ -20,7 +21,7 @@
 
 {% include "dropdown.html" %}
 
-<button type="button" class="del_b" id="{{n}}-del">Delete</button>
+<button type="button" class="del_b button" id="{{n}}-del">Delete</button>
 <br>
 </div>
 {% endfor %}
@@ -28,9 +29,9 @@
 </div>
 
 <br id="change">
-<button type="button" id="edit_b">Edit</button><br>
-<button type="button" id="add" style="visibility:hidden">Add Another Day</button>
-<button type="submit" id="save_b" name="s" value="Update Times" class="button primary" style="visibility:hidden">Save</button>
+<button type="button" class="button" id="edit_b">Edit</button><br>
+<button type="button" class="button" id="add" style="visibility:hidden">Add Another Day</button>
+<button type="submit" id="save_b" name="s" value="Update Times" class="button" style="visibility:hidden">Save</button>
 
 </form>
 
