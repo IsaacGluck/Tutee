@@ -53,8 +53,23 @@ def check_tut(page):
 ## FOR TESTING
 @app.route("/register_test", methods=["GET", "POST"])
 def register_test():
-    if request.method == "GET":
-       return render_template("register_update.html")
+    if request.method == "POST":
+        print(request.form)
+        user_type = request.form["type"]
+        print(user_type)
+        form = RegisterForm()
+        print(form)
+        if form.validate_on_submit():
+            print("HELLO")
+            if user_exists(request.form['email'], user_type, db):
+                flash("A user with this email already exists")
+                return render_template("register_update.html")
+        account = register_user(user_type, request.form, db)
+        create_account(user_type, account, db)
+        return redirect(url_for('login'))
+    else:
+        return render_template("register_update.html")
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
