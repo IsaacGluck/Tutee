@@ -90,26 +90,26 @@ def register_user(user_type, form, db):
         address1["address"] = a1 #actual address
         account["%s_Address" % a1_type] = address1 #store dictionary of all a1's info
 
-        if user_type == "tutor":
-                account['courses'] = form["courses"]
-                #for each subject a tutor lists, it will have a seperate element in the dictionary with value "True"
-                subject = form['subjects']
-                account['%s' % subject] = True
+        if user_type == "tutor":            
                 
                 #print days
-                account['days'] = create_days(form)
+                days  = create_days(form)
+                account['days'] = days
+                for k in days:
+                    print k
+                    account[k] = True
+            
+                courses = form.getlist('course')
+                subjects = form.getlist('subject')
+                account['courses'] = courses
+                account['subjects'] = subjects
                 
-                account['classes'] = form.getlist('course')
-                print form.getlist('course')
-
-                times = form["times"]
-                td = times.split(";")
-                x = 0
-                #each day is given seperate element with value being a dictionary of time, address
-                while x < len(td):
-                        account['%s' % td[x]] = {"time": td[x+1], "address": form['Day1_Address']}
-                        x += 2
+                for subject in subjects:
+                    print subject
+                    account[subject] = True
+                    
                 account['match_score'] = 0.0 #used in comparing for searches
+        print account
         return account
 
 
