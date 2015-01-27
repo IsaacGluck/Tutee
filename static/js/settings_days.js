@@ -108,33 +108,48 @@ function deleteM(e){
     document.getElementById("counter").setAttribute("value", String(parseInt(cnt) - 1));
     if (parseInt(num) < parseInt(cnt) && cnt !=0){
 	for (var i = parseInt(num); i<parseInt(cnt);i++){
+	    var checks = document.getElementsByName(String(i+1) + "-address");
+	    var boos = { "home":checks[0].checked, "school":checks[1].checked};
+	    console.log(boos);
 	    cur_html = document.getElementById("menu" + (i+1)).innerHTML;
-	    console.log(cur_html);
+	    //console.log(cur_html);
 	    var menuNum = new RegExp( "menu" + String(i+1),"g" );
 	    new_html = cur_html.replace( menuNum, "menu" + String(i));
 	    var dayNum = new RegExp( 'day="' + String(i+1) + '"', "g");
 	    new_html = new_html.replace( dayNum, 'day="' + String(i) + '"');
 	    var menuAtt = new RegExp( 'menu="' + String(i+1) + '"',"g");
 	    new_html = new_html.replace( menuAtt, 'menu="' + String(i) + '"');
-	    console.log(new_html);
+	    //console.log(new_html);
 	    document.getElementById("menu" + (i+1)).innerHTML = new_html;
 	    document.getElementById("menu" + (i+1)).setAttribute("id", "menu" + String(i));
 	    document.getElementById(String(i+1) +"-del").setAttribute("id", String(i) + "-del");
 	    document.getElementById(String(i) + "-del").addEventListener('click',deleteM);
+		
 	    init();
 	    init_times();
 	}
 	inputs = document.getElementsByTagName("input");
+	console.log(inputs);
 	for (var i=0; i < inputs.length; i++) {
+	    //console.log(inputs[i]);
 	    if (inputs[i].getAttribute("type") == "hidden" && parseInt(inputs[i].getAttribute("id").slice(0,1))>num){
+		console.log( inputs[i] );
 		pos = String(parseInt(inputs[i].getAttribute("id").slice(0,1)) - 1);
 		id = inputs[i].getAttribute("id");
 		inputs[i].setAttribute("id", pos + id.slice(1,id.length));
 		name = inputs[i].getAttribute("name");
 		inputs[i].setAttribute("name", pos + name.slice(1,name.length));
 	    }
+	    else if (inputs[i].getAttribute("type") == "checkbox" && parseInt(inputs[i].getAttribute("name").slice(0,1))>num){
+		pos = String(parseInt(inputs[i].getAttribute("name").slice(0,1)) - 1);
+		name = inputs[i].getAttribute("name");
+		boo = boos[ inputs[i].getAttribute("value")];
+		inputs[i].setAttribute("name", pos + name.slice(1,name.length));
+		inputs[i].checked = boo
+	    }
 	    
 	}
+	
     }
     
 }

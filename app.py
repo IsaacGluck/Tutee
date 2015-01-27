@@ -185,8 +185,10 @@ def update_settings(settings_type):
     if request.method == "GET":
         html_file = "settings_" + settings_type + ".html"
         days = [];
+        print session
         if session["type"] == "tutor":
             for k in session['days'].keys():
+                print k
                 for x in session['days'][k]:
                     days.append(x);
                 
@@ -210,10 +212,13 @@ def update_settings(settings_type):
             return redirect(url_for("homepage"))
         if request.form["s"] == "Update Times":
             print request.form
+
             days = create_days(request.form)
+            print days
             new_account = {}
             new_account['days'] = days
             new_account['complete'] = 1
+            print new_account
             update_tutor(session["email"], new_account, db)
             session['days'] = days
             session['complete'] = 1
