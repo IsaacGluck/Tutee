@@ -114,7 +114,7 @@ def register_user(user_type, form, db):
 
 
 #sends message by updating the "conversations" key for each user. Conversations' value is a dictionary, each key being the username of the other side of a given conversation. The value of each such key is a list of dictionaries, each dictionary containing a given message's content, sender, and time of sending. Example:
-# 'conversations': {person_talked_to: [{'sender':person_talked_to/me, 'message_text':'sup', 'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people....}
+# 'conversations': {person_talked_to: {unread_count: #, messages:[{'sender':person_talked_to/me, 'message_text':'sup', 'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people....}
 def send_message(form, session, db):
         recipient_username = form['recipient']
         message = form['message']
@@ -134,30 +134,30 @@ def send_message(form, session, db):
         time = time_total[11:19]
 
         #first update the dictionary of the recipient of the message
-        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':True}]
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
+        unread_count = 1
         #check if this conversation already exists. If so incorporate rest of conversation
         if conversations.has_key(session['username']): #if they've already talked
-                add_message = conversations[session['username']]
+                add_message = conversations[session['username']]['messages']
                 for x in add_message:
                         new_message.append(x) #so that new message is at the begginning
-        conversations[session['username']] = new_message #insert as the new value in dict
+                unread_count = conversations[session['username']]['unread_count'] + 1 #unread count in this specific conversation
+
+        conversations[session['username']] = {'unread_count':unread_count, 'messages':new_message} #insert as the new value in dict
         count = recipient['count_unread'] + 1 #increment user's count of unread messages
         if sender_user_type == "tutor":
                 update_tutee(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
         else:
                 update_tutor(recipient['email'], {'conversations':conversations, 'count_unread':count}, db)
         
-        
-        
-        
         #update dictionary of the sender
         conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
-        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date, 'unread':False}]
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
         if conversations.has_key(recipient['username']):
-                add_message = conversations[recipient['username']]
+                add_message = conversations[recipient['username']]['messages']
                 for x in add_message:
                         new_message.append(x)
-        conversations[recipient['username']] = new_message
+        conversations[recipient['username']] = {'unread_count':0, 'messages':new_message}
         if sender_user_type == "tutor":
                 update_tutor(session['email'], {'conversations':conversations}, db)
         else:

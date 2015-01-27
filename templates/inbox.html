@@ -87,7 +87,7 @@
 		
 		<a href="{{conversation}}" class="list-group-item">
 		  <h4 class="list-group-item-heading">{{conversation}}</h4>
-		  <p class="list-group-item-text">{{session['conversations'][conversation][0]['message_text']}}</p>
+		  <p class="list-group-item-text">{{session['conversations'][conversation]['messages'][0]['message_text']}}</p>
 		</a>
 		{% endfor %}
 	      </div>
@@ -97,14 +97,8 @@
 	      <h3 class="under">{{username}}</h3>
 	      {% for message in convo %}
 	      <p><a href="/profile/{{message['sender']}}">{{message['sender']}}</a>:
-		{% if message['unread'] %}
-		<b>{{message['message_text']}}, UNREAD</b><br>
-		{% endif %}
-		{% if message['unread'] == False %}
 		{{message['message_text']}}<br>
-		{% endif %}
-		<i>Sent at {{message['time']}} on {{message['date']}}</i></p>{% if message['undread'] %}
-	      {% endif %}
+		<i>Sent at {{message['time']}} on {{message['date']}}</i></p>
 	      {% endfor %}
 	      <form method="POST">
 		<input type="hidden" value="{{username}}" name="recipient"></input>

@@ -25,6 +25,7 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
+
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -120,16 +121,18 @@ def homepage():
     if request.method == "GET":
         return render_template("homepage.html", appts=appts)
     else:
-        print(request.form)
-        if request.form['b'] == 'Complete':
+        if request.form['s'] == 'Complete':
             appt = appts.pop(int(request.form['index']))
             flash("You have completed an appointment! Congrats")
             db.tutees.update( {'username' : appt['tutee'] }, { '$set' : {'appts' : appts} })
             db.tutors.update( {'username' : appt['tutor'] }, { '$set' : {'appts' : appts} })
             return render_template("homepage.html", appts=appts)
-        if request.form['s']:
-            if request.form['s'] == "Log Out":
-                return logout()
+        if request.form['s'] == "Log Out":
+            return logout()
+        if request.form['s'] == "Send":
+            message = send_message(request.form, session, db)
+            flash(message)
+            return redirect("inbox")
 
 
 
@@ -252,6 +255,7 @@ def uploaded_file(filename):
 @auth("/inbox")
 def inbox():
     if request.method == "GET":
+        #automatically redirect to chat with most recent messenger, as fbook does
         for key in session["conversations"].keys():
             username = key
             break
@@ -262,13 +266,23 @@ def inbox():
 @auth("/inbox/<username>")
 def conversation(username):
     if request.method == "GET":
-        if session['type'] == "tutor":
-            update_tutor(session['email'], {'count_unread':0}, db)
-        else:
-            update_tutee(session['email'], {'count_unread':0}, db)
-        session['count_unread'] = 0
         conversations = session['conversations']
-        convo = conversations[username]
+        now_read = conversations[username]['unread_count'] #newly read messages
+
+        conversations[username]['unread_count'] = 0 #this conversation now has all conversations read
+        for message in conversations[username]['messages']:
+            message['unread'] = False
+        
+        count_unread = session['count_unread'] - now_read
+
+        if session['type'] == "tutor":
+            update_tutor(session['email'], {'conversations':conversations, 'count_unread':count_unread}, db)
+        else:
+            update_tutee(session['email'], {'conversations':conversations, 'count_unread':count_unread}, db)
+        session['count_unread'] = count_unread
+        session['conversations'] = conversations
+
+        convo = conversations[username]['messages']
         return render_template("inbox.html", username = username, convo = convo)
     if request.method == "POST":
         if request.form['s'] == "Log Out":
