@@ -19,6 +19,7 @@ input {
 }
 
 .button {
+  font-family: inherit;
   background-color: rgba(46, 204, 113,1.0);
   color: #fff;
   border: 1px solid rgba(46, 204, 113,1.0) !important; 
@@ -26,6 +27,17 @@ input {
 .button:hover {
   background-color: #fff;
   color: rgba(46, 204, 113,1.0);
+}
+
+.button-opposite {
+    font-family: inherit;
+    background-color: #fff;
+    color: rgba(46, 204, 113,1.0);
+    border: 1px solid #fff !important; 
+}
+.button-opposite:hover {
+    background-color: rgba(46, 204, 113,1.0);
+    color: #fff;
 }
 
 .center-block {

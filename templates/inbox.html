@@ -42,11 +42,11 @@
 
 	<div>
 	  <form method="POST">
-	    <button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
+	    <button type="button" class="button long"  data-toggle="modal" data-target="#sendMessage">Send Message</button>
 	  </form>
 	  <div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	    <div class="modal-dialog">
-	      <div class="modal-content">
+	      <div class="modal-content modal-grey">
 		<div class="modal-header">
 		  <h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
 		</div>
@@ -64,7 +64,7 @@
 		    </div>
 		</div>
 		<div class="modal-footer">
-		  <button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
+		  <button type="submit" class="btn btn-primary button" name="s" value="Send Message">Send Message</button>
 		</div>
 		</form>
 	      </div>
@@ -102,7 +102,7 @@
 		{% endfor %}
 	      </div>
 
-<div class="col-md-8">
+		<div class="col-md-8">
 	    <div class="panel panel-default grey">
 	      <h3 class="under">{{username}}</h3>
 	      {% for message in convo %}
@@ -112,10 +112,16 @@
 	      {% endfor %}
 	      <form method="POST">
 		<input type="hidden" value="{{username}}" name="recipient"></input>
-		<label for="reply" class="control-label">Reply: </label>	
-		<input type="text" class="form-control" placeholder="Message" name="message"></input>
-		<button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
-	      </form>
+		<!-- <label for="reply" class="control-label">Reply: </label>	 -->
+		
+		<div class="input-group">
+			<span class="input-group-btn">
+        		<button type="submit" class="btn btn-default button-rounded" name="s" value="Reply">Reply to {{ username }}</button>
+      		</span>
+			<input type="text" class="form-control" placeholder="Message" name="message">
+    	</div>
+	    
+	    </form>
 
 
 	    </div>
