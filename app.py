@@ -1,16 +1,23 @@
-from flask import Flask, render_template, request, flash, session, redirect, url_for
+from flask import Flask, render_template, request, flash, session, redirect, url_for, send_from_directory
 from pymongo import Connection
 import gridfs
+import os
 from search import search_operation
-from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days
-
+from utils import authenticate, create_account, register_user, send_message, update_tutor, update_tutee, find_tutor, find_user, user_exists, create_days, allowed_file
+from werkzeug import secure_filename
+import tempfile
 import hashlib, uuid
 import random
 import json
+import urllib
 from functools import wraps
 from forms import RegisterForm
+import shutil
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = tempfile.gettempdir()
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # mongo 
 conn = Connection()
@@ -208,14 +215,37 @@ def update_settings(settings_type):
             session['days'] = days
             return redirect(url_for("update_settings", settings_type="times"))
         if request.form["s"] == "Update Profile Picture":
-            # data = request.form["pic"]
-            # file_id = fs.put(open(str(data), "rb").read()) 
-            # update_dict = {"pic_id":file_id}
-            # if session["type"]=="tutee":
-            #     update_tutee(session["email"], update_dict, db)
-            # else:
-            #     update_tutor(session["email"], update_dict, db)
-            return redirect("homepage")
+            file = request.files['file']
+            if file and allowed_file(file.filename): #check extension
+                filename = secure_filename(file.filename)
+                y = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                url = url_for('uploaded_file', filename=filename)
+                src = tempfile.gettempdir() + '/' + filename #tempfile.gettempdir() is flask's temporary storage directory
+
+                img_storage = 'static/img/profile_pics/%s_%s' %(session['username'], filename)
+                open(session["pic_id"][1:],"w").close() #close the current profile picture's file
+                with open(img_storage, 'wb') as f:
+                    shutil.copyfile(src, img_storage) #store the file in the Tutee system
+
+                update_dict = {"pic_id":'../%s' % img_storage}
+                if session["type"]=="tutee":
+                    update_tutee(session["email"], update_dict, db)
+                    u = find_user(session["username"], db)
+                    session["pic_id"] = u["pic_id"]
+                else:
+                    update_tutor(session["email"], update_dict, db)
+                    u = find_user(session["username"], db)
+                    session["pic_id"] = u["pic_id"]
+                return redirect("homepage")
+
+            else: #invalid file name
+                return redirect("settings/profile")
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
                 
 @app.route("/inbox", methods=["GET","POST"])
 @auth("/inbox")

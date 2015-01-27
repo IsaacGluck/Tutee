@@ -28,32 +28,39 @@
 		</nav>
 
 
+	<div>
+	  {% for conversation in session['conversations'].keys() %}
+	  <div class="row">
+	    <div class="panel panel-default grey">
 
+
+	<!-- MESSAGE MODAL -->
 		<div>
-		<form method="POST">
-			    		<button type="button" style="color:black" data-toggle="modal" data-target="#sendMessage">Send Message</button>
-			    </form>
-		<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
-					</div>
-					<div class="modal-body">
-						<form method="POST">
-							<div class="form-group">
-							  <div class="control-group">
-							    <label for="recipient" style="color:black" class="control-label">Recipient: </label>
-							    <input type="text" class="form-control" placeholder="Username" name="recipient" id="recipient"></input>
-							  </div>
-							  <div class="control-group">
-							    <label for="message" style="color:black" class="control-label">Message: </label>
-							    <input type="text" class="form-control" placeholder="Message" name="message" id="message"></input>
-							  </div>
-							</div>
-					</div>
+			<form method="POST">
+				<input type="button" class="btn btn-default button long" data-toggle="modal" data-target="#sendMessage" value="Send Message">
+			</form>
+			<div class="modal fade" id="sendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content modal-grey">
+						<div class="modal-header">
+							<h4 class="modal-title" style="color:black" id="myModalLabel">Send a message</h4>
+						</div>
+						<div class="modal-body">
+							<form method="POST">
+								<div class="form-group">
+							  		<div class="control-group">
+							    		<label for="recipient" style="color:black" class="control-label">Recipient: </label>
+							    		<input type="text" class="form-control" placeholder="Username" name="recipient" id="recipient"></input>
+							  		</div>
+							  		<div class="control-group">
+							    		<label for="message" style="color:black" class="control-label">Message: </label>
+							    		<input type="text" class="form-control" placeholder="Message" name="message" id="message"></input>
+							  		</div>
+								</div>
+							</form>
+						</div>
 						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" name="s" value="Send Message">Send Message</button>
+							<input type="submit" class="btn btn-default button" name="s" value="Send Message">
 						</div>
 					</form>
 				</div>
@@ -78,10 +85,9 @@
 		{% endfor %}
 		{% endif %}
 		{% endwith %}
-	<div>
-	  {% for conversation in session['conversations'].keys() %}
-	  <div class="row">
-	    <div class="panel panel-default grey">
+		<!-- END MESSAGE MODAL -->
+		<br>
+
 		 <h3 class="under">{{conversation}}</h3>
 	      <div class="panel-body">
 		<div class="col-md-3">
@@ -101,10 +107,17 @@
 		  </div>
 	      </div>
 <form method="POST">
-  <input type="hidden" value="{{conversation}}" name="recipient"></input>
-  <label for="reply" class="control-label">Reply: </label>	
-  <input type="text" class="form-control" placeholder="Message" name="message"></input>
-  <button type="submit" style="color:black" name="s" value="Reply">Reply to {{conversation}}</button>
+  <input type="hidden" value="{{conversation}}" name="recipient">
+  <!-- <label for="reply" class="control-label">Reply: </label>
+  <input type="text" class="form-control" placeholder="Message" name="message">
+  <br>
+  <button type="submit" class="btn btn-default button" name="s" value="Reply">Reply to {{conversation}}</button> -->
+ 	<div class="input-group">
+ 		<span class="input-group-btn">
+    		<button type="submit" class="btn btn-default button-rounded" name="s" value="Reply">Reply to {{conversation}}</button>
+    	</span>
+    	<input type="text" class="form-control" placeholder="Message" name="message">
+	</div>
 </form>
 		<br>
 		{% endfor %}
@@ -113,3 +126,6 @@
 	</div>
 </div>
 {% endblock %}
+
+
+
