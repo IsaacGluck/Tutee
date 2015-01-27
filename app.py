@@ -256,9 +256,13 @@ def uploaded_file(filename):
 def inbox():
     if request.method == "GET":
         #automatically redirect to chat with most recent messenger, as fbook does
+        username = ""
         for key in session["conversations"].keys():
             username = key
             break
+        if username == "":
+            flash("no messages yet, try starting a conversation")
+            return redirect('homepage')
         return redirect("inbox/%s"%username)
 
 
@@ -268,7 +272,7 @@ def conversation(username):
     if request.method == "GET":
         conversations = session['conversations']
         now_read = conversations[username]['unread_count'] #newly read messages
-
+        
         conversations[username]['unread_count'] = 0 #this conversation now has all conversations read
         for message in conversations[username]['messages']:
             message['unread'] = False

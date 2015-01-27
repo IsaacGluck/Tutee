@@ -86,6 +86,7 @@
 		{% for conversation in session['conversations'].keys() %}
 		
 		<a href="{{conversation}}" class="list-group-item">
+		  <span class="badge">{{session['conversations'][conversation]['unread_count']}}</span>
 		  <h4 class="list-group-item-heading">{{conversation}}</h4>
 		  <p class="list-group-item-text">{{session['conversations'][conversation]['messages'][0]['message_text']}}</p>
 		</a>
