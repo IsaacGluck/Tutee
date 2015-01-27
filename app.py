@@ -25,14 +25,6 @@ db = conn['users']
 
 fs = gridfs.GridFS(db)
 
-t = db.tutors.find()
-for tutor in t:
-    print tutor
-
-t = db.tutees.find()
-for tutor in t:
-    print tutor
-
 
 def auth(page):
     def decorate(f):
