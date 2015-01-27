@@ -26,7 +26,13 @@
     <ul class="nav nav-pills nav-justified">
       <li role="presentation"><a href="/login"><h3 class="highlight">Login</h3></a></li>
       <li role="presentation" class="active"><a href="/"><h2 class="highlight">Tutee</h2></a></li>
-      <li role="presentation"><a href="/register/tutee"><h3 class="highlight">Register</h3></a></li>
+       <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button"><h3 class="highlight">Register</h3></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/register/tutor">Tutor</a></li>
+            <li><a href="/register/tutee">Tutee</a></li>
+          </ul>
+        </li>
     </ul>
   </nav>
 
