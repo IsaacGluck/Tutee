@@ -1,11 +1,9 @@
 #Tutee
-=====
 
 http://tutee.mooo.com/
-
-=====
-
+----
 A web application to simplify the high school tutoring system.
+----
 
 ##Roles
 
