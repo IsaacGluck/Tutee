@@ -3,8 +3,8 @@ A web application to simplify the high school tutoring system.
 
 While the site is not live, if you wish to run it:<br>
 <ol>
-  <li>Download Flask: ```pip install Flask```</li>
-  <li>Make sure MongoDB is downloaded & running: ```mongod```</li>
+  <li>Download Flask: `pip install Flask`</li>
+  <li>Make sure MongoDB is downloaded & running: `mongod`</li>
   <li>Make sure you have the correct dependencies
     <ol>
       <li>pymongo cannot be above version 2</li>
